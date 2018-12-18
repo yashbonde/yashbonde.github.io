@@ -1,6 +1,6 @@
 body {
   background-color: #f2f2f2;
-  font-family: "Lato"; /* OPTIONAL: Google Fonts - base font */
+  font-family: "Roboto Slab"; /* OPTIONAL: Google Fonts - base font */
   font-weight: 300;
   font-size: 16px;
   color: #555;
@@ -11,9 +11,9 @@ body {
 
 /* Titles */
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Staatliches"; /* OPTIONAL: Google Fonts - title font */
-  font-weight: 300;
-  color: #333;
+  font-family: "IBM Plex Sans"; /* OPTIONAL: Google Fonts - title font */;
+  font-weight: 700;
+  color: #3e3e3e;
 }
 
 /* Paragraph & Typographic */
@@ -28,19 +28,19 @@ p {
 
 /* Links */
 a {
-  color: #1CBCAD;
+  color: #9FC5DE;
   word-wrap: break-word;
 
-  -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
-  -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
-  -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
-  -o-transition: color 0.1s ease-in, background 0.1s ease-in;
-  transition: color 0.1s ease-in, background 0.1s ease-in;
+  -webkit-transition: color 0.3s ease-in, background 0.3s ease-in;
+  -moz-transition: color 0.3s ease-in, background 0.3s ease-in;
+  -ms-transition: color 0.3s ease-in, background 0.3s ease-in;
+  -o-transition: color 0.3s ease-in, background 0.3s ease-in;
+  transition: color 0.3s ease-in, background 0.3s ease-in;
 }
 
 a:hover,
 a:focus {
-  color: #7b7b7b;
+  color: #5E8EBF;
   text-decoration: none;
   outline: 0;
 }
@@ -67,16 +67,49 @@ a:after {
   SECTION WRAPS
 ---------------------------------------------------*/
 
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #372940;
+  overflow: hidden;
+  font-family: "IBM Plex Sans";
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #9FC5DE;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4A6F96;
+  color: white;
+}
+
 /* Header Wrap */
 .header {
-  background: #1CBCAD;
-  background: url(../images/header-bg-3.jpg) no-repeat center top;
-  padding-top:140px;
+  background: #c1454c;
+  background: url(../images/home_bg3.jpg);
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-position:center;
+  padding-top:320px;
   text-align:center;
   background-attachment: relative;
   background-position: center center;
-  min-height: 500px;
+  min-height: 750px;
   width: 100%;
+  height: 100%;
   
   -webkit-background-size: 100%;
   -moz-background-size: 100%;
@@ -90,27 +123,29 @@ a:after {
 }
 
 .header h1 {
-  font-size: 80px;
-  color: white;
-
-  /* remove background on text */
-  /* background: rgba(0,0,0,0.3); */
+  font-size: 70px;
+  color: #EDD4C0;
 }
 
 .header h3 {
-  font-size: 20px;
-  color: white;
+  font-size: 24px;
+  color: #809FB3;
 }
 
 .header h3 a {
-  color: #fff;
+  color: #809FB3;
+}
+
+.header t {
+  font-size: 20px ;
+  color: #B6E3FF ;
 }
 
 /* About Wrap */
 .about {
-  background: #2c3e50;
+  background: #372940;
   padding-top: 60px;
-  padding-bottom: 60px;
+  padding-bottom: 30px;
   color: white;
 } 
 
@@ -125,10 +160,16 @@ a:after {
   vertical-align: middle;
 }
 
+.about t {
+  color: #F1F0F0;
+  text-align: center;
+}
+
+/* Footer Wrap */
 .footer {
-  background: #2f2f2f;
+  background: #372940;
   padding-top: 50px;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
 }
 
 .footer p {
@@ -149,31 +190,59 @@ a:after {
   /*color: #1abc9c;*/
 }
 
+/* Middle */
+
+.mid_section {
+  background: #e9e9e9;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.mid_section h2 {
+  color: #372940;
+}
+
+.mid_section t {
+  color: #111111;
+}
+
+
 /* Global Values */
 
 .desc {
-  padding-top: 50px;
+  padding-top: 30px;
+  padding-bottom: 25px;
 }
 
 .desc p {
-  color: #2f2f2f;
+  color: #111111;
 }
 
 .desc t {
-  color: #34495e;
-  font-weight: 700;
+  color: #2e2e2e;
+  font-weight: 400;
 }
 
 .desc imp {
-  padding: 6px;
+  font-family: 'IBM Plex Sans';
+  font-weight: 700;
+  font-size: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  /* padding: 8px; */
   color: white;
-  background: #34495e;
+  background: #c1454c;
 }
 
 .desc more {
-  color: #616669;
+  color: #2e2e2e;
 }
 
+.desc li {
+  color: #2e2e2e;
+}
 
 sm {
   font-size: 12px;
