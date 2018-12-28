@@ -1,0 +1,21 @@
+article {
+    display: grid;
+    /* instead of using the complex minmax even when we have the @media query seems weird,
+       so we can fix this very easiy
+    grid-template-columns: 1fr 0.4in [start] minmax(0, 9.0in) [end] 0.4in 1fr;
+    */
+    grid-template-columns: 1fr 0.5in [start] 1.25in 5in 1.25in [end] 0.5in 1fr;
+    /* NOTE: we are keeping the size of out box as 8.5 inches */
+
+    padding-top: 0.3in; /* top-bottom and left-right*/
+}
+
+
+article * {
+    grid-column: start / end;
+}
+
+@media (max-width: 8.5in) {
+    /* what ever we need to if the width is less than 9.0in */
+    article { grid-template-columns: 1fr 5% [start] 15% 60% 15% [end] 5% 1fr; }
+}

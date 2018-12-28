@@ -1,0 +1,11 @@
+/* this has the classes for various gradients */
+
+.grad-1 {
+	background: rgb(215,49,76);
+	background: linear-gradient(62deg, rgba(215,49,76,1) 0%, rgba(212,193,89,1) 100%);
+}
+
+.grad-2 {
+	background: rgb(49,82,215);
+	background: linear-gradient(275deg, rgba(49,82,215,1) 0%, rgba(89,212,154,1) 100%);
+}

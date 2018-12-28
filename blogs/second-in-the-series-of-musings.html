@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Second in the series of musings</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Link the main.css stylesheet -->
+    <link href="styles/reset.css" rel="stylesheet">
+    <link href="styles/-debug.css" rel="stylesheet">
+    <link href="styles/article.css" rel="stylesheet">
+    <link href="styles/article-text.css" rel="stylesheet">
+    <link href="styles/article-figure.css" rel="stylesheet">
+    <link href="styles/nav.css" rel="stylesheet">
+    <link href="styles/code-block.css" rel="stylesheet">
+
+    <link href="styles/footer-blog.css" rel="stylesheet">
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../index.html">HOME</a>
+        <a class = "nav-project" href="../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../musings.html">BLOG</a>
+        <a class = "nav-resume" href="../resume.html">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Second in the <em>Series</em> of Musings</h1>
+        <h2>A step in another direction</h2>
+
+        <time datetime="12-28-2018">DEC. 28, 2018</time>
+
+        <p> 
+            With my previous <a class="article-a" href = "https://medium.com/@yashbonde/first-in-the-series-of-musings-b547ad86865f">post</a> written well over 4 months ago from the date of this writing I talked about A.I. and it's types and then somehow jabbered into talking about a T-shaped person.
+            Well since then I have written about variety of topics such as Transformer "Attention is all you need" network, built it up in python and tensorflow and discussed a bit about the code. Then wrote a couple of vague articles and in the end wrote about my latest project Freeciv Learning Environment.
+            But with another bitter-sweet year coming to an end and I wanted something new and fresh, something to get me out of this boredom I have been feeling. And so I took up a long <em>(4 year old)</em> project and decided to code up my own website.
+        </p>
+
+        <figure class="size-2">
+            <img src="https://cdn.shopify.com/s/files/1/0023/8469/1252/products/Hustle-Neon-Sign-1_2000x.jpg?v=1534983377">
+        </figure>
+        <figcaption><p>This <em>looks</em> a bit wierd</p></figcaption>
+
+        <h3>BUILDING MY OWN WEBSITE</h3>
+        <p>
+            For the hosting and handling part I am currently relying on github pages while for the coding part I decided to start from sratch. Read a few blogs, watched a few videos and bam there it is a small <a class = "article-a" href="https://yashbonde.github.io/resume">resume</a> and then a <a class="article-a" href="https://yashbonde.github.io">landing page </a> in just a few hours.
+            I always felt like having my own website will allow me to showcase my work in the best way possible and give me a wider skill set. Having interactive websites and using those along with the AI tools and models that I build in python is a really cool idea.
+            <strong>And aren't all great things started as just really cool ideas.</strong>
+        </p>
+
+        <p>
+            I learned alot from <a class="article-a" href="https://www.youtube.com/watch?v=wq-Q7CDj6ZI">this</a> particular video and used this as the template to built my website. I think I will make my own style sheets and share them to make it easy for people to use those.
+        </p>
+
+        <p>
+            Now I wanted to show off a few things I have added, though you can say I am inspired from Medium, like <code>inline_code(*args, **kwargs)</code> and code blocks like the one shown below: (eventually I want to be able to put syntax highlighted code here):
+        </p>
+<pre><code><b>def</b> calculate_accuracy(target, pred):
+    <i>''' 
+    Calculate accuracy for model
+    '''</i>
+    <i># Getting actual values</i>
+    false_act_ = np.sum([target == self.smooth_thresh_lower])
+    true_act_ = np.sum([target == self.smooth_thresh_upper])
+    
+    <i># prediction counters</i>
+    pred_pos_ = 0
+    pred_neg_ = 0
+    
+    <i># predictions, need to perform iteration, boolean logic not working</i>
+    for i,p in enumerate(pred):
+        if self.s_ll <= p <= self.s_lu and target[i] == self.smooth_thresh_lower:
+            pred_neg_ += 1
+        elif self.s_ul <= p <= self.s_uu and target[i] == self.smooth_thresh_upper:
+            pred_pos_ += 1
+                            
+    correct_pred = pred_pos_ + pred_neg_
+    
+    return correct_pred/len(pred), pred_pos_/true_act_, pred_neg_/false_act_</code></pre>
+    <codecaption><p>real code sample from <a href="https://github.com/yashbonde/Babylon/blob/master/transformer/network.py">here</a></p></codecaption>
+
+        <p>
+            Though the truth is that it was super easy to implement, all I had to use was <code>&ltcode&gt</code> and <code>&ltpre&gt</code> tags, but well it is here and it looks super cool. Imagine the possibilities here it we can have a new method of explaination of code, I have some ideas that I will implement in coming months. And this is why I started this web-designing projects so I can to all forms of weird things that are only in my head.
+        </p>
+
+        <h3>WHERE GO FROM HERE</h3>
+        <p>
+            With the end of 2018 and beginning of a completely new chapter in my life, the possibilities are endless. A year ago I started teaching myself Reinforcement Learning, with a relatively narrow view of the world convincing myself that I knew sufficient and can face any challenge thrown at me. It clearly did not turn out that way, but this year taught me many new things and gave me oppurtunities unimagined.
+        </p>
+
+        <p>
+            It is probably the first time my experience as designer has helped me to this level. Desining your own website is a really cool thing! Also it's super late and should go to sleep, but it's a waste of time.
+        </p>
+
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="images/instagram.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>

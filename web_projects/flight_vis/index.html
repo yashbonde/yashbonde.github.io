@@ -1,40 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>India Flight Visualisation</title>
+    <title>Indian Flight Visualizer</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    
+    <link href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
+        rel="stylesheet"/>
 
-	<script src="https://unpkg.com/deck.gl@~5.2.5/deckgl.min.js"></script>
-    <!-- only if base map is needed -->
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js"></script>
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css" rel="stylesheet" />
-    <!-- <script language="javascript" type="text/javascript" src="sample.js"></script> -->
+
+    <!-- add link to custom css -->
+    <link href="css/main.css" rel="stylesheet">
+
+    <!-- add link to fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400" rel="stylesheet">
 
 </head>
 <body>
-	<div id="container" style="width: 100vw; height: 100vh;"></div>
+
+    <div id="map"></div>
+
+    <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+    </script>
+
+    <script>        
+        // Create a new map with a fullscreen button:
+        var map = new L.map('map', {doubleClickZoom: false, zoomControl: false
+            }).setView([21.2514, 81.6296], 14);
+
+
+        mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        
+        /*
+         * This is the task list: 
+         * read the flight_schedule.json and mark the different airports 
+        */
+        // read JSON
+        /* 
+        Following are the columns in flight data
+        df_dict = {
+            'SourceAirportCode': src_,
+            'SourceAirport': src_full_,
+            'DestinationAirportCode': dst_,
+            'DestinationAirport': dst_full_,
+            'AirlineCode': arl_,
+            'AirlineName': arl_full_,
+            'FlightNumber': fltnum_,
+            'ScheduledTime': scht_
+        }
+        */
+        var flight_data = JSON.parse('./data/final_dump.json')
+        console.log(flight_data.SourceAirportCode)
+
+        // Add attribution layer
+        L.tileLayer(
+            'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+            }).addTo(map);
+    </script>
+
 </body>
-
-
-<script type="text/javascript">
-		const deckgl = new deck.DeckGL({
-        container: 'container',
-        longitude: -122.45,
-        latitude: 37.8,
-        zoom: 12,
-        layers: [
-            new deck.ScatterplotLayer({
-                data: [
-                    {position: [-122.45, 37.8], color: [255, 0, 0], radius: 200}
-                ]
-            }),
-            new deck.TextLayer({
-                data: [
-                    {position: [-122.45, 37.8], text: 'Hello World'}
-                ]
-            })
-        ]
-    });
-	</script>
-
-
 </html>

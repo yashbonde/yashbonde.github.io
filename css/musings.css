@@ -1,0 +1,56 @@
+/* this is the style sheet for single blog unit */
+
+
+h1 {
+	font-family: "Roboto Slab";
+	color: #202020;
+}
+
+blog-home {
+	display: grid;
+	padding-top: 0.3in; /* top-bottom and left-right*/
+
+	grid-template-columns: 1fr 0.5in [start] 1.25in 5in 1.25in [end] 0.5in 1fr;
+	margin-bottom: 0.5in;
+}
+
+blog-home * {
+	grid-column: start / end;
+}
+
+blog-home unit {
+	padding-top: 1.0rem;
+	padding-bottom: 1.0rem;
+	padding-left: 1.0rem;
+	padding-right: 1.0rem;
+
+	display: flex;
+	justify-content: center;
+
+	-webkit-box-shadow: 0px 29px 17px 1px rgba(0,0,0,0.10);
+	-moz-box-shadow: 0px 29px 17px 1px rgba(0,0,0,0.10);
+	box-shadow: 0px 29px 17px 1px rgba(0,0,0,0.10);
+
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border: 0px solid #000000;
+
+	margin-bottom: 0.5in;
+}
+
+blog-home unit name {
+	font: 400 1.5rem/1.1 "Roboto Slab";
+}
+
+blog-home unit info {
+	font: 400 1.0rem/1.1 "Raleway";
+}
+
+@media (max-width: 8.5in) {
+    /* what ever we need to if the width is less than 9.0in */
+    blog-home { grid-template-columns: 1fr 5% [start] 15% 60% 15% [end] 5% 1fr; }
+}
+
+@media (max-width: 8.5in) { :root { font-size: 16px; } }
+@media (max-width: 5.0in) { :root { font-size: 14px; } }
