@@ -1,0 +1,29 @@
+/* this is style sheet for footer */
+
+footer {
+	margin-top: 0.5rem;
+	padding: 1.0rem;
+	background: #1f1f1f;
+}
+
+.footer-p {
+	display: flex;
+	color: #ffffff;
+	justify-content: center; /* to centre the box horizontally */ 
+
+	font-family: "Raleway";
+	font-weight: 300;
+	font-size: 0.8rem;
+
+	letter-spacing: 4px;
+	margin-bottom: 0.3rem;
+
+}
+
+.share { display: flex;
+         justify-content: center; /* to centre the box horizontally */ }
+
+.share img {
+    padding: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;}

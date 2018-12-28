@@ -1,0 +1,55 @@
+/* this is the code-block style sheet */
+
+code {
+	background: #dedede;
+	font-family: "Ubuntu Mono";
+	font-weight: 400;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	padding-bottom: 0.2rem;
+	padding-top: 0.2rem;
+}
+
+pre {
+	padding: 1.2rem;
+	display: block;
+	height:4in;
+	background: #dedede;
+	margin-bottom: 1.2rem;
+	overflow-x: scroll;
+}
+
+
+pre code {
+	font-family: "Ubuntu Mono";
+	font-weight: 400;
+	margin-bottom: 0.4rem;
+	padding: 0;
+}
+
+pre b {
+	font-family: "Ubuntu Mono";
+	font-weight: 700;
+}
+
+pre i {
+	color: #515151;
+	font-family: "Ubuntu Mono";
+	font-weight: 700;
+}
+
+codecaption {
+    display: flex;
+    justify-content: center; /* to centre the box horizontally */
+}
+
+codecaption a {
+	box-shadow: inset 0 -0.25em #FFBF00;
+}
+
+codecaption a:hover { box-shadow: inset 0 -0.25em #FF3755;}
+
+codecaption p {
+	font-family: "Ubuntu Mono";
+	color: #515151;
+}

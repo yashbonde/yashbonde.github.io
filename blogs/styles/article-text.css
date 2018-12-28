@@ -1,0 +1,42 @@
+h1   { font: 700 2.0rem/1.2 "Roboto Slab";
+       color: #202020;
+       margin-bottom: 0.3rem;}
+
+h2   { font: 400 1.5rem/1.2 "Roboto Slab";
+       color: #616161;
+       margin-bottom: 0.8rem;}
+
+time { font: 700 0.8rem/1.2 "Raleway";
+       color: #B20737;
+       margin-bottom: 1.0rem;}
+
+h3   { font: 700 1.0rem/1.2 "Raleway";
+       color: #B20737;
+       margin-bottom: 0.8rem;}
+
+p    { font: 400 1.0rem/1.5 "Raleway";
+       color: #202020;
+       margin-bottom: 1.5rem;
+       text-align: justify;}
+
+/* links hanlding with fade in and fade-out */
+
+.article-a {
+       box-shadow: inset 0 -0.25em #FFBF00;
+       transition: 0.5s;
+}
+
+.article-a:hover { box-shadow: inset 0 -0.25em #FF3755;
+       transition: 0.5s;
+}
+
+/* inline code */
+code-inline { font-family: "Ubuntu Mono";
+       font-weight: 700;
+       background: #dedede;}
+
+
+figcaption p { color: #616161; }
+
+@media (max-width: 8.5in) { :root { font-size: 16px; } }
+@media (max-width: 5.0in) { :root { font-size: 14px; } }

@@ -1,0 +1,88 @@
+/* this is the main css file */
+
+body {
+    background-color: #121821;
+    font-family: "Roboto Slab";
+    font-weight: 300;
+    font-size: 16px;
+    color: #555;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Links */
+a {
+    color: #9FC5DE;
+    word-wrap: break-word;
+
+    -webkit-transition: color 0.3s ease-in, background 0.3s ease-in;
+    -moz-transition: color 0.3s ease-in, background 0.3s ease-in;
+    -ms-transition: color 0.3s ease-in, background 0.3s ease-in;
+    -o-transition: color 0.3s ease-in, background 0.3s ease-in;
+    transition: color 0.3s ease-in, background 0.3s ease-in;
+}
+
+a:hover,
+a:focus {
+    color: #5E8EBF;
+    text-decoration: none;
+    outline: 0;
+}
+
+a:before,
+a:after {
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+/* ===============
+SECTION WRAPS
+=============== */
+
+html, body, #map {
+    height: 100%;
+    width: 100vw;
+}
+
+/* top navigation bar */
+.topnav {
+	background-color: #e2e2e2;
+	overflow: hidden;
+	font-family: "Roboto Slab";
+    /* remove shadows
+	-webkit-box-shadow: 0px 11px 25px 7px rgba(16,97,168,1);
+	-moz-box-shadow: 0px 11px 25px 7px rgba(16,97,168,1);
+	box-shadow: 0px 11px 25px 7px rgba(16,97,168,1); */
+}
+
+.topnav t {
+	vertical-align: middle;
+	color: #2e2e2e;
+	float: left;
+	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 14px;
+	padding-right: 14px;
+	text-decoration: none;
+	font-size: 15px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #9FC5DE;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4A6F96;
+  color: white;
+}
+
+
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Indian Flight Visualizer</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    
+    <link href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
+        rel="stylesheet"/>
+
+
+    <!-- add link to custom css -->
+    <link href="css/main.css" rel="stylesheet">
+
+    <!-- add link to fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400" rel="stylesheet">
+
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+    </script>
+
+    <script>        
+        // Create a new map with a fullscreen button:
+        var map = new L.map('map', {doubleClickZoom: false, zoomControl: false
+            }).setView([21.2514, 81.6296], 14);
+
+
+        mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        
+        /*
+         * This is the task list: 
+         * read the flight_schedule.json and mark the different airports 
+        */
+        // read JSON
+        /* 
+        Following are the columns in flight data
+        df_dict = {
+            'SourceAirportCode': src_,
+            'SourceAirport': src_full_,
+            'DestinationAirportCode': dst_,
+            'DestinationAirport': dst_full_,
+            'AirlineCode': arl_,
+            'AirlineName': arl_full_,
+            'FlightNumber': fltnum_,
+            'ScheduledTime': scht_
+        }
+        */
+        var flight_data = JSON.parse('./data/final_dump.json')
+        console.log(flight_data.SourceAirportCode)
+
+        // Add attribution layer
+        L.tileLayer(
+            'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+            }).addTo(map);
+    </script>
+
+</body>
+</html>

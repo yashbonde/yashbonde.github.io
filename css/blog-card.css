@@ -1,0 +1,74 @@
+card a {
+	display: grid;
+	grid-template-columns: 1.3fr 0.125fr 3fr;
+	grid-template-rows: 0.25fr 1fr 1fr 2fr 0.25fr;
+
+	background: #f1f1f1;
+
+	margin-bottom: 0.5in;
+
+	height: 1.5in;
+
+	-webkit-box-shadow: 0px 0px 12px -1px rgba(181,181,181,1);
+	-moz-box-shadow: 0px 0px 12px -1px rgba(181,181,181,1);
+	box-shadow: 0px 0px 12px -1px rgba(181,181,181,1);
+
+	border-radius: 4px 4px 4px 4px;
+	-moz-border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius: 4px 4px 4px 4px;
+	border: 0px solid #000000;
+
+	transition: 0.5s
+}
+
+card a:hover {
+	-webkit-box-shadow: 0px 0px 38px 0px rgba(181,181,181,1);
+	-moz-box-shadow: 0px 0px 38px 0px rgba(181,181,181,1);
+	box-shadow: 0px 0px 38px 0px rgba(181,181,181,1);
+
+	transition: 0.5s;
+}
+
+/* Animation to change the gradient */
+
+
+/* other items */
+
+card name {
+	grid-column: 3 / 4;
+	grid-row: 2 / 3;
+	font: 700 1.5rem/1.5 "Roboto Slab";
+}
+
+card info {
+	grid-column: 3 / 4;
+	grid-row: 3 / 4;
+	font: 400 1.0rem/1.2 "Roboto Slab";
+	color: #616161;
+}
+card sentence {
+	grid-column: 3 / 4;
+	grid-row: 4 / 5;
+	font: 400 0.85rem/1.5 "Raleway";
+}
+
+card date {
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	text-transform: uppercase;
+	font: 400 0.8rem/1.0 "Ubuntu Mono";
+	color: #ffffff;
+}
+
+card grad {
+	grid-column: 1 / 2;
+	grid-row: 1 / 6;
+	display: block;
+	width: 100%;
+
+	border-radius: 4px 0px 0px 4px;
+	-moz-border-radius: 4px 0px 0px 4px;
+	-webkit-border-radius: 4px 0px 0px 4px;
+	border: 0px solid #000000;
+}
