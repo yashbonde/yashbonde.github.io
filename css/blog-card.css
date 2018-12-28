@@ -1,11 +1,12 @@
 card a {
 	display: grid;
-	grid-template-columns: 1.3fr 0.125fr 3fr;
+	grid-template-columns: 1.3fr 0.125fr 3fr 0.1fr;
 	grid-template-rows: 0.25fr 1fr 1fr 2fr 0.25fr;
 
 	background: #f1f1f1;
 
 	margin-bottom: 0.5in;
+	cursor: pointer;
 
 	height: 1.5in;
 
@@ -18,26 +19,18 @@ card a {
 	-webkit-border-radius: 4px 4px 4px 4px;
 	border: 0px solid #000000;
 
-	transition: 0.5s
+	-moz-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    -webkit-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
 }
-
-card a:hover {
-	-webkit-box-shadow: 0px 0px 38px 0px rgba(181,181,181,1);
-	-moz-box-shadow: 0px 0px 38px 0px rgba(181,181,181,1);
-	box-shadow: 0px 0px 38px 0px rgba(181,181,181,1);
-
-	transition: 0.5s;
-}
-
-/* Animation to change the gradient */
-
 
 /* other items */
 
 card name {
 	grid-column: 3 / 4;
 	grid-row: 2 / 3;
-	font: 700 1.5rem/1.5 "Roboto Slab";
+	font: 700 1.5rem/1.2 "Roboto Slab";
 }
 
 card info {

@@ -2,10 +2,23 @@
 
 .grad-1 {
 	background: rgb(215,49,76);
-	background: linear-gradient(62deg, rgba(215,49,76,1) 0%, rgba(212,193,89,1) 100%);
+	background: linear-gradient(62deg, rgba(212,193,89,1) 0%, rgba(215,49,76,1) 100%);
+}
+
+.shadow-1:hover {
+	-webkit-box-shadow: 0 0px 12px 5px rgba(229, 66, 10, 0.75);
+	-moz-box-shadow: 0 0px 12px 5px rgba(229, 66, 10, 0.75);
+	box-shadow: 0 0px 12px 5px rgba(229, 66, 10, 0.75);
 }
 
 .grad-2 {
 	background: rgb(49,82,215);
 	background: linear-gradient(275deg, rgba(49,82,215,1) 0%, rgba(89,212,154,1) 100%);
 }
+
+.shadow-2:hover{
+	-webkit-box-shadow: 0 0px 12px 5px rgba(49, 196, 190, 0.75);
+	-moz-box-shadow: 0 0px 12px 5px rgba(49, 196, 190, 0.75);
+	box-shadow: 0 0px 12px 5px rgba(49, 196, 190, 0.75);
+}
+

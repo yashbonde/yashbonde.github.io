@@ -27,7 +27,17 @@ nav {
 	justify-content: center;}
 
 
-nav a { transition: 0.4s }
+nav a {
+	-moz-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    -webkit-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}
 
-nav a:hover { color: #4FC9FF; transition: 0.4s;}
+nav a:hover { color: #4FC9FF;
+	-moz-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    -webkit-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}
 
