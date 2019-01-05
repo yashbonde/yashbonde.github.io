@@ -12,17 +12,31 @@ time { font: 700 0.8rem/1.2 "Raleway";
 
 h3   { font: 700 1.0rem/1.2 "Raleway";
        color: #B20737;
-       margin-bottom: 0.8rem;}
+       margin-bottom: 0.8rem;
+       text-transform: uppercase;}
 
-p    { font: 400 1.0rem/1.5 "Raleway";
+h4 {   font: 700 0.9rem/1.2 "Raleway";
+       color: #616161;
+       margin-bottom: 0.8rem;;
+}
+
+p   { font: 400 1.0rem/1.5 "Raleway";
        color: #202020;
        margin-bottom: 1.5rem;
-       text-align: justify;}
+       text-align: justify;
+}
+
+li {
+       font: 400 1.0rem/1.5 "Raleway";
+       color: #202020;
+       margin-bottom: 0.25rem;
+       text-align: justify;
+}
 
 /* links hanlding with fade in and fade-out */
 
 .article-a {
-       box-shadow: inset 0 -0.25em #FFBF00;
+       box-shadow: inset 0 -0.25em #FFBF0080;
        -moz-transition: all .5s ease-in-out;
        -o-transition: all .5s ease-in-out;
        -webkit-transition: all .5s ease-in-out;

@@ -1,0 +1,86 @@
+article {
+    display: grid;
+    /* instead of using the complex minmax even when we have the @media query seems weird,
+       so we can fix this very easiy
+    grid-template-columns: 1fr 0.4in [start] minmax(0, 9.0in) [end] 0.4in 1fr;
+    */
+    grid-template-columns: 1fr 0.5in [start] 1.25in 5in 1.25in [end] 0.5in 1fr;
+
+    /* grid-template-rows: 3in 1fr 1fr 1fr; */
+
+    /* NOTE: we are keeping the size of out box as 8.5 inches */
+}
+
+
+article * {
+    grid-column: start / end;
+}
+
+@media (max-width: 8.5in) {
+    /* what ever we need to if the width is less than 9.0in */
+    article { grid-template-columns: 1fr 5% [start] 15% 60% 15% [end] 5% 1fr; }
+}
+
+p { 
+	font: 400 1.0rem/1.5 "Raleway";
+	color: #202020;
+	margin-bottom: 1.5rem;
+}
+
+.article-a {
+       box-shadow: inset 0 -0.25em #FFBF00;
+       -moz-transition: all .5s ease-in-out;
+       -o-transition: all .5s ease-in-out;
+       -webkit-transition: all .5s ease-in-out;
+       transition: all .5s ease-in-out;
+}
+
+.article-a:hover { box-shadow: inset 0 -0.25em #3DB277;
+}
+
+.landing-page {
+  grid-column: 1/8;
+  background-color: #E8E5B2;
+  background: url("../files/bp.svg") center no-repeat;
+
+  background-size: cover;
+
+  margin: 0 0;
+
+  padding-top: 1.0rem;
+  padding-bottom: 1.0rem;
+
+  height: 30.0rem;
+}
+
+.landing-page.container {
+  display: flex;
+}
+
+
+.landing-page h1 {
+  grid-column: start/end;
+
+  font: 700 3.0rem/1.0 "Playfair Display";
+  text-align: center;
+  
+  color: #1f1f1f;
+
+  background: #B8B47A50;
+  padding-top: 1.0rem;
+  padding-bottom: 0.5rem;
+
+  margin-top: 15rem;
+}
+
+.landing-page h2 {
+  grid-column: start/end;
+
+  font: 700 1.2rem/1.0 "Playfair Display";
+  text-align: center;
+  color: #1f1f1f;
+
+  background: #B8B47A50;
+  padding-bottom:  1.0rem;
+
+}
