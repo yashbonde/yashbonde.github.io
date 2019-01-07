@@ -1,0 +1,13 @@
+/* this is style sheet for the boxes occuring in the middle */
+
+.middle-box-image {
+	grid-column: 1/8;
+	padding-top: 1.0rem;
+	padding-bottom: 1.0rem;
+	background: #2e2e2e;
+}
+
+.middle-box-image p {
+	color: #E8E5B2;
+	margin: 2.0rem;
+}

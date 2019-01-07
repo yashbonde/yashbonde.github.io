@@ -1,0 +1,57 @@
+/* article CSS */
+
+article {
+	display: grid;
+
+	grid-template-columns: 1fr 0.54in [start] 0.86in 8.0in 0.86in [end] 0.54in 1fr;
+	padding-bottom: 0.2in
+}
+
+article * {
+	grid-column: start / end;
+}
+
+@media (max-width: 10.8in) {
+	article {
+		grid-template-columns: 1fr 5% [start] 7.96% 74.08% 7.96% [end] 5% 1fr;
+	}
+
+}
+
+/* attributes regarding the text in article */
+
+p {
+	font: 400 1.0rem/1.5 "Open Sans";
+	color: #202020;
+	margin-bottom: 1.0rem;
+}
+
+h1 {
+	font: 700 3.5rem/1.2 "Playfair Display";
+	color: #202020;
+	margin-top: 1.0rem;
+	margin-bottom:2.0rem;
+	text-align: right;
+}
+
+br {
+	margin: 1.0rem;
+}
+
+@media (max-width: 10.8in) { :root { font-size: 16px; } }
+@media (max-width: 8.0in) { :root { font-size: 14px; } }
+
+/* anchor attributes */
+.article-a {
+	-webkit-text-stroke: 1px black;
+	color: #20202030;
+
+	-moz-transition: all .5s ease-in-out;
+	-o-transition: all .5s ease-in-out;
+	-webkit-transition: all .5s ease-in-out;
+	transition: all .5s ease-in-out;
+}
+
+.article-a:hover {
+	color: #202020;
+}

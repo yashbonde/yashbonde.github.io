@@ -1,0 +1,41 @@
+.size-1 { grid-column: 4 / 5; }
+.size-2 { grid-column: 3 / 6; }
+.size-3 { grid-column: 2 / 7; }
+.size-4 { grid-column: 1 / 8; }
+
+.size-1 img, .size-2 img, .size-3 img, .size-4 img { width: 100%; } 
+
+.top-box {
+    /* Center and scale the image nicely */
+    background: url("images/bp.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    /* Needed to position the navbar */
+    position: relative;
+
+    /* define the height */
+    grid-column: 1/8;
+    min-height: 5in;
+    max-height: 10in;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    
+    justify-content: center;
+    align-items: center;
+}
+
+.top-box:hover {
+    transform-origin: -50% -5%;
+}
+
+.top-box h1 {
+
+    justify-content: center;
+    align-content: center;
+}

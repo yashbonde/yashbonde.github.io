@@ -1,0 +1,47 @@
+/* Navbar CSS */
+
+nav {
+	display: grid;
+	background: #11111100;
+	padding-top: 1.0rem;
+	padding-bottom: 1.0rem;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	color: #22222280;
+
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+
+	letter-spacing: 3px;
+	font-weight: 700;
+}
+
+.nav-home { grid-column: 1 / 2;
+	display: flex;
+	justify-content: center;}
+
+.nav-project { grid-column: 2 / 3;
+	display: flex;
+	justify-content: center;}
+
+.nav-blog { grid-column: 3 / 4; 
+	display: flex;
+	justify-content: center;}
+
+.nav-resume { grid-column: 4 / 5; 
+	display: flex;
+	justify-content: center;}
+
+
+nav a {
+	-moz-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    -webkit-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}
+
+nav a:hover { color: #222222;
+	-moz-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    -webkit-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}
