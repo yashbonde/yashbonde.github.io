@@ -1,0 +1,22 @@
+.update-container {
+	background: #1f1f1f;
+	grid-column: 1/8;
+}
+
+.update-container h1 {
+	font: 700 1.5rem/1.2 "Ubuntu Mono";
+	color: #5D9ED4;
+	text-align: center;
+	letter-spacing: 10px;
+	margin: 1rem 1rem;
+}
+
+.update-container.update {
+}
+
+.update-container.update p {
+	font: 300 1.0rem/1.5 "Raleway";
+	color: #f1f1f1;
+	text-align: center;
+	margin: 0rem 1rem;
+}
