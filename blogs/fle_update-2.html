@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>FLE Update #1</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Link the main.css stylesheet -->
+    <link href="styles/reset.css" rel="stylesheet">
+    <link href="styles/-debug.css" rel="stylesheet">
+    <link href="styles/article.css" rel="stylesheet">
+    <link href="styles/article-text.css" rel="stylesheet">
+    <link href="styles/article-figure.css" rel="stylesheet">
+    <link href="styles/nav.css" rel="stylesheet">
+    <link href="styles/code-block.css" rel="stylesheet">
+
+    <link href="styles/footer-blog.css" rel="stylesheet">
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../index.html">HOME</a>
+        <a class = "nav-project" href="../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../musings.html">BLOG</a>
+        <a class = "nav-resume" href="../resume.html">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Freeciv Learning Environment Update #2</h1>
+        <h2>The Freeciv journey and it's all about engines</h2>
+
+        <time datetime="01-08-2019">JAN. 08, 2019</time>
+
+        <p> 
+            In a previous <a class="article-a" href="https://towardsdatascience.com/call-for-an-army-of-be-a-sts-f751436671be">post</a> I wrote about the importance of developing the Freeciv Learning Environment. And in <a class="article-a" href="https://towardsdatascience.com/lets-go-over-few-things-freeciv-1d400969ad3e">another</a> one I went over three things that make it very unique. As another month has passed (total two months) it is time to write a small update on how it is progressing and what are the future steps towards achieving that goal.
+        </p>
+
+        <h3>JOURNEY TILL NOW</h3>
+
+        <p> 
+            I as I have kept on saying that I was inspired by the previous work done on this game. But before proceeding on with it, I also validated my idea after asking many researchers, including David Silver who worked with a Monte Carlo agent in Freeciv. After getting validated I was pretty confident about why to proceed with it and wrote my first post. But when I was discussing with my friends I realised that there was a serious lack of understanding regarding the discrete nature of action space and thus I wrote the second one. But till this point I was only sure about the validity of the idea and not on the details of how it will work.
+        </p>
+
+        <h3>TECHNICAL BEGINNINGS</h3>
+
+        <p> 
+            Let's start by going over the complete structure of the codebase. The game is setup as a server/client system where all the major processing takes place on the server and the client is a very dumb part which only renders the game-state. After consulting with many people I realised the way to go forward was to start by reading the codebase, and start developing small versions if what I wanted. But with over 300 C files written in the most efficient way it is something to be reckoned with. I did that over a period of 2 weeks and then realised that I needed to combine, the C/C++ backend with python interface for the agent. And so I started writing a <a class="article-a" href="https://github.com/yashbonde/python-interfaces">repo</a> with experiments in doing that.
+        </p>
+
+        <p> 
+            That all went in vain when I realised that modifying the source code is not only a Herculean task for me, but even some of the most experienced people in my network and this would also mean that our environment will be locked to the version of the <a class="article-a" href="https://github.com/freeciv/freeciv">main repo</a> that we are using. So modifications were out of the question, okay understood what next? Well if you think about it, the client is a very dumb machine so all the important information is on the server, then how does the client access that information. It accesses it over the internet too, so it must be using I.P. Packets. And yes, as it turns out it indeed was using <a class="article-a" href="https://github.com/freeciv/freeciv/blob/master/common/networking/packets.def">packets</a> for the job.
+        </p>
+
+        <h3>FINAL STRUCTURE</h3>
+
+        <p>
+        	Cool now we have access to the packets which are language independent and so we can think of the server as API where we can send the correct packets and use the information sent to us. This allows us to change the structure of the package from the original one, now we have three parts to the python package <b>Packet Manager</b>, <b>Inference Engine</b> and lastly <b>World</b>.
+        </p>
+
+
+        <figure class="size-2">
+            <img src="images/freeciv01.svg">
+        </figure>
+        <figcaption><p>Freeciv Package Structure</p></figcaption>
+
+        <p>
+        	The <b>Packet Manager</b> is responsible for the transmitting and receiving the packets. The <b>Inference Engine</b> convert the information from server into deep learning understandable terms such as tile info and maps are converted to dense numpy arrays. <b>World</b> is the entry to our agent and this is where it takes all the actions. The above written order is also the way this is supposed to be built, though personally I am most excited for Inference Engine part.
+        </p>
+
+        <h3>STEPS TOWARDS END GOAL</h3>
+  
+        <p>
+            We want to have a system where the AI players can not only play the game in the multi - agent format but also can interact with Human players. Since we are already connected to the server independent of client this is theoretically possible, though we need to wait and see. Another important feature for me is the inclusion of human interpretability and not in the terms that it's mostly told, but rather in the way that we can record the game and watch it later as it unfolds in GUI. Seeing what is actually happening is the simplest way to fix bugs and develop further, this might require a complete new effort as even the Freeciv maintainers are worried about how to keep track of game efficiently.
+        </p>
+
+        <p>
+        	So this was the minor update that I wanted to give, I will now be working towards packet based approach not that it is going smoothly. But you can contribute to this project, ping me on <a class="article-a" href="https://www.linkedin.com/in/yash-bonde/">LinkedIn</a> what's the most interesting thing you want to work on and we can figure out how we can fit it in this. Or by opening up an issue in the <a class="article-a" href="https://github.com/yashbonde/freeciv-python">repo</a>, I already have put up a few.
+        </p>
+
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="images/instagram.svg"></a>
+            <a href="https://www.fiverr.com/yashbonde"><img src="images/fiverr.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>
