@@ -19,70 +19,63 @@ article * {
 @media (max-width: 8.5in) {
     /* what ever we need to if the width is less than 9.0in */
     article { grid-template-columns: 1fr 5% [start] 15% 60% 15% [end] 5% 1fr; }
+    :root {font-size: 14px};
 }
 
 p { 
-	font: 400 1.0rem/1.5 "Raleway";
-	color: #202020;
-	margin-bottom: 1.5rem;
+  font: 400 1.0rem/1.5 "Raleway";
+  color: #202020;
+  margin-bottom: 1.5rem;
 }
 
 .article-a {
-       box-shadow: inset 0 -0.25em #FFBF00;
-       -moz-transition: all .5s ease-in-out;
-       -o-transition: all .5s ease-in-out;
-       -webkit-transition: all .5s ease-in-out;
-       transition: all .5s ease-in-out;
+    box-shadow: inset 0 -0.25em #FFBF00;
+    -moz-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    -webkit-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
 }
 
-.article-a:hover { box-shadow: inset 0 -0.25em #3DB277;
+.article-a:hover {
+    box-shadow: inset 0 -0.25em #3DB277;
 }
 
-.landing-page {
-  grid-column: 1/8;
-  background-color: #E8E5B2;
-  background: url("../files/bp.svg") center no-repeat;
+.top-box {
+    /* Center and scale the image nicely */
+    background: url("../files/bp.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 
-  background-size: cover;
+    /* Needed to position the navbar */
+    position: relative;
 
-  margin: 0 0;
+    /* define the height */
+    grid-column: 1/8;
+    min-height: 5in;
+    max-height: 10in;
 
-  padding-top: 1.0rem;
-  padding-bottom: 1.0rem;
-
-  height: 30.0rem;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    
+    justify-content: center;
+    align-items: center;
 }
 
-.landing-page.container {
-  display: flex;
-}
+.top-box h1 {
 
+    justify-content: center;
+    align-content: center;
 
-.landing-page h1 {
-  grid-column: start/end;
-
-  font: 700 3.0rem/1.0 "Playfair Display";
-  text-align: center;
+    font: 700 3.0rem/1.0 "Playfair Display";
+    text-align: center;
+    padding: 1.4rem;
   
-  color: #1f1f1f;
-
-  background: #B8B47A50;
-  padding-top: 1.0rem;
-  padding-bottom: 0.5rem;
-
-  margin-top: 15rem;
-}
-
-.landing-page h2 {
-  grid-column: start/end;
-
-  font: 700 1.2rem/1.0 "Playfair Display";
-  text-align: center;
-  color: #1f1f1f;
-
-  background: #B8B47A50;
-  padding-bottom:  1.0rem;
-
+    color: #1f1f1f;
+    background: #E8E5B295;
 }
 
 .banner-middle {
