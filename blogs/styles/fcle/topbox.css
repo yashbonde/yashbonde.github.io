@@ -19,6 +19,7 @@
     font: 700 3.0rem/1.0 "Staatliches";
     text-align: left;
     color: #f8f8f8;
+    padding: 1.0rem;
 
     grid-row: 2 / 3;
 }
