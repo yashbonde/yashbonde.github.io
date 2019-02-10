@@ -1,0 +1,129 @@
+h1   { font: 700 3.0rem/1.2 "Staatliches";
+       color: #202020;
+       margin-bottom: 0.3rem;}
+
+h2   { font: 400 1.5rem/1.2 "Staatliches";
+       color: #616161;
+       margin-bottom: 0.8rem;}
+
+time { font: 700 0.8rem/1.2 "Noto Sans";
+       color: #B20737;
+       margin-bottom: 1.0rem;}
+
+h3   { font: 700 1.0rem/1.2 "Noto Sans";
+       color: #B20737;
+       margin-bottom: 0.8rem;
+       text-transform: uppercase;}
+
+h4 {   font: 700 0.9rem/1.2 "Noto Sans";
+       color: #616161;
+       margin-bottom: 0.8rem;;
+}
+
+p   { font: 400 1.0rem/1.5 "Noto Sans";
+       color: #202020;
+       margin-bottom: 1.5rem;
+       text-align: justify;
+}
+
+li {
+       font: 400 1.0rem/1.5 "Noto Sans";
+       color: #202020;
+       margin-bottom: 0.25rem;
+       text-align: justify;
+}
+
+hr {
+       margin-bottom: 1.5rem;
+       width: 80%;
+       margin-right: auto;
+       margin-left: auto;
+       height: 3px;
+       background-color: #030303;
+}
+
+/* top box qualities */
+
+.top-box h1 {
+
+    justify-content: center;
+    align-content: center;
+
+    font: 700 3.0rem/1.0 "Staatliches";
+    text-align: left;
+    padding: 3.0rem;
+
+    grid-row: 1 / 2;
+}
+
+.top-box h2 {
+
+    justify-content: center;
+    align-content: center;
+
+    font: 700 2.0rem/1.0 "Staatliches";
+    text-align: left;
+    color: #616161;
+
+    grid-row: 2 / 3;
+}
+
+/* links hanlding with fade in and fade-out */
+
+.article-a {
+       box-shadow: inset 0 -0.25em #FFBF00;
+       -moz-transition: all .5s ease-in-out;
+       -o-transition: all .5s ease-in-out;
+       -webkit-transition: all .5s ease-in-out;
+       transition: all .5s ease-in-out;
+}
+
+.article-a:hover {
+       box-shadow: inset 0 -0.25em #FF3755;
+       -moz-transition: all .5s ease-in-out;
+       -o-transition: all .5s ease-in-out;
+       -webkit-transition: all .5s ease-in-out;
+       transition: all .5s ease-in-out;
+}
+
+.index-a {
+       box-shadow: inset 0 -0.15em #00B58780;
+       -moz-transition: all .5s ease-in-out;
+       -o-transition: all .5s ease-in-out;
+       -webkit-transition: all .5s ease-in-out;
+       transition: all .5s ease-in-out;
+}
+
+.index-a:hover {
+       box-shadow: inset 0 -0.15em #6A007580;
+       -moz-transition: all .5s ease-in-out;
+       -o-transition: all .5s ease-in-out;
+       -webkit-transition: all .5s ease-in-out;
+       transition: all .5s ease-in-out;
+}
+
+/* QUOTES */
+
+blockquote {
+       font-weight: 600;
+       font-size: 1.0rem;
+       line-height: 1.4;
+       margin: 0;
+       padding: 0.5rem 1.0rem;
+
+       border-left: 8px solid #B20737;
+
+       font-style: italic;
+       margin-bottom: 1.5rem;
+}
+
+/* inline code */
+code-inline { font-family: "Ubuntu Mono";
+       font-weight: 700;
+       background: #dedede;}
+
+
+figcaption p { color: #616161; }
+
+@media (max-width: 8.5in) { :root { font-size: 16px; } }
+@media (max-width: 5.0in) { :root { font-size: 14px; } }

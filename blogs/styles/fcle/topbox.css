@@ -1,0 +1,33 @@
+/* top box qualities */
+
+.top-box {
+    display: grid;
+    width:  100%;
+    height: 93vh;
+    background: #1e1e1e;
+    background-image: url("FC_final.svg");
+    background-size: cover;
+    background-position: top;
+
+    grid-template-rows: 4fr 2fr 4fr;
+}
+
+/* parallax divisions */
+
+.top-box h1 {
+
+    font: 700 3.0rem/1.0 "Staatliches";
+    text-align: left;
+    color: #f8f8f8;
+
+    grid-row: 2 / 3;
+}
+
+.top-box h2 {
+
+    font: 700 2.0rem/1.0 "Staatliches";
+    text-align: left;
+    color: #616161;
+
+    grid-row: 3 / 4;
+}
