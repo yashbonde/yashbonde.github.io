@@ -9,19 +9,24 @@
 	<!-- Link the main.css stylesheet -->
 	<link href="blogs/styles/reset.css" rel="stylesheet">
 	<link href="blogs/styles/-debug.css" rel="stylesheet">
-	<link href="css/index-main.css" rel="stylesheet">
-	<link href="blogs/styles/nav.css" rel="stylesheet">
+
+	<link href="css/nav.css" rel="stylesheet">
 	<link href="blogs/styles/footer-blog.css" rel="stylesheet">
-	<link href="css/index-article.css" rel="stylesheet">
-    <link href="css/updates.css" rel="stylesheet">
+
+    <link href="blogs/styles/article.css" rel="stylesheet">
+    <link href="blogs/styles/article-text.css" rel="stylesheet">
+    <link href="blogs/styles/article-figure.css" rel="stylesheet">
+
+    <link href="css/musings.css" rel="stylesheet">
+    <link href="css/project.css" rel="stylesheet">
 
     <!-- OPTIONAL: Google Fonts (don't forget to edit main.css also) -->
-	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Staatliches" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
 
 </head>
-<body>
+<body style="background: #f7f7e2;">
 	<nav>
         <a class = "nav-home" href="index.html">HOME</a>
         <a class = "nav-project" href="#">PROJECTS</a>
@@ -30,7 +35,41 @@
     </nav>
 
     <article>
-    	<h1 style="margin: 3.0rem; text-align: center; font:700 1.5rem/1.2 'Playfair Display'; background: #E8E5B2; padding: 1.0rem;">PROJECTS PAGE COMING UP SOON</h1>
+    	<h1 style="font-family: Staatliches;">Home of the Projects</h1>
+        <h2 style="font-family: Staatliches; color: #9f926e;">Projects are the best way to showcase your skills</h2>
+
+        <p>
+            This has been a long overdue page on my website. I believe that projects and work done should be given priority over everything else when creating a resume or portfolio. With that in mind I wanted to create a great UI for it, for now I hacked up a card interface but I don't think this is the final iteration. I have added a few cards for now will add more as more things are built.
+        </p>
+
+        <a href="blogs/fcle.html">
+            <project-card style="margin-bottom: 1.8rem;" class=fcle-card>
+                <name style="color: #ffc000;">FCLE</name>
+                <info style="color: antiquewhite; text-transform: uppercase;">World's most difficult RL environment</info>
+            </project-card>
+        </a>
+
+        <a href="https://github.com/yashbonde/transformer_network_tensorflow">
+            <project-card style="margin-bottom: 1.8rem;" class=transformer-card>
+                <name style="color: #3a3a3a;">Transformer Model</name>
+                <info style="color: rgb(117, 117, 117); text-transform: uppercase;">Attention is all you need</info>
+            </project-card>
+        </a>
+
+        <a href="https://github.com/yashbonde/Reinforcement-Learning-Stocks">
+            <project-card style="margin-bottom: 1.8rem;" class=stock-card>
+            	<name style="color: #98f4f8;">Stock Market RL</name>
+            	<info style="color: antiquewhite; text-transform: uppercase;">RL agent for stock market</info>
+        	</project-card>
+        </a>
+
+        <a href="https://github.com/yashbonde">
+            <project-card style="margin-bottom: 1.8rem;">
+                <name style="color: #ffbf00;">More Projects</name>
+                <info style="color: antiquewhite; text-transform: uppercase;">Head over to Github</info>
+            </project-card>
+        </a>
+
     </article>
 
     <footer>

@@ -3,13 +3,13 @@
 .top-box {
     display: grid;
     width:  100%;
-    height: 93vh;
+    height: 95vh;
     background: #1e1e1e;
     background-image: url("FC_final.svg");
     background-size: cover;
     background-position: top;
 
-    grid-template-rows: 4fr 2fr 4fr;
+    grid-template-rows: 4fr 2fr 0.1fr 3.9fr;
 }
 
 /* parallax divisions */
@@ -28,7 +28,9 @@
 
     font: 700 2.0rem/1.0 "Staatliches";
     text-align: left;
-    color: #616161;
+    color: #ffdcdc;
+    padding: 1.0rem;
+    letter-spacing: 1.4px;
 
     grid-row: 3 / 4;
 }

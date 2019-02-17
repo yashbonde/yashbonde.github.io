@@ -42,32 +42,6 @@ hr {
        background-color: #030303;
 }
 
-/* top box qualities */
-
-.top-box h1 {
-
-    justify-content: center;
-    align-content: center;
-
-    font: 700 3.0rem/1.0 "Staatliches";
-    text-align: left;
-    padding: 3.0rem;
-
-    grid-row: 1 / 2;
-}
-
-.top-box h2 {
-
-    justify-content: center;
-    align-content: center;
-
-    font: 700 2.0rem/1.0 "Staatliches";
-    text-align: left;
-    color: #616161;
-
-    grid-row: 2 / 3;
-}
-
 /* links hanlding with fade in and fade-out */
 
 .article-a {
