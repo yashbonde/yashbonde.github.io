@@ -1,4 +1,5 @@
 /* this has the classes for various gradients */
+/* gradients can be made here:  */
 
 .grad-1 {
 	background: rgb(215,49,76);
@@ -46,5 +47,21 @@
 	-webkit-box-shadow: 0 0px 12px 5px rgba(230, 100, 110, 0.75);
 	-moz-box-shadow: 0 0px 12px 5px rgba(230, 100, 110, 0.75);
 	box-shadow: 0 0px 12px 5px rgba(230, 100, 110, 0.75);
+}
+
+.grad-4 {
+	background: rgb(34,193,195);
+	background: linear-gradient(25deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+}
+
+.shadow-4:hover{
+	-webkit-box-shadow: 0 0px 12px 5px rgba(181,230,89,1);
+	-moz-box-shadow: 0 0px 12px 5px rgba(181,230,89,1);
+	box-shadow: 0 0px 12px 5px rgba(181,230,89,1);
 }
 

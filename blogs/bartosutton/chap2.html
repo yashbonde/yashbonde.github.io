@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Barto Sutton | Chapter 2 Notes</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Link the main.css stylesheet -->
+    <link href="../styles/reset.css" rel="stylesheet">
+    <link href="../styles/-debug.css" rel="stylesheet">
+    <link href="../styles/article.css" rel="stylesheet">
+    <link href="../styles/article-text.css" rel="stylesheet">
+    <link href="../styles/article-figure.css" rel="stylesheet">
+    <link href="../styles/nav.css" rel="stylesheet">
+    <link href="../styles/code-block.css" rel="stylesheet">
+    <link href="./assets/exer.css" rel="stylesheet">
+
+    <link href="../styles/footer-blog.css" rel="stylesheet">
+
+    <!-- Latex -->
+    <!-- for help with symbols goto: https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../../index.html">HOME</a>
+        <a class = "nav-project" href="../../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../../musings.html">BLOG</a>
+        <a class = "nav-resume" href="../../resume.html">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Chapter 2: Multi-Armed Bandit</h1>
+        <h2>Handling Exploitation vs. Exploration</h2>
+
+        <time datetime="19-05-2019">MAY 19, 2019</time>
+
+        <p style="font-size: 0.8rem;">
+            <h3>INDEX</h3>
+            <li><a class="index-a" href="#2_1">2.1 K-armed Bandit Problem</a></li>
+            <li><a class="index-a" href="#2_2">2.2 Action Value Methods</a></li>
+            <li><a class="index-a" href="#2_4">2.4 Incremental Implementation</a></li>
+            <li><a class="index-a" href="#2_5">2.5 Tracking a non-stationary process</a></li>
+            <li><a class="index-a" href="#2_5">2.6 Optimisitc Initial Values</a></li>
+            <li><a class="index-a" href="#2_5">2.7 Upper Confidence Bound Action Selection</a></li>
+            <li><a class="index-a" href="#2_5">2.8 Gradient Bandit Algorithm</a></li>
+            <li><a class="index-a" href="#2_5">2.9 Associative Search (Contextual Bandits)</a></li>
+        </p>
+
+        <p>
+            These are just my notes of the book <a href="http://incompleteideas.net/book/the-book-2nd.html" class="article-a">Reinforcement Learning: An Introduction</a>, all the credit for book goes to the authors and other contributors. My solutions to the exercises are on <a href="./chap2_ex.html" class="article-a">this page</a>.
+        </p>
+
+        <blockquote style="border-left: 8px solid #ffbf00;">
+            We do not know what the rules of the game are; all we are allowed to do is watch the playing. Of course if we are allowed to watch long enough we may catch on a few rules. - Richard Feynman
+        </blockquote>
+
+        <h3 id="2_1">2.1 K-armed Bandit Problem</h3>
+        <p>
+            Assume that you are repeatedly faced with a choice among \(k\) options, after each choice you receive a numnerical reward from stationary probability distribution. Your objective is to maximise the total reward over some time period. So the value of some arbitrary action \(a\) is given by \(q_*(a) = \mathbb{E}[R_t|A_t=a]\). We denote the estimated value of action \(a\) at timestep \(t\) as \(Q_t(a)\) which we would like make close to \(q_*(a)\).</p>
+
+        <h3 id="2_2">2.2 Action Value Methods</h3>
+        <p>
+            Since we need a moving understanding of the reward we calculate the estimates for it. One way to estimate is by averaging all the rewards received.
+            \[Q_t(a) \doteq \frac{\sum_{i = 0}^{t-1}R\cdot 1_{A_i = 1}}{\sum_{i = 0}^{t-1}{1_{A_i = a}}}\]
+            where \(1_{A_t = a}\) means value is one for all the cases where \(A_t = a\). Once we have this to take any action we can use \({argmax}_a Q_t(a)\), which is to take a the action with highest value, this is also called a "greedy method". But this kind of selection prevents "exploration" of the values and gets stuck. To prevent this we use epsilon greedy method, where we take a random action with probability \(\epsilon\).</p>
+
+        <h3 id="2_4">2.4 Incremental Implementation</h3>
+        <p style="margin-bottom: 0.9rem;">
+            Now we continue to build upon the previous equation to make it recursive like this. (Ideally we would liek to have as many recursive algorithms as possible, this makes more sense computationally)
+            \[Q_{n+1} = \frac{1}{n}\sum_{i = 1}^{n}R_i\]
+            \[Q_{n+1} = \frac{1}{n}(R_n + \sum_{i = 1}^{n-1}R_i)\]
+            \[Q_{n+1} = Q_n + \frac{1}{n}(R_n - Q_n)\]
+            Which gives us a meta form of equation that we will use throughout in reinforcement learning, that is
+            \[NewEstimate \gets OldEstimate + StepSize \]\[\times (Target - OldEstimate)\]
+            Where \(Target - OldEstimate\) is the \(Error\) which is reduced by taking a step of \(StepSize\) in towards the \(Target\). Note that the \(StepSize = \alpha = \frac{1}{n}\)This might look similar to the Gradient Descent update and later we will see how we can use gradients to get proper values. So we can give the bandit algorithm as follows:
+        </p>
+        <figure class="size-2">
+            <img src="./assets/bandit_algo.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Bandit Learning Algorithm</p></figcaption>
+
+        <h3 id="2_5">2.5 Tracking a non-stationary process</h3>
+        <p>
+            When the probability distribution is not static i.e. it does not change with time it is called stationary process, but most of the porblems in reinforcement learning has non-statioanry distribution. We can expand and caculate the values as follows, here \(\alpha\) is the step-size
+            \[Q_{n+1} = Q_n + \alpha(R_n - Q_n)\]
+            \[Q_{n+1} = \alpha R_n + (1 - \alpha)Q_n\]
+            \[Q_{n+1} = \alpha R_n + (1 - \alpha)(\alpha R_{n-1} + (1 - \alpha)(...))\]
+            \[Q_{n+1} = (1 - \alpha)^nQ_1 + \sum_{i = 1}^{n}\alpha(1 - \alpha)^{n-i} = 1R_i\]
+            Note that we call this weighted average because the average with or without the additional terms will remain the same, since \((1 - \alpha)^n + \sum_{i = 1}^{n}\alpha(1 - \alpha)^{n-i} = 1\). This type of distributions are called "exponential recency weighted average".
+        </p>
+
+        <div class="boxed">
+            <p style="margin-bottom: 0.7rem;">
+                There are two important things for proper \(\alpha\) (remember this as we will need to use it later on):
+            \[1. \sum_{n=1}^{\infty} \alpha_n(a)= \infty\]
+            \[2. \sum_{n=1}^{\infty} \alpha_n^2(a)= 0\]
+            </p>
+        </div>
+
+        <h3 id="2_6">2.6 Optimistic Initial Values</h3>
+        <p>
+            The methods yet discussed are dependent in some initial action-value estimate \(Q_1(a)\), or statistically speaking these methods are biased. Initial values can be changed to encourage exploration. Suppose \(q_*(a) = \mathcal{N}(0,1)\) but we set \(Q_1 = +5\). Whichever actions are chosen, the reward is less than the starting estimates. The learner switches to the other actions after being "disappointed" with the rewards it is receiving. We call this trick <i>Optimistic Initial Values</i>. How ever it oes not perform well in non-stationary problems as its exploration is temporary. If the task cahnges, creating renewed need for exploration, this method cannot help.
+        </p>
+
+        <h3 id="2_7">2.7 Upper Confidence Bound Action Selection</h3>
+        <p>
+            \(\epsilon\)-greedy action selection forces the non-greedy solutions to the tried but there is not a discrimination between them. It would be better to select among non greedy action according to their potential of actually being optimistic.
+            \[A_t \doteq argmax_a (Q_t(a) + c\sqrt{\frac{ln(t)}{N_t(a)}})\]
+            Where \(N_t(a)\) is the number of times \(a\) has been selected prior to \(t\). So if \(N_t(a) = 0\), then \(a\) is considered to be maximising action. The idea of <i>Upper Confidence Bound (UCB)</i> action selection is that teh swure root term is the measure of uncertainity \(c\) confidence level. Each time \(a\) is selected the uncertainity is decreased.
+        </p>
+        <p>
+            It is more difficult to extend beyond bandits and move to general RL settings:
+            <li>For non-stationary distributions modre complex methods would be needed</li>
+            <li>When state spaces are huge, it will fail</li>
+        </p>
+
+        <h3 id="2_8">2.8 Gradient Bandit Algorithm</h3>
+        <p>
+            Selecting action on estimates is not the only way we consider learning a <i>preference</i> for each action \(a\), denoted by \(H_t(a)\). We call the preference probability distribution as <i>policy</i> and denote it by \(\pi_t(a)\)
+            \[Pr\{A_t=a\} \doteq \frac{e^{H_t(a)}}{\sum_{b=1}^{k}e^{H_t(b)}} \doteq \pi_t(a)\]
+            Where \(H_1(a) = 0\). This is useful as the only thing required for any situation is the relative preference over the other possible actions. The equation for stochastic gradient ascent is given as:
+            \[H_{t+1}(A_t) = H_t(A_t) + \alpha(R_t - \bar{R_t})(\dot{1}_{a = A_t} - \pi_t(a))\]
+            Here \(\dot{1}\) is an operator whose the value is \(1\) if \(a = A_t\) else \(0\). \(\bar{R_t} \in \mathbb{R}\) is the average of all the rewards up through and including time \(t\). \(\bar{R_t}\) term serves as a baseline probability of taking \(A_t\) in the future is increased and vica versa.
+        </p>
+
+        <h3 style="color: #656565;">Addtional Topic: <a href="./chap2_add1.html" class="article-a">Gradient Descent Algorithm as Stochastic Gradient Ascent</a></h3>
+        <p>
+            This is an additional topic where we show here that the gradient bandit algorithm can be represented in form of stochastic gradient ascent (SGA), is covered in detail in another page <a href="./chap2_add1.html" class="article-a">here</a>.
+        </p>
+
+        <h3 id="2_9">2.9 Associative Search (Contextual Bandits)</h3>
+        <p>
+            Unlike till now where we simply had a k-bandit problem, what if there are several different k-bandit problems and at each step you you confront one of those chosen at random. Thus changing the bandit task to a step by step task, whise true action values are changed randomly. However in Practive it does not work well. They are like the full RL problem in that they involve learning a policy. But like k-armed bandit their reward is only at the immidiate step. If its action affects the nex situation adn rewards it would become a full RL problem.
+        </p>
+
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="../images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="../images/instagram.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>

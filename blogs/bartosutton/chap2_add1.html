@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Barto Sutton | Chapter 2 Additional Notes</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Link the main.css stylesheet -->
+    <link href="../styles/reset.css" rel="stylesheet">
+    <link href="../styles/-debug.css" rel="stylesheet">
+    <link href="../styles/article.css" rel="stylesheet">
+    <link href="../styles/article-text.css" rel="stylesheet">
+    <link href="../styles/article-figure.css" rel="stylesheet">
+    <link href="../styles/nav.css" rel="stylesheet">
+    <link href="../styles/code-block.css" rel="stylesheet">
+    <link href="./exer.css" rel="stylesheet">
+
+    <link href="../styles/footer-blog.css" rel="stylesheet">
+
+    <!-- Latex -->
+    <!-- for help with symbols goto: https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../../index.html">HOME</a>
+        <a class = "nav-project" href="../../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../../musings.html">BLOG</a>
+        <a class = "nav-resume" href="../../resume.html">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Chapter 2 Additional Topics</h1>
+        <h2>Bandit Gradient Algorithm as Stochastic Gradient Ascent</h2>
+
+        <time datetime="19-05-2019">MAY 19, 2019</time>
+        <p>
+            <b>NOTE: This part requires some basic understading of calculus.</b><br>
+            These are just my notes of the book <a href="http://incompleteideas.net/book/the-book-2nd.html" class="article-a">Reinforcement Learning: An Introduction</a>, all the credit for book goes to the authors and other contributors. Complete notes can be found <a href="./chap2.html">here</a>.
+        </p>
+        <p>
+            Notes for gradient bandit algorithm are given <a href="./chap2.html#2_8" class="article-a">here</a>. We are going to show here that the gradient bandit algorithm can be represented in form of stochastic gradient ascent (SGA). Note \(\mathbb{E}[R_t] = \sum_i \pi_t(a)q_*(a)\). The gradient bandit algorithm is given as
+            \[H_{t+1}(A_t) = H_t(A_t) + \alpha(R_t - \bar{R_t})(\dot{1}_{a = A_t} - \pi_t(a)) \tag{1} \]
+            where \(\dot{1}_{a = A_t}\) is an operator whose the value is \(1\) if \(a = A_t\) else \(0\). The SGA can be given as (note \(+\) instead of \(-\) for SGD)
+            \[H_{t+1} = H_t + \alpha \frac{\partial \mathbb{E}[R_t]}{\partial H_t(a)}\]
+            The problem here is that we do now know the value of optimal action \(q_*(a)\). Assuming it can be written as a SGA, we replace the value of \(\mathbb{E}[R_t]\)
+            \[\frac{\partial \mathbb{E}[R_t]}{\partial H_t(a)} = \frac{\partial \left[\sum_i \pi_t(a)q_*(a)\right]}{\partial H_t(a)}\]
+            \[= \sum_i q_*(a)\frac{\partial \pi_t(a)}{\partial H_t(a)}\]
+        </p>
+        <p>
+            Now since \(\pi_t(a)\) is a probability distribution (PD) there are two things to notice before going to the next step.
+            <li>\(\sum_i\frac{\partial \pi_t(a)}{\partial H_t(a)} = 0\) as there might be changes in the probability distribution but the changes remain the same. Other way to look at it is that \(\sum_i\pi_t(a) = 1\) thus \(\partial \sum_i\pi_t(a) = \sum_i\partial\pi_t(a) = 0\)</li>
+            <li>We can add another baseline \(B_t\) which is independent of \(H_t(a)\)</li>
+        </p>
+        <p>
+            So we can modify the equation as follows:
+            \[\frac{\partial \mathbb{E}[R_t]}{\partial H_t(a)} = \sum_i (q_*(a) - B_t)\frac{\partial \pi_t(a)}{\partial H_t(a)}\]
+            Multiplying and dividing by the policy \(\pi_t(x))\)
+            \[= \sum_i \frac{\pi_t(x)}{\pi_t(x)} (q_*(a) - B_t)\frac{\partial \pi_t(a)}{\partial H_t(a)}\]
+            \[= \sum_i \pi_t(x) \left[\frac{(q_*(a) - B_t)}{\pi_t(x)} \times \frac{\partial \pi_t(a)}{\partial H_t(a)}\right]\]
+            Now this can be represented as the expectation function since there is a PD multiplied to it.
+            \[= \mathbb{E} \left[\frac{(q_*(a) - B_t)}{\pi_t(a)} \times \frac{\partial \pi_t(a)}{\partial H_t(a)}\right] \tag{2} \]
+        </p>
+        <p>
+            Now we shift to solving the differential \(\frac{\partial \pi_t(a)}{\partial H_t(a)}\) which is a differential of type \(\frac{\partial f(x)}{\partial g(x)}\). This can be expanded as follows:
+            \[\frac{\partial}{\partial x}\left( \frac{f(x)}{g(x)} \right) = \frac{\frac{\partial f(x)}{\partial x}g(x) - f(x)\frac{\partial g(x)}{\partial x}}{g(x)^2}\]
+            Putting the value of \(\pi_t(a) = softmax(H_t(a))\) in the equation gives
+            \[\frac{\partial}{\partial H_t(a)} \pi_t(a) = \frac{\partial}{\partial H_t(a)} \left( \frac{e^{H_t(x)}}{\sum_{y=1}^{k} e^{H_t(y)}} \right) \]
+            This when reduced gives the result
+            \[\frac{\partial}{\partial H_t(a)} \pi_t(a) = \frac{\dot{1}_{a=x}e^{H_t(x)}\sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(y)}e^{H_t(x)}} {{(\sum_{y=1}^{k} e^{H_t(y)}})^2}\]
+            \[= \frac{\dot{1}_{a=x}e^{H_t(x)}} {{\sum_{y=1}^{k} e^{H_t(y)}}} - \frac{e^{H_t(y)}e^{H_t(x)}} {{(\sum_{y=1}^{k} e^{H_t(y)}})^2}\]
+            \[= \pi_t(x) \left(\dot{1}_{a = x} - \pi_t(a) \right) \tag{3} \]
+        </p>
+        <p>
+            Putting the \((3)\) in \((2)\) gives
+            \[\frac{\partial \mathbb{E}[R_t]}{\partial H_t(a)} = \mathbb{E} \left[\frac{(q_*(a) - B_t)}{\pi_t(a)} \times \pi_t(x) \left(\dot{1}_{a = x} - \pi_t(a) \right) \right] \]
+            \[= \mathbb{E}\left[(q_*(a) - B_t)(\dot{1}_{a = x} - \pi_t(a))\right]\]
+            \[= \mathbb{E}\left[(R_t - \bar{R_t})(\dot{1}_{a = x} - \pi_t(a))\right] \tag{4} \]
+            Any expectation function can be re-written in incremental updates and \((4)\) is written as in \((1)\). Thus we have shown that the gradient bandit algorithm can be written as SGA and it gives the same results.
+        </p>
+
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="../images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="../images/instagram.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>

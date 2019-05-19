@@ -61,7 +61,7 @@ hr {
 }
 
 .index-a {
-       box-shadow: inset 0 -0.15em #00B58780;
+       box-shadow: inset 0 -0.15em #00b540ee;
        -moz-transition: all .5s ease-in-out;
        -o-transition: all .5s ease-in-out;
        -webkit-transition: all .5s ease-in-out;
@@ -69,7 +69,7 @@ hr {
 }
 
 .index-a:hover {
-       box-shadow: inset 0 -0.15em #6A007580;
+       box-shadow: inset 0 -0.15em #da0768ad;
        -moz-transition: all .5s ease-in-out;
        -o-transition: all .5s ease-in-out;
        -webkit-transition: all .5s ease-in-out;
