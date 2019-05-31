@@ -13,3 +13,10 @@ figcaption {
     justify-content: center; /* to centre the box horizontally */
 }
 
+.ytVideo {
+	grid-column: 2 / 7;
+	margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center; /* to centre the box horizontally */
+}
+
