@@ -1,5 +1,6 @@
 /* this has the classes for various gradients */
 /* gradients can be made here:  */
+/* box shadow can be found here: https://www.cssmatic.com/box-shadow */
 
 .grad-1 {
 	background: rgb(215,49,76);
@@ -63,5 +64,21 @@
 	-webkit-box-shadow: 0 0px 12px 5px rgba(181,230,89,1);
 	-moz-box-shadow: 0 0px 12px 5px rgba(181,230,89,1);
 	box-shadow: 0 0px 12px 5px rgba(181,230,89,1);
+}
+
+.grad-5 {
+	background: rgb(253,255,197);
+	background: linear-gradient(25deg, rgba(253,255,197,1) 0%, rgba(126,102,48,1) 100%);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+}
+
+.shadow-5:hover{
+	-webkit-box-shadow: 0 0px 12px 5px rgba(204,176,130,1);
+	-moz-box-shadow: 0 0px 12px 5px rgba(204,176,130,1);
+	box-shadow: 0 0px 12px 5px rgba(204,176,130,1);
 }
 
