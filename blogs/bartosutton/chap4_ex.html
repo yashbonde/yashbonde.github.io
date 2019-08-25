@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Barto Sutton | Chapter 4 Exercises</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Link the main.css stylesheet -->
+    <link href="../styles/reset.css" rel="stylesheet">
+    <link href="../styles/-debug.css" rel="stylesheet">
+    <link href="../styles/article.css" rel="stylesheet">
+    <link href="../styles/article-text.css" rel="stylesheet">
+    <link href="../styles/article-figure.css" rel="stylesheet">
+    <link href="../styles/nav.css" rel="stylesheet">
+    <link href="../styles/code-block.css" rel="stylesheet">
+    <link href="./exer.css" rel="stylesheet">
+
+    <link href="../styles/footer-blog.css" rel="stylesheet">
+
+    <!-- Latex -->
+    <!-- for help with symbols goto: https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../../index.html">HOME</a>
+        <a class = "nav-project" href="../../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../../musings.html">BLOG</a>
+        <a class = "nav-resume" href="../../resume.html">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Chapter 4 Exercises</h1>
+        <h2>Some solutions might be off</h2>
+
+        <time datetime="23-05-2019">MAY 23, 2019</time>
+
+        <p>
+            <b>NOTE: This part requires some basic understading of calculus.</b><br>
+            These are just my solutions of the book <a href="http://incompleteideas.net/book/the-book-2nd.html" class="article-a">Reinforcement Learning: An Introduction</a>, all the credit for book goes to the authors and other contributors. Complete notes can be found <a href="./chap3.html" class="article-a">here</a>. If there are any problems with the solutions or you have some ideas ping me at <code>bonde.yash97@gmail.com</code>.
+        </p>
+
+        <figure class="size-3">
+            <img src="./assets/ex4_1.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Grid for problems 4.1 - 4.3</p></figcaption>
+
+        <h3 id="4_1">4.1 Q-Values</h3>
+        <p>
+            \[q_\pi(11, down) = \sum_a \pi(a|s)r = 3 \times 0.25 \times -1 = -0.75\]
+            \[q_\pi(7, down) = 4 \times 0.25 \times -1 = -1 \]
+        </p>
+
+        <h3 id="4_2">4.2 state values</h3>
+        <p>
+            \[v_\pi(s) = \sum_a \pi(a|s)q_\pi(s,a)\]
+            \[v_\pi(15) = -1\]
+            After moving from \(13\) we get value for \(v_\pi(13) = -1\) and so 
+            \[v_\pi(15) = 0.25(-2) + 0.75(-3) = -1.25\]
+        </p>
+
+        <h3 id="4_3">4.3 q-value functions</h3>
+        <p>
+            \[q_\pi(s,a) = \mathbb{E} \left[G_t|S_t=s, A_t=a \right]\]
+            \[q_\pi(s,a) = \mathbb{E} \left[R_{t+1} + \gamma G_{t+1} |S_t=s, A_t=a \right]\]
+            \[q_\pi(s,a) = \mathbb{E} \left[R_{t+1} + \gamma q_pi(S_{t+1}, A_{t+1})|S_t=s, A_t=a \right]\]
+            \[q_\pi(s,a) = \sum_{s',r}p(s',r|s,a) \left[r + \sum_{a'}\pi(a'|s')q_\pi(s',a') \right]\]
+            \[q_k(s,a) = \sum_{s',r}p(s',r|s,a) \left[r + \sum_{a'}\pi(a'|s')q_{k+1}(s',a') \right]\]
+        </p>
+
+        <h3 id="4_4">4.4 Subtle bug</h3>
+        <p>
+            The <a href="./chap4.html#4_3" class="article-a">policy iteration algorithm</a> has a subtle bug as follows. Imagine if we are in a state \(s\) where either actions \(a_1\) and \(a_2\) predicted by the policy \(\pi(a|s)\) lead to the same state \(s'\) (assume it is terminal and there are multiple ways to reach the terminal). In this case the policy will keep on oscilating and may never terminate.
+            \[\pi(s) \leftarrow \max_a \sum_{s',r} p(s',r|s,a) \left[r + \gamma V(s') \right] \forall s \in S\]
+            To fix this we replace the second last line in algorithm i.e. if \(\text{old action} \ne \pi(s)\) then \(\text{policy-stable} \leftarrow \text{fails}\), because the policy is oscilating between equally good policies. The way to solve this is to replace it directly with the value returned, if the value is same then the policy is stable.
+            \[\text{if } v_{\pi'}(s) = v_\pi ; \text{policy-stable} \leftarrow \text{true}\]
+        </p>
+
+        <h3 id="4_5">4.5 Action Value Algorithm</h3>
+        <p>
+            The problem is to convert the <a href="./chap4.html#4_3" class="article-a">policy iteration algorithm's</a> \(v_*\) to \(q_*\). This can be done by adding an inner loop \(\forall a \in A_s\)
+            \[q(s,a) \leftarrow Q(s,a)\]
+            \[Q(s,a) \leftarrow \sum_{s',r}p(s'r|s,a)\left[r + \gamma \sum_{a'} \pi(a'|s') Q(s',a') \right]\]
+            \[\Delta \leftarrow \max_a \left[ \Delta, |q(s,a) - Q(s,a)| \right]\]
+        </p>
+
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="../images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="../images/instagram.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>
