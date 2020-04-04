@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Teaching Machines Rules and Algorithms</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Link the main.css stylesheet -->
+    <link href="styles/reset.css" rel="stylesheet">
+    <link href="styles/-debug.css" rel="stylesheet">
+    <link href="styles/article.css" rel="stylesheet">
+    <link href="styles/article-text.css" rel="stylesheet">
+    <link href="styles/article-figure.css" rel="stylesheet">
+    <link href="styles/nav.css" rel="stylesheet">
+    <link href="styles/code-block.css" rel="stylesheet">
+
+    <link href="styles/footer-blog.css" rel="stylesheet">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+    <style type="text/css">
+      .gist-data {max-height: 400px}
+    </style>
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../index.html">HOME</a>
+        <a class = "nav-project" href="../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../musings.html">BLOG</a>
+        <a class = "nav-resume" href="../resume.html">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Teaching Machines Rules and Algorithms</h1>
+        <h2>Cellular Automata Learning Neural Network</h2>
+
+        <time datetime="03-04-2020">APRIL 4, 2020</time>
+
+        <p> 
+            🦠 This particular Coronavirus strain <a class="article-a" href="https://en.wikipedia.org/wiki/Severe_acute_respiratory_syndrome_coronavirus_2">(SARS Cov2)</a> is the biggest calamity to happen to humanity since World War 2. It has put all of us in our homes without anything interesting to do, so I decided to take time and try out some whacky ideas. But being limited by compute power of a Google Colab I needed to try out something simple, quick and low power, not training some giant neural network based language model for <a class="article-a" href="https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge">Covid-19 Kaggle challenge</a>.
+        </p>
+
+        <p>
+            Like always I go on a bit of writing before getting to the point so <a class="article-a" href="#cellular-automata"><b>TL;DR</b></a>.
+        </p>
+
+        <h3>📦 Software 2.0</h3>
+        <p>
+           Machine learning is good with cases where we have large datasamples and we need to generate algorithms from it, though very important problem it's still has not entered the software industry as much as a developer would want. The few changes that have happened is that now I have to write an API query to Google and they run the networks. 
+        </p>
+
+        <p>
+            But this is boring and not where it should be, conventional software programming still dominates most of the things we do. I have a theory why that is, the current state of machine learning algorithms have gone from <b>data ➜ algorithm</b> but all the other software goes from <b>algorithm ➜ data</b> and <b>we do not have a way to teach network rules</b>.
+        </p>
+
+        <figure class="size-2">
+            <img src="https://www.researchgate.net/profile/Rainer_Endl/publication/225116605/figure/fig1/AS:671510029144090@1537111875988/Business-rules-as-integration-layers.png">
+        </figure>
+        <figcaption><p>An overview of how the business rules, you can look at the complexity that they have and ignoring the data flow piece there is a possibility to convert this into Neural Engine</p></figcaption>
+
+        <p>
+            The reason I bring up business rules is because that is what I do professionaly, building integrated systems that take in documents at one end and create business metrics at the other end. I had an idea that most of business rules can be converted into giant if/else statements and you just need a smart enough language to load that run those, this can be loosely interpreted as <a class="article-a" href="https://jpaulm.github.io/fbp/">Flow-based programing</a> where the data flows through and rules can be easily understood and created without writing a JSON for each complex rule.
+        </p>
+
+        <h3 id="cellular-automata">🤖 PoC: The idea of cellular automata</h3>
+        <p>
+            While my readings I came about two practical applications of neural network to perform tasks that are more software oriented. Both of them can be seen in <a class="article-a" href="https://deepmind.com/blog/article/differentiable-neural-computers">Differentiable Neural Computers</a>, one is long term copy pasting the other is shortest path finding on a graph. These are practical examples of a copy-pasting mechanism and <a class="article-a" href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">Dijkstra's Algorithm</a>, though still not the perfect solution but better than the rest.
+        </p>
+
+        <p>
+            I needed something that was simple enough, and I came across <a class="article-a" href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a> something that is very simple but can generate some amazing patterns. I was not interested in generating the specific grids but more on the simplicity of it's algorithm which has three simple rules
+            <li>Any live cell with two or three neighbors survives.
+            <li>Any dead cell with three live neighbors becomes a live cell.
+            <li>All other live cells die in the next generation. Similarly, all other dead cells stay dead.
+        </p>
+
+        <p>
+            This was good enough to implement and wrote a 20-min gist:
+            <script src="https://gist.github.com/yashbonde/13d70b067e98bdc89d3250a6c0c7596a.js"></script>
+            It generates sample like this:
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/CA_0.png">
+        </figure>
+        <figcaption><p>starting top right go line by line</p></figcaption>
+
+        <h3>❄️ Building a Network</h3>
+        <p>
+            All the main code is uploaded on <a class="article-a", href="https://colab.research.google.com/drive/1-Sw3jxWj4KOrZXBmCuKENUhuVr-hiSfT">this colab notebook</a>. In short there are a few ideas that I had
+            <li> since I just need to check the surrounding I can have kernel size of \(3\)
+            <li> as this operation needs to have same output shape as input we need to have autoencoder like structure, so rather than having <code>Conv-Conv-Deconv-Deconv</code> structure I have a <code>Conv-Deconv-Conv-Deconv</code> structure
+            <li> tensorflow is a nightmare to develop so shifted to pytorch
+            <li> since this is not a classification but more on line of regresstion its good to use MSE or BCE loss functions
+            <li>\(\sigma(\cdot)\) activation in final layer and a threshold of \(0.5\)
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/CA_1.png">
+        </figure>
+        <figcaption><p>Quick training result left: target, right: predicted</p></figcaption>
+
+        <p>
+            I got some good results after a quick model training I started getting good results. But there needs to be a good robustness test, so I tested on the following things:
+            <li> Edgecases where nothing changes: an algorithm trained on boards that have changes, can it generalise the algorithm to cases where nothing can change
+            <li> Board is very sparse or board is very dense: the board was trained on samples that have probability distribution \(P(1) = 0.3; P(0) = 0.7\) so could it generalise on boards that had a different distribution
+            <li> Size of grid changes: though the network is has same output structure as input could changes in grid size affect the performance
+        </p>
+
+        <h3>🤔 Some extensions and limitations</h3>
+        <p>
+            There are some very clear limitations for using this like lack of specificity i.e. we cannot get the exact output always because neural networks are still function approximators and not exact code. But I think this is solvable because we humans can store large set of rules in our neural networks and so we should be able to theoratically store this in computer.
+        </p>
+        <p>
+            Even in this case we still have trained our network by providing 1000s of sample, but what in situation where do not have such data or generate data by simulation. In most cases we do have the data but sometimes the organisation might have a pre-concieved notion and it may have never happened. Issue that comes with lack of data is that a particular BR might have been put in place as a failsafe.
+        </p>
+        <p>
+            <b>Another thought might be that do we even need something like this?</b> And my argument is that this is needed because then we can change it for good, implementing proper procedures, there will nonetheless issues that come from lack of explainability and approximations but pros will still outweigh the cons. Particularly less critical tedious operations will find benefit from this and in future this might allow for optimisation to take place and god knows we need that to happen.
+        </p>
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="images/instagram.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>
