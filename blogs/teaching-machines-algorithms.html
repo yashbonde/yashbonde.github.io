@@ -110,9 +110,34 @@
 
         <p>
             I got some good results after a quick model training I started getting good results. But there needs to be a good robustness test, so I tested on the following things:
-            <li> Edgecases where nothing changes: an algorithm trained on boards that have changes, can it generalise the algorithm to cases where nothing can change
-            <li> Board is very sparse or board is very dense: the board was trained on samples that have probability distribution \(P(1) = 0.3; P(0) = 0.7\) so could it generalise on boards that had a different distribution
-            <li> Size of grid changes: though the network is has same output structure as input could changes in grid size affect the performance
+
+            <li> <b>Size of grid changes</b>: though the network is has same output structure as input could changes in grid size affect the performance. It is very surprising to see the results there is no change in the performance of network when trained on fixed grid size but tested on multiple different size
+        <figure class="size-2">
+            <img src="./images/CA_2.png">
+        </figure>
+        <figcaption><p>Surprisingly there is no change on results and in fact it performs better on larger grid sizes</p></figcaption>
+
+        <figure class="size-2">
+            <img src="./images/CA_3.png">
+        </figure>
+        <figcaption><p>And no it is not over-fitting to give just one value; left: target, right: predicted</p></figcaption>
+
+            <li> <b>Board Sparsity</b>: the board was trained on samples that have probability distribution \(P(1) = 0.3; P(0) = 0.7\) so could it generalise on boards that had a different distribution
+        <figure class="size-2">
+            <img src="./images/CA_4.png">
+        </figure>
+        <figcaption><p>Though there is decline in performance when 1s occur too frequently its still above 95% mark</p></figcaption>
+        <figure class="size-2">
+            <img src="./images/CA_5.png">
+        </figure>
+        <figcaption><p>Edge cases are still tricky, pun intended; left: target, right: predicted</p></figcaption>
+
+            <li id="sparse"> <b>Edgecases where nothing changes</b>: an algorithm trained on boards that have changes, can it generalise the algorithm to cases where nothing can change. For this I got an accuracy of 99% but this is wrong because I am also comparing the negative values in accuracy 
+        <figure class="size-2">
+            <img src="./images/CA_6.png">
+        </figure>
+        <figcaption><p>Though it has the correct idea of where to look for it does not generate the proper result; left: target, right: predicted</p></figcaption>
+
         </p>
 
         <h3>🤔 Some extensions and limitations</h3>
@@ -120,10 +145,14 @@
             There are some very clear limitations for using this like lack of specificity i.e. we cannot get the exact output always because neural networks are still function approximators and not exact code. But I think this is solvable because we humans can store large set of rules in our neural networks and so we should be able to theoratically store this in computer.
         </p>
         <p>
-            Even in this case we still have trained our network by providing 1000s of sample, but what in situation where do not have such data or generate data by simulation. In most cases we do have the data but sometimes the organisation might have a pre-concieved notion and it may have never happened. Issue that comes with lack of data is that a particular BR might have been put in place as a failsafe.
+            Even in this case we still have trained our network by providing 1000s of sample, but what in situation where do not have such data or generate data by simulation. In most cases we do have the data but sometimes the organisation might have a pre-concieved notion and it may have never happened. Issue that comes with lack of data is that a particular BR might have been put in place as a failsafe. As seen <a class="article-a" href="#sparse">above</a> sparsity is still an issue, when an algorithm has not seen the samples it is unable to learn it properly.
         </p>
         <p>
             <b>Another thought might be that do we even need something like this?</b> And my argument is that this is needed because then we can change it for good, implementing proper procedures, there will nonetheless issues that come from lack of explainability and approximations but pros will still outweigh the cons. Particularly less critical tedious operations will find benefit from this and in future this might allow for optimisation to take place and god knows we need that to happen.
+        </p>
+
+        <p>
+            This is still at naive stage but if you have any comments do reach out to me at bonde.yash97@gmail.com
         </p>
     </article>
 
