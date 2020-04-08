@@ -56,25 +56,30 @@
 
         <h3 id="4_1">4.1 Q-Values</h3>
         <p>
-            \[q_\pi(11, down) = \sum_a \pi(a|s)r = 3 \times 0.25 \times -1 = -0.75\]
-            \[q_\pi(7, down) = 4 \times 0.25 \times -1 = -1 \]
+            <!-- \[q_\pi(11, down) = \sum_a \pi(a|s)r = 3 \times 0.25 \times -1 = -0.75\] -->
+            <!-- \[q_\pi(7, down) = 4 \times 0.25 \times -1 = -1 \] -->
+            \[q_\pi(11, down) = -1 + v_\pi(T) = -1 + 0 = -1\]
+            \[q_\pi(7, down) = -1 + v_\pi(11) = -15\]
         </p>
 
         <h3 id="4_2">4.2 state values</h3>
         <p>
-            \[v_\pi(s) = \sum_a \pi(a|s)q_\pi(s,a)\]
-            \[v_\pi(15) = -1\]
-            After moving from \(13\) we get value for \(v_\pi(13) = -1\) and so 
-            \[v_\pi(15) = 0.25(-2) + 0.75(-3) = -1.25\]
+            <!-- \[v_\pi(s) = \sum_a \pi(a|s)q_\pi(s,a)\] -->
+            <!-- \[v_\pi(15) = -1\] -->
+            <!-- After moving from \(13\) we get value for \(v_\pi(13) = -1\) and so  -->
+            <!-- \[v_\pi(15) = 0.25(-2) + 0.75(-3) = -1.25\] -->
+            \[v_\pi(15) = -1 + 0.25 (-20 -22-14+v_\pi(15))\]
+            \[v_\pi(15) = \frac{-15}{0.75} = -20\]
+            No the dynamics do not change the value of the state because it is still as far off from terminal as \(S_{12}\)
         </p>
 
         <h3 id="4_3">4.3 q-value functions</h3>
         <p>
             \[q_\pi(s,a) = \mathbb{E} \left[G_t|S_t=s, A_t=a \right]\]
             \[q_\pi(s,a) = \mathbb{E} \left[R_{t+1} + \gamma G_{t+1} |S_t=s, A_t=a \right]\]
-            \[q_\pi(s,a) = \mathbb{E} \left[R_{t+1} + \gamma q_pi(S_{t+1}, A_{t+1})|S_t=s, A_t=a \right]\]
-            \[q_\pi(s,a) = \sum_{s',r}p(s',r|s,a) \left[r + \sum_{a'}\pi(a'|s')q_\pi(s',a') \right]\]
-            \[q_k(s,a) = \sum_{s',r}p(s',r|s,a) \left[r + \sum_{a'}\pi(a'|s')q_{k+1}(s',a') \right]\]
+            \[q_\pi(s,a) = \mathbb{E} \left[R_{t+1} + \gamma q_\pi(S_{t+1}, A_{t+1})|S_t=s, A_t=a \right]\]
+            \[q_\pi(s,a) = \sum_{s',r}p(s',r|s,a) \left[r + \gamma \sum_{a'}\pi(a'|s')q_\pi(s',a') \right]\]
+            \[q_k(s,a) = \sum_{s',r}p(s',r|s,a) \left[r + \gamma \sum_{a'}\pi(a'|s')q_{k+1}(s',a') \right]\]
         </p>
 
         <h3 id="4_4">4.4 Subtle bug</h3>
@@ -87,10 +92,45 @@
 
         <h3 id="4_5">4.5 Action Value Algorithm</h3>
         <p>
-            The problem is to convert the <a href="./chap4.html#4_3" class="article-a">policy iteration algorithm's</a> \(v_*\) to \(q_*\). This can be done by adding an inner loop \(\forall a \in A_s\)
+            The problem is to convert the <a href="./chap4.html#4_3" class="article-a">policy iteration algorithm's</a> \(v_*\) to \(q_*\). This can be done by adding an inner loop \(\forall a \in A_s\) in 2. Policy Evaluation
             \[q(s,a) \leftarrow Q(s,a)\]
             \[Q(s,a) \leftarrow \sum_{s',r}p(s'r|s,a)\left[r + \gamma \sum_{a'} \pi(a'|s') Q(s',a') \right]\]
             \[\Delta \leftarrow \max_a \left[ \Delta, |q(s,a) - Q(s,a)| \right]\]
+        </p>
+
+        <h3 id="4_6">4.6 Epsilon-soft policy</h3>
+        <p>
+            The problem is to optimize the <a href="./chap4.html#4_3" class="article-a">policy iteration algorithm's</a> when the policy is epsilon-soft i.e. minimum probability of any action is \(\epsilon / |A(s)|\), thus we can modify Policy Evaluation piece as 
+            \[v(s) \leftarrow V(s)\]
+            \[a \leftarrow \max{(\epsilon / |A(s)|, \pi(s))}\]
+            \[V(s) \leftarrow \sum_{s',r}p(s'r|s,a)\left[r + \gamma V(s')\right]\]
+        </p>
+
+        <h3 id="4_8">4.8 Gambler's Problem - 1</h3>
+        <p>
+            The reason it bets all the money at 50 is because that is the price at which it has the highest probability to win. If the value function represents the probability then it has highest probability of winning at 50.
+        </p>
+        <figure class="size-1">
+            <img src="./assets/ex4_8.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Value Distribution for \(p_h=0.4\)</p></figcaption>
+
+        <h3 id="4_9">4.9 Gambler's Problem - 2</h3>
+        <p>
+            The reason it bets all the money at 50 is because that is the price at which it has the highest probability to win. If the value function represents the probability then it has highest probability of winning at 50.
+        </p>
+        <figure class="size-1">
+            <img src="./assets/ex4_9_1.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Value Distribution for \(p_h=0.25\)</p></figcaption>
+
+        <figure class="size-1">
+            <img src="./assets/ex4_9_2.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Value Distribution for \(p_h=0.55\)</p></figcaption>
+
+        <p>
+            No the results are not stable as \(\theta \rightarrow 0\) as the \(\Delta\) value starts to increase and learning detoriates. I am unable to generate the optimal policies, I suspect it is because of the float values.
         </p>
 
     </article>

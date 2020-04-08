@@ -95,7 +95,7 @@
             \[Q_{n+1} = Q_n + \alpha(R_n - Q_n)\]
             \[Q_{n+1} = \alpha R_n + (1 - \alpha)Q_n\]
             \[Q_{n+1} = \alpha R_n + (1 - \alpha)(\alpha R_{n-1} + (1 - \alpha)(...))\]
-            \[Q_{n+1} = (1 - \alpha)^nQ_1 + \sum_{i = 1}^{n}\alpha(1 - \alpha)^{n-i} = 1R_i\]
+            \[Q_{n+1} = (1 - \alpha)^nQ_1 + \sum_{i = 1}^{n}\alpha(1 - \alpha)^{n-i}R_i\]
             Note that we call this weighted average because the average with or without the additional terms will remain the same, since \((1 - \alpha)^n + \sum_{i = 1}^{n}\alpha(1 - \alpha)^{n-i} = 1\). This type of distributions are called "exponential recency weighted average".
         </p>
 
@@ -103,7 +103,7 @@
             <p style="margin-bottom: 0.7rem;">
                 There are two important things for proper \(\alpha\) (remember this as we will need to use it later on):
             \[1. \sum_{n=1}^{\infty} \alpha_n(a)= \infty\]
-            \[2. \sum_{n=1}^{\infty} \alpha_n^2(a)= 0\]
+            \[2. \sum_{n=1}^{\infty} \alpha_n^2(a) < \infty\]
             </p>
         </div>
 

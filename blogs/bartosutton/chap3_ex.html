@@ -233,7 +233,12 @@
 
         <h3 id="3_27">3.27 Equation for \(\pi_*\) in terms of \(q_*\)</h3>
         <p>
-            \[\pi(a|s) = \max v_*(s)\]
+            \[\pi(a|s) = \max_a q_*(s,a)\]
+        </p>
+
+        <h3 id="3_28">3.28 Equation for \(\pi_*\) in terms of \(v_*\) and for-argument \(p\)</h3>
+        <p>
+            \[\pi(a|s) = \max_a \sum_{s',r} p(s',r|s,a)[r + \gamma v_*(s)]\]
         </p>
 
     </article>

@@ -102,7 +102,7 @@
             \[\leq \mathbb{E}_\pi'\left[R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... | S_t = s\right]\]
             \[\leq \mathbb{E}_\pi'\left[R_{t+1} + \gamma v_\pi(S_{t+1}) | S_t = s\right]\]
             \[v_\pi(s) \leq v_\pi'(s) \tag{2}\]
-            That is if there is strict inequality of \((1)\) then there will be strict inequality of \((2)\). Thus is \(q_\pi(s, a) > v_\pi(s)\) then the changed policy is indeed a better than \(\pi\). Thus at each step we select the best possible \(q_\pi(s,a)\) at each step, <b>basically greedy policy</b>.
+            That is if there is strict inequality of \((1)\) then there will be strict inequality of \((2)\). Thus is \(q_\pi(s, a) > v_\pi(s); a = \pi'(s)\) then the changed policy is indeed a better than \(\pi\). Thus at each step we select the best possible \(q_\pi(s,a)\) at each step, <b>basically greedy policy</b>.
             \[\pi'(s) = \max_a q_\pi(s,a) = \max_a \sum_{s',r}p(s',r|s,a)\left[r + \gamma v_\pi(s')\right] \tag{3}\]
             By construction, the greedy policy meets the conditions of policy improvement theorem \((1)\), so we know that is as good as, or better than the original policy. Suppose the new policy \(v_{\pi'} = v_\pi\) then it follows that \(\forall s \in S\), \((3)\) is true.
             But this is same as <a href="./chap3.html#3_6" class="article-a">Bellman optimality equation</a> and therefore, \(v_{\pi'}\) must be \(v_*\) and both \(\pi\) and \(\pi'\) must be optimal policy. Now there is a simple way to improve the policy, <b>firstly</b> Evaluate the policy \(\pi\) as in \(v_\pi\) and <b>secondly</b>, improve the policy \(\pi\) by acting greedily w.r.t. \(v_\pi\)</li>
