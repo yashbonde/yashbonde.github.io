@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Barto Sutton | Chapter 4 Exercises</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Link the main.css stylesheet -->
+    <link href="../styles/reset.css" rel="stylesheet">
+    <link href="../styles/-debug.css" rel="stylesheet">
+    <link href="../styles/article.css" rel="stylesheet">
+    <link href="../styles/article-text.css" rel="stylesheet">
+    <link href="../styles/article-figure.css" rel="stylesheet">
+    <link href="../styles/nav.css" rel="stylesheet">
+    <link href="../styles/code-block.css" rel="stylesheet">
+    <link href="./exer.css" rel="stylesheet">
+
+    <link href="../styles/footer-blog.css" rel="stylesheet">
+
+    <!-- Latex -->
+    <!-- for help with symbols goto: https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../../index.html">HOME</a>
+        <a class = "nav-project" href="../../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../../musings.html">BLOG</a>
+        <a class = "nav-resume" href="../../resume.html">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Chapter 4 Exercises</h1>
+        <h2>Some solutions might be off</h2>
+
+        <time datetime="23-05-2019">MAY 23, 2019</time>
+
+        <p>
+            <b>NOTE: This part requires some basic understading of calculus.</b><br>
+            These are just my solutions of the book <a href="http://incompleteideas.net/book/the-book-2nd.html" class="article-a">Reinforcement Learning: An Introduction</a>, all the credit for book goes to the authors and other contributors. Complete notes can be found <a href="./chap5.html" class="article-a">here</a>. If there are any problems with the solutions or you have some ideas ping me at <code>bonde.yash97@gmail.com</code>.
+        </p>
+
+        <figure class="size-3">
+            <img src="./assets/ex5_1.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Blackjack approximate state value 5.1 - 5.2</p></figcaption>
+
+        <h3 id="5_1">5.1 Estimate Values</h3>
+        <p>
+            The value function jumps up for the last two rows in the rear because the value of the state at that moment is very high due to the sum of cards being in \(20-21\) range. The dropoff occurs in the whole last row in the left because the dealer has shown an ace which can either be used as a \(1\) or \(11\), thus it's confidence ov victory is low. The frontmost values are higher in the upper diagrams as having a usable ace in the start is very beneficial.
+        </p>
+
+        <h3 id="5_2">5.2 Every-visit MC</h3>
+        <p>
+            With every visit MC the training cycles would be quicker as the average would be calculated over a larger reward base with discounts. But we are given that discount factor \(\gamma = 1\) for this game and thus there will be no difference in the ETMC and FTMC in this game.
+        </p>
+
+        <h3 id="5_4">5.4 Improvements to MS-ES pseudo code</h3>
+        <p>
+            We need to add code for <a class="article-a" href="./chap2.html#2_4">incremental averaging</a> which gives us the following equation and it needs to be replaced in the pseudocode
+            \[Q(S_t,A_t) \leftarrow Q(S_t, A_t) + \frac{1}{N(S_t, A_t)}(G - Q(S_t, A_t))\]
+            Also note that the given pseudo code is first visit MC.
+        </p>
+
+        <h3 id="5_5">5.5 EV-MC and FV-MC estimated value</h3>
+        <p>
+            Looking at the algorithm for <a class="article-a" href="./chap5.html#FC-MC">first visit</a> we can see that \(V_{FC} = +1\) and breaking out a quick script for every-visit we get value \(+5.5\).
+            <figure class="size-1">
+                <img src="./assets/ex5_5.png">
+            </figure>
+            <figcaption><p style="text-align: center; font-size: 0.9rem;">quick code</p></figcaption>
+        </p>
+
+        <h3 id="5_6">5.6 \(Q(s,a)\) Value</h3>
+        <p>
+            \[V(s) \doteq \frac{\sum_{t\in J(s)}\rho_{t:T(t) - 1}G_t}{\sum_{t\in J(s)}\rho_{t:T(t) - 1}}\]
+            The only change is that instead of counting the state visit we count the state, action visit i.e. \(J(s) \rightarrow J(s,a)\)
+            \[Q(s,a) \doteq \frac{\sum_{t\in J(s,a)}\rho_{t:T(t) - 1}G_t}{\sum_{t\in J(s,a)}\rho_{t:T(t) - 1}}\]
+        </p>
+
+        <h3 id="5_7">5.7 MSE increases</h3>
+        <p>
+            In the <a class="article-a" href="./chap5.html#EG54"> plot for Example 5.4</a> the error over all decreases but weighted sampling shows a slight rise and then decreases, question is why does this happen? 
+        </p>
+
+        <h3 id="5_8">5.8 Why the jump?</h3>
+        <p>
+            In the <a class="article-a" href="./chap5.html#EG54"> plot for Example 5.4</a> the weight sampling increases and then decreases. This can happen because the value of \(\rho\) is large, i.e. the bias is high. Though as the episodes progress the average reduces and so does the bias.
+        </p>
+
+        <h3 id="5_9">5.9 Change algorithm for incremental implementation</h3>
+        <p>
+            The simple change is the removal of \(Returns\) list and getting value of \(V(s)\) as
+            \[V(s) \leftarrow V(s) + \frac{1}{N(s)}(G_t - V(s))\]
+        </p>
+
+        <h3 id="5_10">5.10 Derive weight update rule</h3>
+        <p>
+            There are a few things here that \(C_n\) represents the cumulative weight till now such that \(C_{n+1} = C_n + W_{n+1}\)
+            \[V_n = \frac{\sum_{k=1}^{n-1}W_kG_k}{\sum_{k=1}^{n-1}W_k}\]
+            \[V_{n+1} = \frac{\sum_{k=1}^{n}W_kG_k}{\sum_{k=1}^{n}W_k}\]
+            \[= \frac{1}{W_n + \sum_{k=1}^{n-1}W_k}\big(W_nG_n + \sum_{k=1}^{n-1}W_kG_k \big)\]
+            \[= \frac{W_nG_n}{C_n} + \frac{\sum_{k=1}^{n-1}W_kG_k}{C_n}\]
+            \[= \frac{W_nG_n}{C_n} + \frac{\sum_{k=1}^{n}W_k}{C_n}V_n\]
+            \[= \frac{W_nG_n}{C_n} + \frac{C_n - W_n}{C_n}V_n\]
+            \[V_{n+1} = V_n + \frac{W_n}{C_n}(G_n - V_n)\]
+        </p>
+
+        <h3 id="5_11">5.11 Why off-policy MC control removes \(\pi(a|s)\)</h3>
+        <p>
+            Since \(W\) is only allowed to change if \(A_t = \pi(S_t)\) and \(\pi\) being determinitstic we can say that we are safe to \(\pi(A_t|S_t) = 1\).
+        </p>
+
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="../images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="../images/instagram.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>
