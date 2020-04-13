@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Drug Multitask Classification</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Link the main.css stylesheet -->
+    <link href="styles/reset.css" rel="stylesheet">
+    <link href="styles/-debug.css" rel="stylesheet">
+    <link href="styles/article.css" rel="stylesheet">
+    <link href="styles/article-text.css" rel="stylesheet">
+    <link href="styles/article-figure.css" rel="stylesheet">
+    <link href="styles/nav.css" rel="stylesheet">
+    <link href="styles/code-block.css" rel="stylesheet">
+
+    <link href="styles/footer-blog.css" rel="stylesheet">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../index.html">HOME</a>
+        <a class = "nav-project" href="../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../musings.html">BLOG</a>
+        <a class = "nav-resume" href="../resume.html">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Drug Multitask Classification [In-progress]</h1>
+        <h2>Using Graph Neural Networks for Drug Classification</h2>
+
+        <time datetime="13-04-2020">APRIL 13, 2020</time>
+
+        <p> 
+            With no end in sight for this Covid-19 issue, there is some time to do crazy ideas. In a <a class="article-a" href="./teaching-machines-algorithms.html">previous post</a> I tried to train a neural network that was able to perform algorithms on a given input, which in that cas was cellular automata. There is some refining to be done to get some very good results but overall I saw that training on a certain piece of data, in that case distribution \(P(\{1, 0\}) = \{0.3, 0.7\}\) we were able to scale the algorithm both on the size and variety of other distributions, where we saw that a tiny network with even just \(~1000\) parameters was able to generalise very well on that.
+        </p>w
+        <p>
+            This time around I wanted to play with <a class="article-a" href="https://arxiv.org/pdf/1812.08434"> Graph Neural Networks</a> which are deep algorithms that perform operations on <a class="article-a" href="https://en.wikipedia.org/wiki/Graph_(abstract_data_type)"> graph data structures</a>. Most of the problems where we use computers in day to day life are strucutred as graphs and an ability to perform operations on them could be removal of a significant bottle neck. Quick Link: <a class="article-a" href="https://graphdeeplearning.github.io/">graphdeeplearning.github.io</a>
+        </p>
+
+        <h3 id="problem">📦 Finding a Simple Problem</h3>
+        <p>
+            Over time I have realised that 20% part of learning system is just finding the right problem, so I started looking around for a simple dataset and I came across <a class="article-a" href="https://github.com/shiruipan/graph_datasets">this repo</a> which has some examples and everything and chose to do the <a class="article-a" href="https://github.com/shiruipan/graph_datasets#2ptc-predictive-toxicology-challenge-data-ptc">Predictive Toxicology Challenge dataset</a> which was small enough and interesting. Here's roughly what the data has to say:
+        </p>
+
+        <blockquote style="border-left: 8px solid #ffbf00; font-size: 0.8rem; font-weight: 600;">
+            The dataset we selected contains 417 compounds from four types of test animals: MM (male mouse), FM (female mouse), MR (male rat), and FR (female rat). Each compound is with one label selected from {CE, SE, P, E, EE, IS, NE, N}, which stands for Clear Evidence of Carcinogenic Activity (CE), Some Evidence of Carcinogenic Activity (SE), Positive (P), Equivocal (E), Equivocal Evidence of Carcinogenic Activity (EE), Inadequate Study of Carcinogenic Activity (IS), No Evidence of Carcinogenic Activity (NE), and Negative (N).
+        </blockquote>
+
+        <p>
+            So I went ahead and downloaded the simple dataset, you get 4 csv files with <a class="article-a" href="https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system#Examples"> SMILES (Simplified Molecular Input Line Entry System)</a> notations for the chemicals and it's effect on the particular animal (MM, FM, MR, FR) i.e. whether it was carcinogenic or not. I used <a href="https://github.com/pckroon/pysmiles"><code style="color: #FF3755;">pysmiles</code></a> which takes the smiles string and converts it to <a href="https://networkx.github.io/documentation/stable/"><code style="color: #FF3755;">networkx</code></a> graphs. The next step was to convert all this into a single CSV file, which was just 408 lines. Download the CSV File <a class="article-a" href="./assets/ptc_merged.csv">here</a>, there is a minor change that in some of the molecules there is no tests on some animal so the value in that case has been changed to 0.
+        </p>
+
+        <p>
+            The next task would be to analyse all the graphs and see the features / attributes and all that. Luckily <code>pysmiles</code> handles all that for us, we can use the build in graph maker and see the molecules.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/drug0.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Sample of Molecules</p></figcaption>
+
+        <h3 id="problem">🪐 Finalising the GraphNet structure</h3>
+        <p>
+            There are a tonne of papers and research already done on how to use different types of GraphNets to get good results on this. But we will do our own stuff, taking help from <a class="article-a" href="https://arxiv.org/pdf/1806.01261.pdf">Relational inductive biases, deep learning, and graph networks</a> paper, which establishes the idea of graph network and how all the different pieces are supposed to work.
+        </p>
+        <p>
+            Each graph has nodes and edges and the information we extract from it can be about the nodes (embedding of the nodes), edges (vector value of the edge connection) or the entire graph (molecule is carginogenic?). The image below will give a better framework for how to think for the graph and the nomenclature around it.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/drug1.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Definition of graph, from <a class="article-a" href="https://arxiv.org/pdf/1806.01261.pdf">here</a></p></figcaption>
+
+        <p>
+            Thus from the above framework we can say our graphs are \(Undirected,\) \(Attributed\) and we want to extract \(Global\) \(Attribute\) from it. Following are the attributes that we have (📍 means Node and 🔗 means edge):
+            <li> 📍 We have 21 different elements: <code>'Ca', 'In', 'As', 'K', 'Cu', 'Ba', 'Zn', 'C', 'B', 'Te', 'Br', 'F', 'Na', 'Cl', 'N', 'P', 'Sn', 'I', 'S', 'O', 'Pb'</code> convert these to embeddings
+            <li> 📍 Compounds can either be aromatic or not be: boolean flag changed to <code>1, 0</code>
+            <li> 📍 Charge again is either <code>0, 1, -1</code> so use this as is
+            <li> 📍 Hcounts, which I guess is the number of hydrogen atoms attached: <code>0, 1, 2, 3</code>
+            <li> 🔗 For edge we only have one attribute which is the order of the bond which has values <code>1, 1.5, 2, 3</code>
+        </p>
+
+        <p>
+            The idea of graph net is to have a general framework for how a single block of network that takes in the graph and returns a graph will look like. It has some of its own operations and user can then chain multiple blocks to get the desired output. Below is the algorithm for it, note that it takes in the full graph tuple \(G(E,V,u)\) and returns \(G(E',V',u')\).
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/drug2.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Alogrithm for one block of full graph net, from <a class="article-a" href="https://arxiv.org/pdf/1806.01261.pdf">here</a></p></figcaption>
+
+        <p>
+            We can now remove and keep pieces that are relevant to us. The beauty here is the composability of the network that can be used in multiple diffrent methods. To start off we do not have a starting global attribute and ony the edges and the vertices. Next up we can return only the new edge and the new vertices, go over this block for a few times and for the last layer return only the global attribute which can then be called the emedding of the graph. This embedding can be used with otehr attributes such as the animal type to get whether some drug is carcinogenic or not.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/drug3.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Composibility of blocks, from <a class="article-a" href="https://arxiv.org/pdf/1806.01261.pdf">here</a></p></figcaption>
+
+        <p>
+            Okay so we have a rough idea of what we want to see as the network and can now start to build it. Since I have moved over to pytorch from tensorflow, I came across a library called <a href="https://pytorch-geometric.readthedocs.io/en/latest/notes/introduction.html"><code style="color: #FF3755;">pytorch-geometric</code></a>, the good thing is that it has a tonne of prebuilt networks ready for us. For this piece we are going to use the <a class="article-a" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.conv.NNConv">Neural Message Passing Network</a> from <a class="article-a" href="https://arxiv.org/pdf/1704.01212.pdf">this paper</a>.
+        </p>
+
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="images/instagram.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>
