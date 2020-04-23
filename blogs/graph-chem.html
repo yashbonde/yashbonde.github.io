@@ -35,16 +35,16 @@
 
     <article id = "blog-0">
 
-        <h1>Drug Multitask Classification [In-progress]</h1>
-        <h2>Using Graph Neural Networks for Drug Classification</h2>
+        <h1>Drug Multitask Classification</h1>
+        <h2>Using Graph Neural Networks for Drug Classification, Custom built nothing out there like this!</h2>
 
-        <time datetime="13-04-2020">APRIL 13, 2020</time>
+        <time datetime="24-04-2020">APRIL 24, 2020</time>
 
         <p> 
-            With no end in sight for this Covid-19 issue, there is some time to do crazy ideas. In a <a class="article-a" href="./teaching-machines-algorithms.html">previous post</a> I tried to train a neural network that was able to perform algorithms on a given input, which in that cas was cellular automata. There is some refining to be done to get some very good results but overall I saw that training on a certain piece of data, in that case distribution \(P(\{1, 0\}) = \{0.3, 0.7\}\) we were able to scale the algorithm both on the size and variety of other distributions, where we saw that a tiny network with even just \(~1000\) parameters was able to generalise very well on that.
+            With no end in sight for this Covid-19 issue, there is some time to do crazy ideas. In a <a class="article-a" href="./teaching-machines-algorithms.html">previous post</a> I tried to train a neural network that was able to perform algorithms on a given input, which in that cas was cellular automata. There is some refining to be done to get some very good results but overall I saw that training on a certain piece of data, in that case distribution \(P(\{1, 0\}) = \{0.3, 0.7\}\) we were able to scale the algorithm both on the size and variety of other distributions, where we saw that a tiny network with even just\(~1000\) parameters was able to generalise very well on that.
         </p>
         <p>
-            This time around I wanted to play with <a class="article-a" href="https://arxiv.org/pdf/1812.08434"> Graph Neural Networks</a> which are deep algorithms that perform operations on <a class="article-a" href="https://en.wikipedia.org/wiki/Graph_(abstract_data_type)"> graph data structures</a>. Most of the problems where we use computers in day to day life are structured as graphs and an ability to perform operations on them could be removal of a significant bottle neck. Quick Link: <a class="article-a" href="https://graphdeeplearning.github.io/">graphdeeplearning.github.io</a>
+            This time around I wanted to play with <a class="article-a" href="https://arxiv.org/pdf/1812.08434"> Graph Neural Networks</a> which are deep algorithms that perform operations on <a class="article-a" href="https://en.wikipedia.org/wiki/Graph_(abstract_data_type)"> graph data structures</a>. Most of the problems where we use computers in day to day life are structured as graphs and an ability to perform operations on them could be removal of a significant bottle neck. Quick Link: <a class="article-a" href="https://graphdeeplearning.github.io/">graphdeeplearning.github.io</a>. I am not going to go over what graph, etc. is here I just document my journey to making one.
         </p>
 
         <h3 id="problem">📦 Finding a Simple Problem</h3>
@@ -69,7 +69,7 @@
         </figure>
         <figcaption><p style="text-align: center; font-size: 0.9rem;">Sample of Molecules</p></figcaption>
 
-        <h3 id="problem">🪐 Finalising the GraphNet structure</h3>
+        <h3 id="net_struct">🪐 Finalising the GraphNet structure</h3>
         <p>
             There are a tonne of papers and research already done on how to use different types of GraphNets to get good results on this. But we will do our own stuff, taking help from <a class="article-a" href="https://arxiv.org/pdf/1806.01261.pdf">Relational inductive biases, deep learning, and graph networks</a> paper, which establishes the idea of graph network and how all the different pieces are supposed to work.
         </p>
@@ -104,14 +104,84 @@
             We can now remove and keep pieces that are relevant to us. The beauty here is the composability of the network that can be used in multiple diffrent methods. To start off we do not have a starting global attribute and ony the edges and the vertices. Next up we can return only the new edge and the new vertices, go over this block for a few times and for the last layer return only the global attribute which can then be called the emedding of the graph. This embedding can be used with otehr attributes such as the animal type to get whether some drug is carcinogenic or not.
         </p>
 
-        <figure class="size-2">
+        <figure class="size-2" id="composability">
             <img src="./images/drug3.png">
         </figure>
         <figcaption><p style="text-align: center; font-size: 0.9rem;">Composibility of blocks, from <a class="article-a" href="https://arxiv.org/pdf/1806.01261.pdf">here</a></p></figcaption>
 
         <p>
-            Okay so we have a rough idea of what we want to see as the network and can now start to build it. Since I have moved over to pytorch from tensorflow, I came across a library called <a href="https://pytorch-geometric.readthedocs.io/en/latest/notes/introduction.html"><code style="color: #FF3755;">pytorch-geometric</code></a>, the good thing is that it has a tonne of prebuilt networks ready for us. For this piece we are going to use the <a class="article-a" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.conv.NNConv">Neural Message Passing Network</a> from <a class="article-a" href="https://arxiv.org/pdf/1704.01212.pdf">this paper</a>.
+            Okay so we have a rough idea of what we want to see as the network and can now start to build it. Since I have moved over to pytorch from tensorflow, I came across a library called <a href="https://pytorch-geometric.readthedocs.io/en/latest/notes/introduction.html"><code style="color: #FF3755;">pytorch-geometric</code></a>, the good thing is that it has a tonne of prebuilt networks ready for us. In full honesty this experiment is just a quick test for an project we are undertaking at my office for using large graph-networks to extract relevant information across large information space. In that we require a full graph-net block in the sense that we need node-level, edge-level and global level information.
         </p>
+
+        <h3 id="coding">🧩 Coding</h3>
+        <p>
+            This section deals with the initial network ideas and coding attempts, saying it was difficult is an understatement. I have added the not-to-do list below, in order to read final code go te <a class="article-a" href="coding-success">below section</a>. But still there are some weird things that I found while working on it. Also note that I am using <a class="article-a" href="#composability">Encoder-Decoder</a> architecture as that is what looks the most promising right now.
+        </p>
+
+        <p>
+           <code>pytorch-geometric</code> has support for the kind of Graph Neural Network Block as described in the above mentioned paper. Though as it turns out the <a class="article-a" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.meta.MetaLayer">code</a> much more simpler and does not actually need message passing. So I coded up a custom network and acutally did not use the <code>MetaLayer</code>, built the loss functions and bam the training starts. But there is a hiccup, without batching it doesn't actually learn anything.
+        </p>
+
+        <figure class="size-2" id="composability">
+            <img src="./images/drug4.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">What no batching does, each step is one sample</p></figcaption>
+
+        <p>
+            <b>Batching:</b> This was actually the hard part to do and I did not get some good place to get information on batching. See the challenge with graphs is that the current state of libraries does not allow for such dynamic networks unfortunately otherwise it would hugely progress this field. Adding an image below that tells the difficulty with conventional tensors and I know there is something similar to <a class="article-a" href="https://www.tensorflow.org/guide/ragged_tensor">RaggedTensor</a> in pytorch called <a class="article-a" href="https://discuss.pytorch.org/t/are-there-any-plans-for-ragged-tensors-in-pytorch/58758">NestedTensor</a> but I don't want to get into that.
+        </p>
+
+        <figure class="size-2" id="composability">
+            <img src="./images/drug5.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Cannot create tensors with dynamic shapes in pytorch</p></figcaption>
+
+        <p id="stupidity">
+            The conventional method to batch multiple batches to actually combine multiple adjecency matrices as <a class="article-a" href="https://pytorch-geometric.readthedocs.io/en/latest/notes/batching.html#pairs-of-graphs">explained here</a>. That should be fine because the we use message passing and there are no overlapping nodes in the two graphs. Say that we have \(n\) batches to sample we get
+            \[\begin{split}\mathbf{A} = \begin{bmatrix} \mathbf{A}_1 & & \\ & \ddots & \\ & & \mathbf{A}_n \end{bmatrix}, \qquad \mathbf{X} = \begin{bmatrix} \mathbf{X}_1 \\ \vdots \\ \mathbf{X}_n \end{bmatrix}, \qquad \mathbf{Y} = \begin{bmatrix} \mathbf{Y}_1 \\ \vdots \\ \mathbf{Y}_n \end{bmatrix}.\end{split}\]
+            Next I go down the stupid way, nice proud of you:
+            <li> So with batching we do get properly batched graphs in the format above but since now the network is batched there actually is no way to pool the network and we lose that ability to get a nice dense embedding for the graph. There is <a class="article-a" href="https://pytorch-geometric.readthedocs.io/en/latest/_modules/torch_geometric/nn/glob/glob.html#global_mean_pool">here</a>, so next time check better.
+            <li>What I have done is that the target is same size as all the nodes and not the graph, so it's equivalent of feeding language model, and asking each word to predict the same thing.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/drug6.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Batching does not guarantee success</p></figcaption>
+
+        <p>
+            Then there are some other things that were a limitation because I was not familiar with <code>pytorch</code>, which include improper gereration of computation graph where I tried to load the embeddings from matrix in the and once an epoch is done set <code>retain_graph = True</code>, which then cause further detoriation of training.
+        </p>
+
+        <h3 id="coding-success">🗿 Coding Success</h3>
+        <p>
+            I haven't added more things here as better explaination is to just read the code, <a class="article-a" href="https://gist.github.com/yashbonde/ab25e34834e71519178b93d3b5a26c19">link to gist</a>. Finally I got some success but there were some things I had to giveup, one of them was I had to convert every embedding to one-hot encoding because the batching using <code>DataLoader</code> would not work if there are no tensors and blah blah blah. Long story short I encoded everything to one-hot and the network finally seemed to work like magic.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/drug8.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Aah it works, finally. Note the spikes are because graphs are not shuffled every batch</p></figcaption>
+
+        <figure class="size-2">
+            <img src="./images/drug9.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Lowering learning rate creates a nice smooth graph, but note how training takes much longer</p></figcaption>
+
+        <p>
+            Now there are a couple of things I did not implement like testing and benchmarking against the SOTA scores because that was not the point of this at all. I just wanted to make a graph neural network quick.
+        </p>
+
+        <h3>🚈 Implications</h3>
+        <p>
+            Now that we have one, imagine combining it with <a class="article-a" href="./teaching-machines-algorithms.html">previous post</a> where we are able to teach neural network complex rules and algorithms that operate on graphs. That is basically what all these business automation companies do, we can build a comnmon system to just convert all that and build it into an end-to-end AI that operates on algorithms. This can basically allow moving away from large dataset based neural network approaches.
+        </p>
+
+        <p>
+            You find something cool or missing do reach out to me at bonde.yash97@gmail.com
+        </p>
+
+
 
     </article>
 

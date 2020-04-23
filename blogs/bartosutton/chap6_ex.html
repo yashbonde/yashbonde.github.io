@@ -39,7 +39,7 @@
 
     <article id = "blog-0">
 
-        <h1>Chapter 2 Exercises</h1>
+        <h1>Chapter 6 Exercises</h1>
         <h2>Some solutions might be off</h2>
 
         <time datetime="19-05-2019">MAY 19, 2019</time>
@@ -59,6 +59,23 @@
             expanding and compressing gives us
             \[= \sum_{k=0}^{T-1}[\gamma^{k-t}\delta_k + \gamma^{k-t+1}u_{k-t+1}]\]
             So the amount we have added is \(\sum_{k=0}^{T-1}\gamma^{k-t+1}u_{k-t+1}\)
+        </p>
+
+        <h3 id="6_2">6.2 TD vs. MC</h3>
+        <p>
+            I think alot of problem that require an estimation for long sequences where we need the estimation as the task continues] would benefit from the TD learning system. Eg. we all love to eat and often have tendency to overeat, if we decide to go to a buffet and our priorities is to eat diversity of food while enjoying the good ones more. This is a perfect setup where TD learning would be beneficial.
+        </p>
+
+        <h3 id="6_3">6.3 Analysis of random walks</h3>
+        <p>
+            We know that for the first step only \(V(A)\) was changed which means the random walk landed on \(A\) and from there it went to the terminal state on left, other wise the \(V(E)\) would have changed. Again, because walk ended on terminal state on left of \(A\) only \(V(A)\) changed. We can calculate the values very easily:
+            \[V(A)_{t+1} = V(A)_t + \alpha (R + \gamma V(Term) - V(A)_t)\]
+            Now we have \(V(Term) = 0\), \(R = 0\) and \(\alpha = 0.1\), so we get \(V(A) = 0.45\). Similarly if it went the other way \(V(E) = 5.5\).
+        </p>
+
+        <h3 id="6_4">6.4 Analysis of random walks</h3>
+        <p>
+            It is clear that if there was a wider set of \(\alpha\)s then TD would be a better algorithm than MC. As seen that we get good performance for TD at \(\alpha = 0.05\) and at \(\alpha = 0.04\) the MC starts to detoriate. So even though the TD learning would occur when \(\alpha\) is small it would become sub-optimal as it would take more walks per episode to learn.
         </p>
 
     </article>

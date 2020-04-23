@@ -47,7 +47,7 @@
         <p style="font-size: 0.8rem;">
             <h3>INDEX</h3>
             <li><a class="index-a" href="#6_1">6.1 TD Prediction</a></li>
-            <li><a class="index-a" href="#6_2">6.2 Action Value Methods</a></li>
+            <li><a class="index-a" href="#6_2">6.2 Advantage of TD Prediction</a></li>
             <li><a class="index-a" href="#6_4">6.4 Incremental Implementation</a></li>
             <li><a class="index-a" href="#6_5">6.5 Tracking a non-stationary process</a></li>
             <li><a class="index-a" href="#6_5">6.6 Optimisitc Initial Values</a></li>
@@ -90,6 +90,34 @@
             \[\delta^{MC}_t = \sum_{k=t}^{T-t}\gamma^{k-t}\delta_k\]
             This identity is not exact if the \(V\) changes during the episode eg. an update, but if the step size is small it may still hold approximately. When \(V\) updates <a class="article-a" href="./chap6_ex.html#6_1">following</a> changes will have to be made.
         </p>
+
+        <p>
+            <b>Example 6.1: Driving Home</b> The aim is to predict the Total Time required to get home, which will be the sum of columns one and columns two. 
+        </p>
+
+        <figure class="size-2">
+            <img src="./assets/chap6_2.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">If our aim is to predict total time then how MC would compare against TD</p></figcaption>
+        
+        <p>
+            Must you wait until you get home to before increasing your estimate for initial state? According to Monte Carlo approahc you must, because you don't yet know the true return. According to TD approach, on the other hand, you would learn immidiately, shifting your intial estimate from 30 minutes towards 50. In fact, each estimate would be shifted toward the estimate that immidiately follows it.
+        </p>
+
+        <h3 id="6_2">6.2 Advantage of TD Prediction</h3>
+        <p>
+            There are clear advantages like, TD can learn without a final outcome or in non-episodic settings (continuous). Another advantage is that TD does not require the complete episode it to end, it just has to look one step ahead. For any fixed policy \(\pi\), TD(\(0\)) has been shown to converge to \(v_\pi\), though most convergence proof apply on table-based case of the algoithm some also apply to the general linear function approximation.
+        </p>
+
+        <p>
+            So if both the TD and MC are proven to converge then the question are which get there first, which learns faster, which makes hte most efficient use of limited data. This is currently an open question as we do not even know how to mathematically prove the question. In practice however constant-\(\alpha\) method have been found to converge faster on stochastic tasks.
+        </p>
+
+        <p>
+            The return \(G_t = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{T-1}R_{T}\) is the unbiased estimate of \(v_\pi(S_t)\) same as the true TD target \(R_{t+1} + \gamma v_\pi(S_{t+1})\) (as if someone has already given us the true value function \(v_\pi\)). However TD target \(R_{t+1} + \gamma V(S_{t+1})\) is a biased estimate of \(v_\pi(S_t)\), because the estimate \(V(S_{t+1})\) can be wildly wrong.
+        </p>
+
+
     </article>
 
     <footer>
