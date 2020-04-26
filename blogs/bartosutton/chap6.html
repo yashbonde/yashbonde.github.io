@@ -48,12 +48,9 @@
             <h3>INDEX</h3>
             <li><a class="index-a" href="#6_1">6.1 TD Prediction</a></li>
             <li><a class="index-a" href="#6_2">6.2 Advantage of TD Prediction</a></li>
-            <li><a class="index-a" href="#6_4">6.4 Incremental Implementation</a></li>
-            <li><a class="index-a" href="#6_5">6.5 Tracking a non-stationary process</a></li>
-            <li><a class="index-a" href="#6_5">6.6 Optimisitc Initial Values</a></li>
-            <li><a class="index-a" href="#6_5">6.7 Upper Confidence Bound Action Selection</a></li>
-            <li><a class="index-a" href="#6_5">6.8 Gradient Bandit Algorithm</a></li>
-            <li><a class="index-a" href="#6_5">6.9 Associative Search (Contextual Bandits)</a></li>
+            <li><a class="index-a" href="#6_3">6.3 Optimatlity of TD(\(0\))</a></li>
+            <li><a class="index-a" href="#6_4">6.4 SARSA: On-policy TD Control</a></li>
+            <li><a class="index-a" href="#6_5">6.5 Q-Learning: Off-policy TD Control</a></li>
         </p>
 
         <p>
@@ -87,7 +84,7 @@
             we can now continue to substitute the values and see the expansion as
             \[= \delta_t + \gamma\delta_{t+1} + \gamma^2\delta_{t+2} + \gamma^{T-t-1}\delta_{T-1} + \gamma^{T-t}(G_T -V(S_T))\]
             \[= \delta_t + \gamma\delta_{t+1} + \gamma^2\delta_{t+2} + \gamma^{T-t-1}\delta_{T-1} + \gamma^{T-t}(0 - 0)\]
-            \[\delta^{MC}_t = \sum_{k=t}^{T-t}\gamma^{k-t}\delta_k\]
+            \[\delta^{TD}_t = \sum_{k=t}^{T-t}\gamma^{k-t}\delta_k\]
             This identity is not exact if the \(V\) changes during the episode eg. an update, but if the step size is small it may still hold approximately. When \(V\) updates <a class="article-a" href="./chap6_ex.html#6_1">following</a> changes will have to be made.
         </p>
 
@@ -117,6 +114,76 @@
             The return \(G_t = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{T-1}R_{T}\) is the unbiased estimate of \(v_\pi(S_t)\) same as the true TD target \(R_{t+1} + \gamma v_\pi(S_{t+1})\) (as if someone has already given us the true value function \(v_\pi\)). However TD target \(R_{t+1} + \gamma V(S_{t+1})\) is a biased estimate of \(v_\pi(S_t)\), because the estimate \(V(S_{t+1})\) can be wildly wrong.
         </p>
 
+        <figure class="size-2">
+            <img src="./assets/chap6_3.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">MC vs. TD</p></figcaption>
+
+        <h3 id="6_3">6.3 Optimality of TD(\(0\))</h3>
+        <p>
+            If we have to approximate the value function V at we have just a few episodes or a few samples, we can pass over all the values and calculate the sum of all increments. We then apply this sum of all increments to change the value function \(V\) unlike applying for each sample/episode. This is called batch updating because updates are made only after processing each complete batch of training data. 
+        </p>
+
+        <figure class="size-2">
+            <img src="./assets/chap6_4.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Performance of TD(\(0\)) and constant-\(\alpha\) MC under batch training on random walk task</p></figcaption>
+
+        <p>
+            <b>Example 6.3</b> Under the batch training, the constant-\(\alpha\) MC converges to \(V(s)\), that are sample averages of actual returns after visitin each state \(s\). These are optimal estimates in the sense that they minimize the MSE, still TD method was able to outperform and get better MSE scores. The question is why is that. Figure above.
+        </p>
+
+        <p>
+            <b>Example 6.4</b> In this example we are given a simple process and we have to estimate the value of the states \(V(A)\) and \(V(B)\). By using MC method we get values \(V(B) = 0.75\) and \(V(A) = 0\), whereas if we us TD we get \(V(B) = 0.75\) and \(V(A) = 0.75\). And both are legitimate values, then why do we get this difference in values. That is because MC gives best fit to observed state
+            \[\sum_{k=1}^K\sum_{t-1}^{T_K}\big(g_t^k - V(S_t^k)\big)^2\]
+            where as the TD\((0)\) converges to solution of MDP that best explains the data. So it first fits the transitions and then calculates the value for that from the rewards. In general the <em>maximum likelyhood estimate</em> of a parameter is the parameter-value whose probability of generating data is maximum. Given this MDP we can compute the estimate of the value function that would be exactly correct if the model was exactly correct. This is called <em>certainity-equivalenge estimate because it is equivalent to to assuming that the estimate of underlying process what known with certainity rather than being approximated.</em>
+        </p>
+
+        <p>
+            This explains why TD\((0)\) methods converge faster nad more quickly than MC methods. In batch form, TD\((0)\) is faster than MC becuase it computes the true certainity-equivalence estimate. Finally it is interesting to note that if \(n = |S|\) then calculating MLE requires \(n^2\) memory and \(n^3\) computational steps if done conventionally. In these terms it is striking that TD methods can approximate the same solution using memory no more than \(n\) and repeated computations over the training set.
+        </p>
+
+        <h3 id="6_4">6.4 SARSA; On-policy TD-Control</h3>
+        <p>
+            Now we have reached the most popular learning algorithm, probably in all of RL that is Sarsa. The idea of sarsa is simple, you start with a state, action pair (\(S,A\)), you sample the environment and get reward \(R\) and end up in state \(S'\) and sample our policy to take the action \(A'\) i.e. \(S,A,R,S',A'\). Here we still follow the pattern of Generalised policy iteration and action-value funcion \(q_\pi(s,a)\) instead of value-function \(v(s)\). This can be done essentially the same TD method described above for learning \(v_\pi\) applied to \(q_\pi\)
+        </p>
+
+        <figure class="size-2">
+            <img src="./assets/chap6_5.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Transition diagram</p></figcaption>
+
+        <p>
+            We consider the transitions and get equation as
+            \[Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)]\]
+            This update is done for each non-terminal state \(S_t\) for terminal state \(S_{t+1}\) we define \(Q(S_{t+1}, A_{t+1}) = 0\). The convergence properties of the Sarsa depend on the nature of policy's dependence on \(Q\), eg. one could use \(\epsilon\)-greedy or \(\epsilon\)-soft policies. Sarsa converges to probability 1 to an optimal policy and action-value function as long as all the state-actions have been visited \(\infty\) times.
+        </p>
+
+        <figure class="size-2">
+            <img src="./assets/chap6_6.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Sarsa (On-policy TD Control) for estimating \(Q \approx q_*\)</p></figcaption>
+
+        <h3 id="6_5">6.5 Q-Learning; Off-policy TD-Control</h3>
+        <p>
+            This is single handedly the first Deep-RL algorithm anyone tries to imeplement, thanks to <a class="article-a" href="https://deepmind.com/research/publications/playing-atari-deep-reinforcement-learning">Deepmind</a>. The idea was first defined by Watkins, 1989 in his Ph.D thesis titles <a class="article-a" href="http://www.cs.rhul.ac.uk/~chrisw/new_thesis.pdf">Learning from Delayed Rewards</a>. It is defined as follows:
+            \[Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [R_{t+1} + \gamma \max_aQ(S_{t+1}, A_{t+1}) - Q(S_t, A_t)]\]
+            And the algorithm is given as follows
+        </p>
+
+        <figure class="size-2">
+            <img src="./assets/chap6_7.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Q-Learning (Off-policy TD Control) for estimating \(\pi \approx \pi_*\)</p></figcaption>
+
+        <p>
+            <b>Example 6.6 Cliff Walking</b> In this example we find that Q-learning learns the optimal path of walking just next to the cliff while Sarsa learns the safest policy of walking as far from the cliff as possible. For Q-learning though this means it occasionally falls off the cliff because of \(\epsilon\)-greedy policy. Of course if the \(\epsilon\) were to be gradually reduced, then both methods would asymptotically converge to the optimal policy.
+        </p>
+
+        <figure class="size-2">
+            <img src="./assets/chap6_8.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">right: cliff environment setup | left: rewards by the two algorithms</p></figcaption>
 
     </article>
 

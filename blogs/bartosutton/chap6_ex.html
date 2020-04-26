@@ -78,6 +78,25 @@
             It is clear that if there was a wider set of \(\alpha\)s then TD would be a better algorithm than MC. As seen that we get good performance for TD at \(\alpha = 0.05\) and at \(\alpha = 0.04\) the MC starts to detoriate. So even though the TD learning would occur when \(\alpha\) is small it would become sub-optimal as it would take more walks per episode to learn.
         </p>
 
+        <h3 id="6_5">6.5 Analysis of random walks</h3>
+        <p>
+            We can see that increase in \(\alpha\) increases the MSE over multiple steps that might happend because the noise is too high. You think like it starts to oscillate around the true value function.
+        </p>
+
+        <h3 id="6_8">6.8 Sarsa Convergece</h3>
+        <p>
+            \[G_t - Q(S_t, A_t) = R_{t+1} + \gamma G_{t+1} - Q(S_t, A_t) + \gamma Q(S_{t+1}, A_{t+1}) -\gamma Q(S_{t+1}, A_{t+1}) \]
+            \[= \delta_t + \gamma (G_{t+1} - Q(S_{t+1}, A_{t+1}))\]
+            we can now continue to substitute the values and see the expansion as and \(Q(S_T, A_T) = 0; G_T = 0\)
+            \[= \delta_t + \gamma\delta_{t+1} + \gamma^2\delta_{t+2} + \gamma^{T-t-1}\delta_{T-1} + \gamma^{T-t}(G_T -Q(S_T, A_T))\]
+            \[= \delta_t + \gamma\delta_{t+1} + \gamma^2\delta_{t+2} + \gamma^{T-t-1}\delta_{T-1} + \gamma^{T-t}(0 - 0)\]
+            \[\delta^{TD}_t = \sum_{k=t}^{T-t}\gamma^{k-t}\delta_k\]
+        </p>
+        <h3 id="6_11">6.11 Q-learning</h3>
+        <p>
+            There is a subtle difference in the Sarsa and Q-learning, ie. the action taken by Sarsa is the next action taken (\(S \leftarrow S'; A \leftarrow A'\)) where as in Q-learning the only the state changes (\(S \leftarrow S'\)) and new action is taken at each step. Thus learning happens independent of whether the action was taken or not!
+        </p>
+
     </article>
 
     <footer>
