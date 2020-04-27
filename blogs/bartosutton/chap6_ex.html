@@ -42,7 +42,7 @@
         <h1>Chapter 6 Exercises</h1>
         <h2>Some solutions might be off</h2>
 
-        <time datetime="19-05-2019">MAY 19, 2019</time>
+        <time datetime="27-04-2019">APRIL 27, 2020</time>
 
         <p>
             <b>NOTE: This part requires some basic understading of calculus.</b><br>
@@ -92,9 +92,22 @@
             \[= \delta_t + \gamma\delta_{t+1} + \gamma^2\delta_{t+2} + \gamma^{T-t-1}\delta_{T-1} + \gamma^{T-t}(0 - 0)\]
             \[\delta^{TD}_t = \sum_{k=t}^{T-t}\gamma^{k-t}\delta_k\]
         </p>
+        
         <h3 id="6_11">6.11 Q-learning</h3>
         <p>
             There is a subtle difference in the Sarsa and Q-learning, ie. the action taken by Sarsa is the next action taken (\(S \leftarrow S'; A \leftarrow A'\)) where as in Q-learning the only the state changes (\(S \leftarrow S'\)) and new action is taken at each step. Thus learning happens independent of whether the action was taken or not!
+        </p>
+
+        <h3 id="6_12">6.12 Q-learning \(\approx\) Sarsa \(?\) </h3>
+        <p>
+            The question is if we make the action selection greedy then are the two algorithms same. The answer is no, consider this case \(Q(S,a) = [0.1, 0.09 ... 0.01]\), now considering greedy action selection we get \(A = 1\). On observing the followed rewards and new state \(R, S'\) we update the value of this state so say that we got a large negative reward then the new values may become \(Q(S,a) = [0.009, 0.09 ... 0.01]\).
+        </p>
+        <p>
+            <b>Action:</b> In case of Sarsa we will see that the action is taken as \(A \leftarrow A'\) and so the action cannot change, however the value is again updated for Q-learning and this time it will not choose \(A = 1\). Thus no the action for the two will not be same.
+        </p>
+
+        <p>
+            <b>Weight Update:</b> They will be same as we basically have the same variables, thus if both algorithms take action \(A\) and get the same \(R\) and \(S'\) we do get the same weight updates.
         </p>
 
     </article>

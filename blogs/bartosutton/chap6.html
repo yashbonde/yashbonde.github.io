@@ -39,10 +39,10 @@
 
     <article id = "blog-0">
 
-        <h1>Chapter 6: Temporal Difference Learning [In-progress]</h1>
+        <h1>Chapter 6: Temporal Difference Learning</h1>
         <h2>Learning from Experiences minus the Complete Rollout</h2>
 
-        <time datetime="19-05-2019">MAY 19, 2019</time>
+        <time datetime="27-04-2019">APRIL 27, 2020</time>
 
         <p style="font-size: 0.8rem;">
             <h3>INDEX</h3>
@@ -54,7 +54,7 @@
         </p>
 
         <p>
-            These are just my notes of the book <a href="http://incompleteideas.net/book/the-book-2nd.html" class="article-a">Reinforcement Learning: An Introduction</a>, all the credit for book goes to the authors and other contributors. My solutions to the exercises are on <a href="./chap5_ex.html" class="article-a">this page</a>. Addtional concise notes for this chapter <a href="https://drive.google.com/open?id=0B3w765rOKuKAcERUTmJaN1lJbUU" class="article-a">here</a>. There is also a <a href="https://www.youtube.com/watch?v=Nd1-UUMVfz4&list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&index=4&t=0s" class="article-a">Deepmind's Youtube Lecture</a> and slides for <a href="./slides/L4_MC-TD.pdf" class="article-a">model free value extimation</a> and <a class="article-a" href="./slides/L5_Model_Free_control.pdf">model free control</a>. Some other <a href="https://drive.google.com/file/d/0B3w765rOKuKAZWV6bGFJcWN6VDg/view?usp=sharing" class="article-a">slides</a>.
+            These are just my notes of the book <a href="http://incompleteideas.net/book/the-book-2nd.html" class="article-a">Reinforcement Learning: An Introduction</a>, all the credit for book goes to the authors and other contributors. My solutions to the exercises are on <a href="./chap6_ex.html" class="article-a">this page</a>. Addtional concise notes for this chapter <a href="https://drive.google.com/open?id=0B3w765rOKuKAcERUTmJaN1lJbUU" class="article-a">here</a>. There is also a <a href="https://www.youtube.com/watch?v=Nd1-UUMVfz4&list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&index=4&t=0s" class="article-a">Deepmind's Youtube Lecture</a> and slides for <a href="./slides/L4_MC-TD.pdf" class="article-a">model free value extimation</a> and <a class="article-a" href="./slides/L5_Model_Free_control.pdf">model free control</a>. Some other <a href="https://drive.google.com/file/d/0B3w765rOKuKAZWV6bGFJcWN6VDg/view?usp=sharing" class="article-a">slides</a>.
         </p>
 
         <blockquote style="border-left: 8px solid #ffbf00;">
@@ -79,11 +79,20 @@
             \[v_\pi(s) = \mathbb{E}[R_{t+1} + \gamma v_\pi(S_{t+1})|S_t = s]\]
             We can say that the upper equation is what the MC use as estimates and lower is what DP use as estimates for any state.
             Notice that the TD error \(\delta_t\) is the error made in estimate at that time. Because the TD error depends on the next state and next reward, it is not available until one time step later. We can calculate the Monte Carlo error as sum of TD errors from that point.
-            \[G_t - V(S_t) = R_{t+1} + \gamma G_{t+1} - V(S_t) + \gamma V(S_{t+1}) -\gamma V(S_{t+1}) \]
+            \[
+                G_t - V(S_t) = R_{t+1} + \gamma G_{t+1} - V(S_t) + \\
+                \gamma V(S_{t+1}) -\gamma V(S_{t+1})
+            \]
             \[= \delta_t + \gamma (G_{t+1} - V(S_{t+1}))\]
             we can now continue to substitute the values and see the expansion as
-            \[= \delta_t + \gamma\delta_{t+1} + \gamma^2\delta_{t+2} + \gamma^{T-t-1}\delta_{T-1} + \gamma^{T-t}(G_T -V(S_T))\]
-            \[= \delta_t + \gamma\delta_{t+1} + \gamma^2\delta_{t+2} + \gamma^{T-t-1}\delta_{T-1} + \gamma^{T-t}(0 - 0)\]
+            \[
+                = \delta_t + \gamma\delta_{t+1} + \gamma^2\delta_{t+2} + ... \\
+                \gamma^{T-t-1}\delta_{T-1} + \gamma^{T-t}(G_T -V(S_T))
+            \]
+            \[
+                = \delta_t + \gamma\delta_{t+1} + \gamma^2\delta_{t+2} + ... \\
+                \gamma^{T-t-1}\delta_{T-1} + \gamma^{T-t}(0 - 0)
+            \]
             \[\delta^{TD}_t = \sum_{k=t}^{T-t}\gamma^{k-t}\delta_k\]
             This identity is not exact if the \(V\) changes during the episode eg. an update, but if the step size is small it may still hold approximately. When \(V\) updates <a class="article-a" href="./chap6_ex.html#6_1">following</a> changes will have to be made.
         </p>
@@ -155,7 +164,10 @@
 
         <p>
             We consider the transitions and get equation as
-            \[Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)]\]
+            \[
+                Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \\
+                \alpha [R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)]
+            \]
             This update is done for each non-terminal state \(S_t\) for terminal state \(S_{t+1}\) we define \(Q(S_{t+1}, A_{t+1}) = 0\). The convergence properties of the Sarsa depend on the nature of policy's dependence on \(Q\), eg. one could use \(\epsilon\)-greedy or \(\epsilon\)-soft policies. Sarsa converges to probability 1 to an optimal policy and action-value function as long as all the state-actions have been visited \(\infty\) times.
         </p>
 
@@ -167,7 +179,10 @@
         <h3 id="6_5">6.5 Q-Learning; Off-policy TD-Control</h3>
         <p>
             This is single handedly the first Deep-RL algorithm anyone tries to imeplement, thanks to <a class="article-a" href="https://deepmind.com/research/publications/playing-atari-deep-reinforcement-learning">Deepmind</a>. The idea was first defined by Watkins, 1989 in his Ph.D thesis titles <a class="article-a" href="http://www.cs.rhul.ac.uk/~chrisw/new_thesis.pdf">Learning from Delayed Rewards</a>. It is defined as follows:
-            \[Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [R_{t+1} + \gamma \max_aQ(S_{t+1}, A_{t+1}) - Q(S_t, A_t)]\]
+            \[
+                Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \\
+                \alpha [R_{t+1} + \gamma \max_aQ(S_{t+1}, A_{t+1}) - Q(S_t, A_t)]
+            \]
             And the algorithm is given as follows
         </p>
 
@@ -184,6 +199,55 @@
             <img src="./assets/chap6_8.png">
         </figure>
         <figcaption><p style="text-align: center; font-size: 0.9rem;">right: cliff environment setup | left: rewards by the two algorithms</p></figcaption>
+
+        <h3 id="6_6">6.6 Expected Sarsa</h3>
+        <p>
+            Consider that we converted in \(G_t = \mathbb{E}_\pi[Q(S_{t+1}, A_{t+1}) | S_{t+1}]\) to proper expectations as \(G_t = \sum_a\pi(a|S_{t+1})Q(S_{t+1},a)\). We call this expected Sarsa, and since we remove the samlping of action given the probability we can eliminate the variance and this should result in better performance and that indeed is what we see.
+        </p>
+        <figure class="size-2">
+            <img src="./assets/chap6_9.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Interim (dashed) and Asymptotic (solid) are calculated by getting averages from first 10 and 50,000 runs. Solid Circle shows the best performance for interim performance</p></figcaption>
+
+        <p>
+            It can also learn over a wide variety of step-sizes, it can safely set \(\alpha=1.0\) without suffering any degradation of asymptotic performance. In the cliff walking results Expected Sarsa was used on-policy, but in general it might use a policy different from the one learning and so it becomes off-policy in that way, which is basically Q-Learning.
+        </p>
+
+        <h3 id="6_7">6.7 Maximisation Bias and Double Learning</h3>
+        <p>
+            In these algorithms, a maximum over estimates values is used implicitly as an estimate of the maximum value, which can lead to a significant positive bias. Consider a state \(s\) where many actions \(a\) whose true values \(q(s,a) = 0\) but the estimated values \(Q(s,a) \neq 0\), some are above and some are below zero. The maximum of true values is zero but the maximum of estimates is positive, <em>maximisation bias</em>. Consider the simple MDP below, the ideal solution is to never take left since the distribution is very likely to return negative rewards. But Q-learning will over estimate the value of B and chose that.
+        </p>
+        <figure class="size-2">
+            <img src="./assets/chap6_10.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Q vs. Double-Q for the given MDP</p></figcaption>
+
+        <p>
+            So how to we handle this maximisation bias, one way is to introduce two q-values. One q-value \(Q_1\) to determine the maximising action \(A^* = argmax_a Q_1(a) \) and another \(Q_2\), to provide the estimate of its value \(Q_2(A^*) = Q_2(argmax_a Q_1(a))\). Both \(Q_1(a)\) and \(Q_2(a)\) are estimates of the true value \(q(a)\) for all \(a \in A\). The estimate is unbiased in the sense that \(\mathbb{E}[Q_2(A^*)] = q(A^*)\), and we can reverse the roll and say \(Q_1(A^*) = Q_1(argmax_a Q_2(a))\). The update then becomes
+            \[
+                Q_1(S_t, A_t) \leftarrow Q_1(S_t, A_t) + \\
+                \alpha [R_{t+1} + \gamma Q_2(S_{t+1}, argmax_a Q_1(S_{t+1}, A_{t+1})) \\
+                - Q_1(S_t, A_t)]
+            \]
+            This is the idea of double learning, and the algorithm is given below.
+        </p>
+
+        <figure class="size-2">
+            <img src="./assets/chap6_11.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">Double Q-learning, for estimating \(Q_1 \approx Q_2 \approx q_*\)</p></figcaption>
+
+        <h3 id="6_8">6.8 Games, Afterstates, and Other Special Cases</h3>
+        <p>
+            In our algorithms we depend on the value of the next state, so when we reach the next state (afterstate) the values should be applied on all the state-actions that make it reach there. As in the diagram below we see that two state-action pairs make it reach the same "afterposition". Afterstates arise in many tasks, not jsut games. For example, in queuing tasks there are actions such as assigning customers to servers, rejecting customers, or discarding information. In such cases  the action are in fact defined in tersm of their immediate effects, which are completely known.
+        </p>
+
+        <figure class="size-2">
+            <img src="./assets/chap6_12.png">
+        </figure>
+        <figcaption><p style="text-align: center; font-size: 0.9rem;">two state-action pairs make board reach the same "afterposition"</p></figcaption>
+
+
 
     </article>
 
