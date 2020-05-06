@@ -84,7 +84,7 @@
         <h3 id="3_9">3.9 Returns Numerical</h3>
         <p>
             Given that \(R_1 = 2\) and rest of the sequence is infinitely long with reward at each step being \(7\), trick is to calculate the later return first (\(G_1\) then \(G_0\)). This is a simple sum of geometric progression as
-            \[G_1 = \sum_{k = 1}^{\infty}\gamma R_{1 + k + 1}\]
+            \[G_1 = \sum_{k = 0}^{\infty}\gamma^k R_{1 + k + 1}\]
             \[G_1 = \frac{7 \times (1 - \gamma)^\infty}{1 - \gamma}\]
             \[G_1 = \frac{7}{0.1} = 70\]
             and using the formula \(G_0 = R_1 + \gamma G_1\) we get value \(G_0 = 2 + 0.9 \times 70 = 65\).
@@ -210,9 +210,9 @@
         <h3 id="3_23">3.23 Action Value Bellman Equation for Robot</h3>
         <p>
             From example 3.9 we know the values for \(v(h)\) and \(v(l)\) can be given as
-            \[v(h) = \pi(s|h)q(h,s) + \pi(w,h)q(h,w)\]
-            \[v(l) = \pi(s|l)q(l,s) + \pi(w,l)q(l,w) + \pi(re,l)q(l,re)\]
-            Similarly we calculated the action values \(q()\) as
+            \[v(h) = \pi(s|h)q(h,s) + \pi(w|h)q(h,w)\]
+            \[v(l) = \pi(s|l)q(l,s) + \pi(w|l)q(l,w) + \pi(re|l)q(l,re)\]
+            Similarly we calculated the action values \(q\) as
             \[q(h, s) = r_s + \gamma\left[ \alpha v(h) + (1 - \alpha)v(l)\right]\]
             \[q(h, w) = r_w + \gamma v(h)\]
             \[q(l, s) = \beta r_s - 3(1- \beta) + \gamma \left[(1 - \beta)v(h) + \beta v(l) \right]\]
