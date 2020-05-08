@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Notes on Algorithmic Reasoning</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Link the main.css stylesheet -->
+    <link href="styles/reset.css" rel="stylesheet">
+    <link href="styles/-debug.css" rel="stylesheet">
+    <link href="styles/article.css" rel="stylesheet">
+    <link href="styles/article-text.css" rel="stylesheet">
+    <link href="styles/article-figure.css" rel="stylesheet">
+    <link href="styles/nav.css" rel="stylesheet">
+    <link href="styles/code-block.css" rel="stylesheet">
+
+    <link href="styles/footer-blog.css" rel="stylesheet">
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../index.html">HOME</a>
+        <a class = "nav-project" href="../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../musings.html">BLOG</a>
+        <a class = "nav-resume" href="../resume.html">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Reading List on Neural Execution</h1>
+        <h2>Lets Call this Neural Algorithm Execution (NAE)</h2>
+
+        <time datetime="07-05-2020">MAY 7, 2020</time>
+
+        <p> 
+            With my previous <a class="article-a" href = "./teaching-machines-algorithms.html">machine learning "algorithms"</a> post I showed a quick hack kind of poisisbility that we can teach the machines algorithms. For verification of that I trained a simple convnet on Conway's game of life cellular automata, which is application of three simple rules. While browsing the internet I found <a class="article-a" href="https://www.youtube.com/watch?v=IPQ6CPoluok">this talk</a> on topic "Graph Representation Learning for Algorithmic Reasoning" and so these are the quick notes on the topic. For reference you can use the <a class="article-a" href="https://petar-v.com/talks/Algo-WWW.pdf">slides here</a>. This is a reading list kind of thing where I also write the notes on those.
+        </p>
+
+        <p>
+            <b>Declaration</b>: These are just my notes on the topic that I am providing on my website. All the credit for the work goes to the authors. As far as possible I have tried to provide links to the paper.
+        </p>
+
+        <h3>Issues with Datasets, Models</h3>
+        <p>
+            <a class="article-a" href="http://arxiv.org/abs/1811.05868"><b>Pitfalls of Graph Neural Network Evaluation (Schur et al.)</b></a>: In this paper authors tell how the current datasets and models are bad metrics to find the optimal models. The comparison was done on 3 major dataset CORA, CiteSeer, PubMed and the main results was that different splits lead to a completely different ranking of models.
+        </p>
+
+        <p>
+            Our results highlight the fragility of experimental setups that consider only a single train/validation/test split of the data. We also find that, surprisingly, a simple GCN model can outperform the more sophisticated GNN architectures if the same hyperparameter selection and training procedures are used, and the results are averaged over multiple data splits.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-1.png">
+        </figure>
+        <figure class="size-2">
+            <img src="./images/nae-2.png">
+        </figure>
+
+        <p>
+            In addition, we consider four baseline models. Logistic Regression (<b>LogReg</b>) and Multilayer Perceptron (<b>MLP</b>) are attribute-based models that do not consider the graph structure. Label Propagation (<b>LabelProp</b>) and Normalized Laplacian Label Propagation (<b>LabelProp NL</b>), on the other hand, only consider the graph structure and ignore the node attributes.
+        </p>
+
+        <p>
+            <a class="article-a" href="http://arxiv.org/abs/1905.04682"><b>On Graph Classification Networks, Datasets and Baselines (Luzhnica et al.)</b></a>: Authors show that despite recent advanced in GNNs the competitive performance is achieved by the simplest of models – structure-blind MLP, single- layer GCN and fixed-weight GCN. For simple baseline two models are considered:
+        </p>
+
+
+        <figure class="size-1">
+            <img src="./images/nae-3.png">
+        </figure>
+
+        <p>
+            Now going over the benchmark comparisons we see that majority cases the GNN models perform worse to MLP (blue).
+        </p>
+
+        <figure class="size-1">
+            <img src="./images/nae-4.png">
+        </figure>
+
+        <p>
+            This brings to question a couple of things, whether the datasets really require the advantages that GNNs provide, as we can see in many cases that is not even true. The other way to see it is whether the implementations of GNNs really allows it to be powerful over basic MLP.
+        </p>
+        
+
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="images/instagram.svg"></a>
+            <a href="https://www.fiverr.com/yashbonde"><img src="images/fiverr.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>
