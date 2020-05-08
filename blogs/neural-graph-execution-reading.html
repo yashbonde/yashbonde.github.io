@@ -22,6 +22,7 @@
     <link href="styles/code-block.css" rel="stylesheet">
 
     <link href="styles/footer-blog.css" rel="stylesheet">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 </head>
 <body>
@@ -47,13 +48,27 @@
             <b>Declaration</b>: These are just my notes on the topic that I am providing on my website. All the credit for the work goes to the authors. As far as possible I have tried to provide links to the paper.
         </p>
 
-        <h3>Issues with Datasets, Models</h3>
-        <p>
-            <a class="article-a" href="http://arxiv.org/abs/1811.05868"><b>Pitfalls of Graph Neural Network Evaluation (Schur et al.)</b></a>: In this paper authors tell how the current datasets and models are bad metrics to find the optimal models. The comparison was done on 3 major dataset CORA, CiteSeer, PubMed and the main results was that different splits lead to a completely different ranking of models.
+        <p style="font-size: 0.8rem;">
+            <h3>INDEX</h3>
+            <li><a class="index-a" href="#why">Why do this when I have Algorithms?</a></li>
+            <li><a class="index-a" href="#benchmarking">Issues with Datasets, Models (Benchmarking GNNs)</a></li>
+            <li><a class="index-a" href="#generalisation">From Generalisation point (Strong Generalisation)</a></li>
+            <li><a class="index-a" href="#multitask">Reusing Subroutines (Multitask Learning)</a></li>
+            <li><a class="index-a" href="#discovery">Problem Solving as Hierarchy of Control (Discovering Algorithms)</a></li>
         </p>
 
+        <h3 id="why">Why do this when I have algorithms?</h3>
         <p>
-            Our results highlight the fragility of experimental setups that consider only a single train/validation/test split of the data. We also find that, surprisingly, a simple GCN model can outperform the more sophisticated GNN architectures if the same hyperparameter selection and training procedures are used, and the results are averaged over multiple data splits.
+            This is a good question that if I have already spent some time on making an algorithm then why would I want to add a layer of training nueral network. Neural Networks <b>(+)</b> operate on raw inputs, <b>(+)</b> Generalise on noisy conditions, <b>(+)</b> models reusable across tasks but <b>(-)</b> require big data, <b>(-)</b> unreliable when extrapolating and <b>(-)</b> there is a lack of interpretability.
+        </p>
+        <p>
+            Classical algorithms on the other hand <b>(+)</b> trivially strongly generalise, <b>(+)</b> compositional (subroutines), <b>(+)</b> guaranteed correctness, <b>(+)</b> interpretable operations but <b>(-)</b> inputs must match spec and <b>(-)</b> not robust to task variations. Is it possible to get the best of both worlds?
+        </p>
+
+        <h3 id="benchmarking">Issues with Datasets, Models (Benchmarking GNNs)</h3>
+        <h4><a class="article-a" href="http://arxiv.org/abs/1811.05868"><b>Pitfalls of Graph Neural Network Evaluation (Schur et al.)</b></a></h4>
+        <p>
+            In this paper authors tell how the current datasets and models are bad metrics to find the optimal models. The comparison was done on 3 major dataset CORA, CiteSeer, PubMed and the main results was that different splits lead to a completely different ranking of models. Our results highlight the fragility of experimental setups that consider only a single train/validation/test split of the data. We also find that, surprisingly, a simple GCN model can outperform the more sophisticated GNN architectures if the same hyperparameter selection and training procedures are used, and the results are averaged over multiple data splits.
         </p>
 
         <figure class="size-2">
@@ -62,13 +77,15 @@
         <figure class="size-2">
             <img src="./images/nae-2.png">
         </figure>
+        <figcaption><p>The above two are screenshots from <a class="article-a" href="http://arxiv.org/abs/1811.05868">this paper</a></p></figcaption>
 
         <p>
             In addition, we consider four baseline models. Logistic Regression (<b>LogReg</b>) and Multilayer Perceptron (<b>MLP</b>) are attribute-based models that do not consider the graph structure. Label Propagation (<b>LabelProp</b>) and Normalized Laplacian Label Propagation (<b>LabelProp NL</b>), on the other hand, only consider the graph structure and ignore the node attributes.
         </p>
 
+        <h4><a class="article-a" href="http://arxiv.org/abs/1905.04682"><b>On Graph Classification Networks, Datasets and Baselines (Luzhnica et al.)</b></a></h4>
         <p>
-            <a class="article-a" href="http://arxiv.org/abs/1905.04682"><b>On Graph Classification Networks, Datasets and Baselines (Luzhnica et al.)</b></a>: Authors show that despite recent advanced in GNNs the competitive performance is achieved by the simplest of models – structure-blind MLP, single- layer GCN and fixed-weight GCN. For simple baseline two models are considered:
+            Authors show that despite recent advanced in GNNs the competitive performance is achieved by the simplest of models – structure-blind MLP, single- layer GCN and fixed-weight GCN. For simple baseline two models are considered:
         </p>
 
 
@@ -83,9 +100,118 @@
         <figure class="size-1">
             <img src="./images/nae-4.png">
         </figure>
+        <figcaption><p>The above two are screenshots from <a class="article-a" href="http://arxiv.org/abs/1905.04682">this paper</a></p></figcaption>
 
         <p>
             This brings to question a couple of things, whether the datasets really require the advantages that GNNs provide, as we can see in many cases that is not even true. The other way to see it is whether the implementations of GNNs really allows it to be powerful over basic MLP.
+        </p>
+
+        <h4><a class="article-a" href="http://arxiv.org/abs/1902.07153"><b>Simplifying Graph Convolutional Networks (Wu et al.)</b></a></h4>
+        <p>
+            Paper that shows how reducing the GCN by removing non-linearities and collapsing weight matrices between consecutive layers, then the model corresponds to a fixed low-pass filter followed by a linear classifier. This is a pretty smart paper where they explain how the entire graph layers with regularities between graph removed is nothing but a feature extraction preprocessing layer. More details in the diagram below:
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-5.png">
+        </figure>
+        <figcaption><p>from <a class="article-a" href="http://arxiv.org/abs/1902.07153">here</a></p></figcaption>
+
+        <p>
+            The idea is discussed in Section 2, first they explain the conventional Graph Convolutional Network (GCN). Feature propogation is what separates GCN from MLP, at the beggining of each layers is the features \(h_i\) for each node \(v_i\) which are averaged in the local neighbourhood:
+            \[h_i^{(k)} \leftarrow \frac{1}{d_i + 1}h_i^{(k+1)} + \sum_{j=1}^{n}\frac{a_{ij}}{\sqrt{(d_i + 1)(d_j + 1)}}h_j^{(k-1)}\]
+            Let \(S\) denote the normalised adjacency matrix with self-added loops \(S = D^{-\frac{1}{2}}\overline{A}D^{-\frac{1}{2}}\) where \(\overline{A} = A + I\), \(A\) is adjacency matrix and \(D\) is degree matrix. So we can reduce the above formula
+            \[H^{(k)} \leftarrow SH^{(k-1)}\]
+            Now each layer will also have a learned matrix \(\Theta\) and so we can write propogation for each layer happens as
+            \[H^{(k)} \leftarrow ReLU(SH^{(k-1)}, \Theta^{(k)})\]
+            and finally we get to the predictions using softmax as
+            \[Y_{GCN} = softmax(SH^{(k-1)}, \Theta^{(k)})\]
+        </p>
+
+        <p>
+            We see that with increasing depth in MLP it becomes more feature heirarchical as a layers features depend on the features from its previous layers. In GCN the equivalence is that k-layers mean that information from k-hops away is aggregated. Based on this idea authors perform <b>linearisation</b> in which all the non-linearities in layers are removed, so we are left with chain of normalised adjacency matrices and learned weight matrices. So output of the network becomes
+            \[Y = softmax(S ... S X \Theta^{(1)} ... \Theta^{(K)})\]
+            We can compress them as \(S^K = S ... S\) and \(\Theta = \Theta^{(1)} ... \Theta^{(K)}\) and so we get the output distribution as
+            \[Y_{SGC} = softmax(S^K X \Theta)\]
+            SGC distinguishes between feature extraction and classifier, SGC consists of a fixed (i.e., parameter-free) feature extraction/smoothing component \(\overline{X} = S^KX\) followed by a <b>logistic regression classifier</b> \(Y = softmax(\overline{X} \Theta)\). So we can think of it like performing preprocessing for k-hops and then performing LR.
+        </p>
+
+        <p>
+            The paper then has some giant math spaghetti, I am not going to get into where they mathematically prove that under such setup the preprocessing layers behave as a low-pass filter.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-6.png">
+        </figure>
+        <figcaption><p>from <a class="article-a" href="http://arxiv.org/abs/1902.07153">here</a></p></figcaption>
+
+        <p>
+            Ultimately, the strong performance of SGC sheds light onto GCNs. It is likely that the expressive power of GCNs originates primarily from the repeated graph propagation (which SGC preserves) rather than the nonlinear feature extraction (which it doesn’t.)
+        </p>
+
+        <h4>Summarising This section</h4>
+        <p>
+            Popular GNN benchmark datasets often unreliable and the complexity not very high. Training the networks on algorithms might prove to be favourable as we can generate infinite data, perform complex data manipulation and we get that a very clear hierarchy of models emerge (discussed <a class="article-a" href="#">later</a>). Since we use a generating function we do not have noise in the data generated and <a class="article-a" href="https://ai.stackexchange.com/questions/12908/what-is-the-credit-assignment-problem">credit assignment</a> becomes easier.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-11.png">
+        </figure>
+        <figcaption><p>from <a class="article-a" href="http://arxiv.org/abs/1906.01227">here</a></p></figcaption>
+
+        <p>
+            We can also use this on NP-hard problem such as travelling salesman problem as done in <a class="article-a" href="http://arxiv.org/abs/1906.01227">An Efficient Graph Convolutional Network Technique for the Travelling Salesman Problem (Joshi et al.)</a>, look at the diagram above. you can see that 
+        </p>
+
+
+        <h3 id="generalisation">From Generalisation point (Strong Generalisation)</h3>
+        <p>
+            Algorithms are not simple data mapping (input-output mapping) but instead the network must learn the underlying manipulations / individual operations. Imitating individual operations enables strong generalisation, consider how humans devise algorithms by hand and scales to much larger graph sizes. This grounds the GNN in the underlying algorithmic reasoning it learns more than just mapping but learns the manipulations.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-9.png">
+        </figure>
+        <figcaption><p>Neural Turing Machine (NTM) on copy task, from <a class="article-a" href="https://arxiv.org/pdf/1410.5401">here</a></p></figcaption>
+
+        <p>
+            The two diagrams show different kinds of generalisation. In the above digram we see that when trained on sequence of a particular length when scaling up the copy on longer sequences it fails. Where as in the bottom we see different kind of generalisation, <b>NTM though not trained as composable</b> shows better generalisation on repeat copy task.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-8.png">
+        </figure>
+        <figcaption><p>NTM vs. LSTM on repeat-copy task, from <a class="article-a" href="https://arxiv.org/pdf/1410.5401">here</a></p></figcaption>
+
+        <p>
+            <a class="article-a" href="#">Later</a> we will see how generalisation can be achieved on NAE and use that to achieve 100% on much different evaluation cases.
+        </p>
+
+        <h3 id="multitask">Reusing Subroutines (Multitask Learning)</h3>
+        <p>
+            Many algorithms share many parts and vary very little. For comparison compare the <a class="article-a" href="https://en.wikipedia.org/wiki/Prim%27s_algorithm">Prim's Algorithm</a> and <a class="article-a" href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">Dijkstra's algorithm</a>. Both of them are used to find the shortest path between two points one using a Minimum Spanning Tree and other using shortest node path. Infact even the algorithms look very similar (share the sub-routines).
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-7.png">
+        </figure>
+        <figcaption><p>from <a class="article-a" href="https://petar-v.com/talks/Algo-WWW.pdf">here</a></p></figcaption>
+        <p>
+            Learning representations of manipulations we can then reuse the subroutines that are so massively shared (eg. length of maximum spannign tree and Djikstra's algorithm). Representations and positively reinforce one another and we can get the meta-representation of the algorithms. And also because we can then see the sharing of subroutines we can then have clearly defined task-relations. Output of easier algorithm can be used as input for a harder one, eg. if an alogrithm can learn the breadth first search on unweighted graph (basically shortest-path) we can then use it for weighted graph (which is what Bellman Ford Algorithm is).
+        </p>
+
+        <h3>Problem solving in hierarchy of control (Discovering Algorithms)</h3>
+        <p>
+            We now see how using NAE allows us to improve and make better algorithms, we can inspect intermediate outputs of an algorithm can decode its behaviour, to understand its behaviour. It gives us opportunity for deriving novel algorithms eg. spanning trees or optimising GPU/TPU performace afterall they too are just computation graphs. <b>SuperProgrammer</b>: An interesting way to look at would be like the perfect problem solver. GNN can perform soft subroutine reuse from polynomial-time algorithms and once it has an arsenal of these it can use those to solve any problem (think competitive programming).
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-10.png">
+        </figure>
+        <figcaption><p>Looking at NAE from conventional programming paradigm, these are the 3 papers discussed below</p></figcaption>
+
+        <h4><a class="article-a" href="https://openreview.net/forum?id=rJxbJeHFPS"><b>What can Neural Networks Reason About? (Xu et al.)</b></a></h4>
+        <p>
+            
         </p>
         
 

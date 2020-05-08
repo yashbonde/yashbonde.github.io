@@ -1,23 +1,28 @@
 h1   { font: 700 2.0rem/1.2 "Roboto Slab";
        color: #202020;
-       margin-bottom: 0.3rem;}
+       margin-bottom: 0.3rem;
+}
 
 h2   { font: 400 1.5rem/1.2 "Roboto Slab";
        color: #616161;
-       margin-bottom: 0.8rem;}
+       margin-bottom: 0.8rem;
+}
 
 time { font: 700 0.8rem/1.2 "Raleway";
        color: #B20737;
-       margin-bottom: 1.0rem;}
+       margin-bottom: 1.0rem;
+}
 
 h3   { font: 700 1.0rem/1.2 "Raleway";
        color: #B20737;
        margin-bottom: 0.8rem;
-       text-transform: uppercase;}
+       text-transform: uppercase;
+}
 
 h4 {   font: 700 0.9rem/1.2 "Raleway";
        color: #616161;
-       margin-bottom: 0.8rem;;
+       margin-bottom: 0.8rem;
+       text-transform: uppercase;
 }
 
 p   { font: 400 1.0rem/1.5 "Raleway";
