@@ -35,13 +35,13 @@
 
     <article id = "blog-0">
 
-        <h1>Reading List on Neural Execution</h1>
+        <h1>Reading List on Neural Execution [In-Progress]</h1>
         <h2>Lets Call this Neural Algorithm Execution (NAE)</h2>
 
         <time datetime="07-05-2020">MAY 7, 2020</time>
 
         <p> 
-            With my previous <a class="article-a" href = "./teaching-machines-algorithms.html">machine learning "algorithms"</a> post I showed a quick hack kind of poisisbility that we can teach the machines algorithms. For verification of that I trained a simple convnet on Conway's game of life cellular automata, which is application of three simple rules. While browsing the internet I found <a class="article-a" href="https://www.youtube.com/watch?v=IPQ6CPoluok">this talk</a> on topic "Graph Representation Learning for Algorithmic Reasoning" and so these are the quick notes on the topic. For reference you can use the <a class="article-a" href="https://petar-v.com/talks/Algo-WWW.pdf">slides here</a>. This is a reading list kind of thing where I also write the notes on those.
+            With my previous <a class="article-a" href = "./teaching-machines-algorithms.html">machine learning "algorithms"</a> post I showed a quick hack kind of poisisbility that we can teach the machines algorithms. For verification of that I trained a simple convnet on Conway's game of life cellular automata, which is application of three simple rules. While browsing the internet I found <a class="article-a" href="https://www.youtube.com/watch?v=IPQ6CPoluok">this talk</a> on topic "<b>Graph Representation Learning for Algorithmic Reasoning</b>" and so these are the quick notes on the topic. For reference you can use the <a class="article-a" href="https://petar-v.com/talks/Algo-WWW.pdf">slides here</a>. This is a reading list kind of thing where I also write the notes on those.
         </p>
 
         <p>
@@ -55,6 +55,8 @@
             <li><a class="index-a" href="#generalisation">From Generalisation point (Strong Generalisation)</a></li>
             <li><a class="index-a" href="#multitask">Reusing Subroutines (Multitask Learning)</a></li>
             <li><a class="index-a" href="#discovery">Problem Solving as Hierarchy of Control (Discovering Algorithms)</a></li>
+            <li><a class="index-a" href="#total-reading">References (with links)</a></li>
+
         </p>
 
         <h3 id="why">Why do this when I have algorithms?</h3>
@@ -209,11 +211,143 @@
         </figure>
         <figcaption><p>Looking at NAE from conventional programming paradigm, these are the 3 papers discussed below</p></figcaption>
 
-        <h4><a class="article-a" href="https://openreview.net/forum?id=rJxbJeHFPS"><b>What can Neural Networks Reason About? (Xu et al.)</b></a></h4>
         <p>
-            
+            The idea is to breakdown the execution into three levels, similar to how the conventional programming is broken down. The higher up you go you get more abstract tasks and things that reason at a much higher level. And the lower you go, you get closer to metal more basic operations. In the following subsections I discuss all the three papers, <a class="article-a" href="#nn-reason-1"><b>What can Neural Networks Reason About? (Xu et al.)</b></a>, 
         </p>
-        
+
+        <h4 id="nn-reason-1"><a class="article-a" href="https://openreview.net/forum?id=rJxbJeHFPS"><b>What can Neural Networks Reason About? (Xu et al.)</b></a></h4>
+        <p>
+            This is an interesting paper/idea that sits at the top of the hierarachy of abstractive task and segements the idea in the 4 types: Summary Statistics, Relational Argmax, Dynamic Programming and NP-hard problem (Is there a subset that sums to 0?).
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-12.png">
+        </figure>
+        <figcaption><p>Different types of problems with different logic required</p></figcaption>
+
+        <p>
+            There are four main algorithms that the paper talks about. First is the simple MLP which works well when you have a single-object universe but fails when we have multiple objects. Secondly we have <a class="article-a" href="https://arxiv.org/pdf/1703.06114">Deep Sets</a>, which consider reasoning on an unordered set, to induce this permutation invariance authors use two MLPs that look like this
+            \[y = MLP_2\big( \sum_{s \in S} MLP_1(X_s) \big)\]
+            And the third are the GNNs whose structure can be given as follows:
+            \[h_s^{(k)} = \sum_{t\in S} MLP_1^{(k)}(h_s^{(k-1)}, h_s^{(k-1)})\]
+            \[h_S = MLP_2 \big( \sum_{s\in S} h_s^{(K)} \big) \]
+            where \(h_s^{(0)} = X_s\). The final algorithm is the NES (Neural Exhaustive Search), given a universe, NES enumerates all subsets of objects and passes each subset through an LSTM followed by a MLP. The results are aggregated with a max-pooling layer and MLP
+            \[
+                MLP_2 (\max_{\tau \subseteq S} MLP_1 \circ \\
+                LSTM (X_1, ..., X_{|\tau|}: X_1, ..., X_{|\tau|} \in \tau ))
+            \]
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-14.png">
+        </figure>
+        <figcaption><p>What the framework shows</p></figcaption>
+
+        <p>
+            What the paper showed is that GNNs that are very similar to the existing algorithms perform better to than any abstract method. Thus in order to create better models we must look for architectures that suit an existing algorithms. For reference in the tasks
+            <ul>
+                <li><b>Summary Statistics</b>: Since the idea is the to get the aggregation of information from the available modalities. This can be done using deep sets as they are permutation invariant, as shown in the results below.</li>
+                <li><b>Relational Argmax</b>: This is the case where we need relation between multiple objects and as we can see that Deep Sets would not work in this setting as we need propogation of information across the objects but GNNs with even one layer is able to extract the correct information. This is also reflected in the results below.</li>
+                <li><b>Dynamic Programming</b>: In this task there are several rounds of propogation is required and so we can see that the GNNs with more layers are better at extracting the information</li>
+                <li><b>NP-Hard Problem</b>: These are the problems that require a more deeper logic than just the propogation and thus even Deep GNNs perform poorly, while a simple logic works on this.</li>
+            </ul>
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-13.png">
+        </figure>
+        <figcaption><p>The above three images are from <a class="article-a" href="https://openreview.net/forum?id=rJxbJeHFPS">this paper</a></p></figcaption>
+
+        <p>
+            Rest of the paper involves massive amounts of mathematics, theorems proves claims etc. Most of the interesting theory on the work is in Section 4. In particular, the answer what tasks a neural network can learn to reason about is done by studying the generalization ability of learning the underlying reasoning processes for a task. And we find that GNNs are good when it comes to tasks that require dynamic programming kind of setup. Paper also introduces algorithmic alignment, neural networks that can learn other reasoning paradigms beyond dynamic programming.
+        </p>
+
+        <h4 id="nn-reason-2"><a class="article-a" href="https://openreview.net/forum?id=SkgKO0EtvS"><b>Neural Execution of Graph Algorithms (Veličković et al.)</b></a></h4>
+        <p>
+            Unlike the above paper this one stands lower in hierarchy and deals with the stomic steps in the algorithm. The idea is that many classical algorithms share related subroutines: for example, shortest path computation (via the Bellman-Ford algorithm) and breadth-first search both must enumerate sets of edges adjacent to a particular node. Authors show that by learning several algorithms simultaneously and providing a supervision signal, their neural network is able to demonstrate positive knowledge transfer between learning different algorithms.
+        </p>
+
+        <p>
+            The basic idea is that along with a continual propogation of node values at each layer we also keep a latent vector for each node at each layer as clear in the diagram below. The architecture is a encoder-processor-decoder architecture. We start with the latent vector \(h_i^{(0)} = 0\) and the encoded inputs
+            \[ z_i^{(t)} = f_A(x_i^{(t)}, h_i^{(t)})\]
+            where \(f_A\) is the encoder network. The set of all input encoded vectors \(Z^{(t)} = \{ z_i^{t} \}_{v \in V} \) and edge features \(E^{(t)} = \{ e_i^t \}_{e \in E}\) are fed to processor network \(P\) to get latent node features
+            \[ H^{(t)} = P(Z^{(t)}, E^{(t)} ) \]
+            The node and algorithm specific outputs are then calculated by the decoder-network, \(g_A\)
+            \[y_i^{(t)} = g_A(z_i^{(t)}, h_i^{(t)})\]
+            Note that the processor also requires a termination network which tells the probability of termination after applying logistic sigmoid activation \(\rho\)
+            \[ \tau^{(t)} = \rho( T_A(H^{(t)}, \overline{H^{(t)})} ) \]
+            where \(\overline{H^{(t)}} = \frac{1}{|V|}\sum_{i \in V} H^{(t)}\) is the mean of all the node embeddings and algorithm terminates if \(\tau^{(t)} < 0.5\) then the above equation is reused with \(y_i^{(t)}\) used to calculate \(x_I^{(t + 1)}\).
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-15.png">
+        </figure>
+        <figcaption><p></p></figcaption>
+
+        <p>
+            Now the main comparison is done between two form of equations, one for Graph Attention Networks (GAT)
+            \[h_i^{(t)} = ReLU\Big( \sum_{(j,i) \in E} a(z_i^{(t)}, z_j^{(t)}, e_{ij}^{(t)}) W z_j^{(t)} \Big)\]
+            where \(W\) is a learnable matrix, \(a\) is the attention mechanism producing scalar coefficients. Other being the Message Passing Neural Networks (MPNNs)
+            \[h_i^{(t)} = U\Big(z_i^{(t)}, \oplus M (z_i^{(t)}, z_j^{(t)}, e_{ij}^{(t)}) \Big)\]
+            where \(M\) and \(U\) are neural networks producing vector messages. \(\oplus\) is element wise aggregation such as maximization, mean, summation.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-16.png">
+        </figure>
+        <figcaption></figcaption>
+
+        <figure class="size-2">
+            <img src="./images/nae-17.png">
+        </figure>
+        <figcaption><p>As we saw in the previous paper, we see the same repeating here as well. Architectures that are more alligned to the actual algorithm perform better. The above three images are from <a class="article-a" href="https://openreview.net/forum?id=SkgKO0EtvS">this paper</a></p></figcaption>
+
+        <p>
+            It should be noted that, when learning to execute Bellman-Ford and Prim’s algorithms, the prediction of \(p_i^{(t)}\)is performed by scoring each node-pair using an edge-wise scoring network (a neural network predicting a scalar score from \(h_i^{(t)} || h_j^{(t)} || e_{ij}^{(t)}\) ), followed by a softmax over all neighbours of \(i\).
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/nae-18.png">
+        </figure>
+        <figcaption></figcaption>
+
+        <p>
+            The performance of a curriculum learning strategy (as curriculum): here, BFS is learnt first in isolation (to perfect validation accuracy), followed by fine- tuning on Bellman-Ford. We find that this approach performs worse than learning both algorithms simultaneously, and as such we do not consider it in further experiments. So basically we should learn more algorithms simultaneously and exploiting the similarities between their respective subroutines whenever appropriate.
+        </p>
+
+        <p>
+            <b>EXTRA (IGNORE IF NOT INTERESTED)</b>: In the Appendix B. of the paper authors give a theoretical reason why simultaneously learning may provide benefits in downstream task. Consider that for the same input \(x\), two different outcomes are \(y_A\) using algorithm \(A\) and \(y_B\) using algorithm \(B\). Now we imply that the two algorithms share some subroutines so the <a class="article-a" href="https://www.sciencedirect.com/topics/computer-science/shannon-information-theory">Conditional Mutual Information</a> of the corresponding random variables \(x, y_A, y_B\) is \(I(Y_A;Y_B|X)\) can be expanded as
+            \[I(Y_A;Y_B|X) = H(Y_A|X) - H(Y_A,Y_B|X)\]
+            where \(H\) is the Shannon Entropy. Now from experiments we know that \(I(Y_A;Y_B|X)\) is positive thus \(H(Y_A|X) > H(Y_A,Y_B|X)\) therefore providing \(y_B\) upfront strictly reduces the information-theoretic uncertainty in \(y_A\), thus making it potentially more suitable for being learned by optimisation techniques.
+        </p>
+
+        <h4 id="nn-reason-3"><a class="article-a" href="https://openreview.net/forum?id=rJg7BA4YDr"><b>Neural Execution Engines (Yan et al.)</b></a></h4>
+        <p>
+            Though the above two results are good, we see that one of the main challenge they face is the generalisation over larger datasets, this is the particular target that this paper achieves. They take the base Transformer and modify the masking mechanism. They take several basic algorithms (selection sort, merge sort, Dijkstra’s algorithm for shortest paths) and express them in terms of a series of subroutines, as a software engineer would. Each subroutine represents a simple function, and can be composed with others to express the algorithm. In this way, we train neural networks to perform relatively simple tasks in a supervised manner, and obtain complex behaviors through composition.
+        </p>
+
+        <p>
+            Simply stated, a neural execution engine (NEE) is a transformer that takes as input binary numbers and an encoding mask, and outputs either data values, a pointer, or both. The pointer can optionally be used to modify the mask the next time the NEE is invoked. <b>Bitwise Embedding</b> is used where given an embedding vector \(v_i\) for each bit \(i\), for an \(n\)-bit input vector \(x\), we would compute \(\hat{x} = \sum_{i=1}^{n} x_i v_i\). For example, \(emb(1001) = v_0+v_3\)
+        </p>
+
+
+        <h3 id="total-reading">Total Reading List</h3>
+        <p>
+            This is the list of all the papers in the above notes and some more, in case you are interested in the details.
+            <ul>
+                <li>GNNExplainer: Generating Explanations for Graph Neural Networks <a class="article-a" href="https://arxiv.org/pdf/1903.03894.pdf">(link)</a></li>
+                <li>Nerual GPUs Learn Algorithms <a class="article-a" href="https://arxiv.org/pdf/1511.08228.pdf">(link)</a></li>
+                <li>Neural Random Access Machines <a class="article-a" href="https://arxiv.org/pdf/1511.06392.pdf">(link)</a></li>
+                <li>Neural Execution Engines <a class="article-a" href="https://openreview.net/forum?id=rJg7BA4YDr">(link)</a></li>
+                <li>Neural Execution of Graph Algorithms <a class="article-a" href="https://openreview.net/forum?id=SkgKO0EtvS">(link)</a></li>
+                <li>What Neural Networks can reason about? <a class="article-a" href="https://openreview.net/forum?id=rJxbJeHFPS">(link)</a></li>
+                <li>Neural Turing Machines <a class="article-a" href="https://arxiv.org/pdf/1410.5401">(link)</a></li>
+                <li>An Efficient Graph Convolutional Network Technique for the Travelling Salesman Problem <a class="article-a" href="http://arxiv.org/abs/1906.01227">(link)</a></li>
+                <li>Simplifying Graph Convolutional Network <a class="article-a" href="http://arxiv.org/abs/1902.07153">(link)</a></li>
+                <li>On Graph Classification Networks, Datasets and Baselines <a class="article-a" href="http://arxiv.org/abs/1905.04682">(link)</a></li>
+                <li>Pitfalls of Graph Neural Network Evaluation <a class="article-a" href="http://arxiv.org/abs/1811.05868">(link)</a></li>
+            </ul>
+        </p>
 
     </article>
 
