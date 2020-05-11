@@ -35,17 +35,17 @@
 
     <article id = "blog-0">
 
-        <h1>Reading List on Neural Execution [In-Progress]</h1>
+        <h1>Reading List on Neural Graph Execution</h1>
         <h2>Lets Call this Neural Algorithm Execution (NAE)</h2>
 
-        <time datetime="07-05-2020">MAY 7, 2020</time>
+        <time datetime="11-05-2020">MAY 11, 2020</time>
 
         <p> 
-            With my previous <a class="article-a" href = "./teaching-machines-algorithms.html">machine learning "algorithms"</a> post I showed a quick hack kind of poisisbility that we can teach the machines algorithms. For verification of that I trained a simple convnet on Conway's game of life cellular automata, which is application of three simple rules. While browsing the internet I found <a class="article-a" href="https://www.youtube.com/watch?v=IPQ6CPoluok">this talk</a> on topic "<b>Graph Representation Learning for Algorithmic Reasoning</b>" and so these are the quick notes on the topic. For reference you can use the <a class="article-a" href="https://petar-v.com/talks/Algo-WWW.pdf">slides here</a>. This is a reading list kind of thing where I also write the notes on those.
+            With my previous <a class="article-a" href = "./teaching-machines-algorithms.html">machine learning "algorithms"</a> post I showed a quick hack kind of poisisbility that we can teach the machines algorithms. For verification of that I trained a simple convnet on Conway's game of life cellular automata, which is application of three simple rules. I also have been working on <a class="article-a" href="./graph-chem.html">Graph Neural Networks</a> and they seemed very powerful but at the same time weak. While browsing the internet I found <a class="article-a" href="https://www.youtube.com/watch?v=IPQ6CPoluok">this talk</a> on topic "<b>Graph Representation Learning for Algorithmic Reasoning</b>" and so these are the quick notes on the topic. For reference you can use the <a class="article-a" href="https://petar-v.com/talks/Algo-WWW.pdf">slides here</a>. This is a reading list kind of thing where I also write the notes on those. <a class="article-a" href="#conclusion">TL;DR</a> just want the conclusions
         </p>
 
         <p>
-            <b>Declaration</b>: These are just my notes on the topic that I am providing on my website. All the credit for the work goes to the authors. As far as possible I have tried to provide links to the paper.
+            <b>Declaration</b>: These are just my notes on the topic that I am providing on my website. All the credit for the work goes to the respective authors. As far as possible I have tried to provide links to the papers and articles I have used. If I have missed some or you have any suggestions please ping me at bonde.yash97@gmail.com or <a class="article-a" href="https://www.linkedin.com/in/yash-bonde/">linkedin</a> or <a class="article-a" href="https://twitter.com/bondebhai/">twitter</a>.
         </p>
 
         <p style="font-size: 0.8rem;">
@@ -55,6 +55,7 @@
             <li><a class="index-a" href="#generalisation">From Generalisation point (Strong Generalisation)</a></li>
             <li><a class="index-a" href="#multitask">Reusing Subroutines (Multitask Learning)</a></li>
             <li><a class="index-a" href="#discovery">Problem Solving as Hierarchy of Control (Discovering Algorithms)</a></li>
+            <li><a class="index-a" href="#conclusion">Conclusion</a></li>
             <li><a class="index-a" href="#total-reading">References (with links)</a></li>
 
         </p>
@@ -323,13 +324,76 @@
 
         <h4 id="nn-reason-3"><a class="article-a" href="https://openreview.net/forum?id=rJg7BA4YDr"><b>Neural Execution Engines (Yan et al.)</b></a></h4>
         <p>
-            Though the above two results are good, we see that one of the main challenge they face is the generalisation over larger datasets, this is the particular target that this paper achieves. They take the base Transformer and modify the masking mechanism. They take several basic algorithms (selection sort, merge sort, Dijkstra’s algorithm for shortest paths) and express them in terms of a series of subroutines, as a software engineer would. Each subroutine represents a simple function, and can be composed with others to express the algorithm. In this way, we train neural networks to perform relatively simple tasks in a supervised manner, and obtain complex behaviors through composition.
+            Though the above two results are good, we see that one of the main challenge they face is the generalisation over larger datasets, this is the particular target that this paper achieves. They take several basic algorithms (selection sort, merge sort, Dijkstra’s algorithm for shortest paths) and express them in terms of a series of subroutines, as a software engineer would. Each subroutine represents a simple function, and can be composed with others to express the algorithm. In this way, we train neural networks to perform relatively simple tasks in a supervised manner, and obtain complex behaviors through composition.
         </p>
 
         <p>
-            Simply stated, a neural execution engine (NEE) is a transformer that takes as input binary numbers and an encoding mask, and outputs either data values, a pointer, or both. The pointer can optionally be used to modify the mask the next time the NEE is invoked. <b>Bitwise Embedding</b> is used where given an embedding vector \(v_i\) for each bit \(i\), for an \(n\)-bit input vector \(x\), we would compute \(\hat{x} = \sum_{i=1}^{n} x_i v_i\). For example, \(emb(1001) = v_0+v_3\)
+            They take the base Transformer and modify the masking mechanism. Simply stated, a neural execution engine (NEE) is a transformer that takes as input binary numbers and an encoding mask, and outputs either data values, a pointer, or both. The pointer can optionally be used to modify the mask the next time the NEE is invoked. There are some ideas that are new here and noted below:
+            <ul>
+                <li><b>Bitwise Embedding</b>: It is used where given an embedding vector \(v_i\) for each bit \(i\), for an \(n\)-bit input vector \(x\), we would compute \(\hat{x} = \sum_{i=1}^{n} x_i v_i\). For example, \(emb(1001) = v_0+v_3\)</li>. The other two special tokes are the start \(s\) and end \(e\) tokens.
+                <li><b>Conditional Masking</b>: In this we use the output pointer of the decoder to modify the mask for a subsequent call of the encoder. In this way, the inputs represent a memory state, and the mask represents a set of pointers into the memory. The binary mask \(M\) has value \(0\) where to focus and \(1\) where not to focus. The input mask \(b\) and output \(o\) of the transformer result in mask for next state as \(\hat{b} = xor(b, o)\). It is sufficient for the algorithms given here.</li>
+                <li><b>Encoding Independent Inputs</b>: The function must operate on a sequence of inputs, but where subsets of the inputs can be treated independently.</li>
+                <li><b>Encoding Dependent Inputs</b>: If we receive two sub sequences we merge using \(e\) token as \(\{ [a,b];[c,d] \} \rightarrow [a, b, e, c, d, e] \) and the mask could become \([0, 0, 1, 0, 0, 1]\) and if we need to iterate over sub-sequences we could use \([0, 1, 1, 0, 1, 1]\).</li>
+                <li><b>Decoding</b>: In decoding we start with the start tag \(s\) and compute attention over encoder blocks and return a single value and/or pointer instead of sequence.</li>
+            </ul>
         </p>
 
+        <figure class="size-2">
+            <img src="./images/nae-19.png">
+        </figure>
+        <figcaption><p>Seq2Seq style sorting when trained on sequences upto length 8. Thing to note is that despite heavy modifications the vanilla transformer is not really doing anything good.</p></figcaption>
+
+        <p>
+            Authors found that sorting random numbers was easier than sorting those with minor difference (eg. \(1\) and \(90\) vs \(53\) and \(54\)). The decoder uses a greedy decoding strategy. The outputs of the decoder are one-hot \(256\) dim vectors representing the unnormalized log-probabilities of the output numbers. Thus training data has 70% random numbers, 30% numbers with small differences. The reason was seen when authors focused on the attention in the last layer of the decoder the attention was proper for the first few numbers but went completely fuzzy for the later numbers as seen in the image below.
+        </p>
+
+        <figure class="size-1">
+            <img src="./images/nae-20.png">
+        </figure>
+        <figcaption></figcaption>
+
+        <p>
+            <ul>
+                <li><b>Subroutine Level Traces (Selection Sort)</b>: Using this insight authors decided to increase teh supervision and break the problem in sub tasks which are more atomic than the previous paper. For example the task in selection-sort is to find the minimum of the list and that can be replaced with a neural network and to increase focus (attention only on required things), a mask was used to tell where it could attend.</li>
+                <li><b>Recursive Subroutines (Merge Sort)</b>: In merge sort the list of the list is broken in two equal pieces till there is only one left and then they are joined iteratively, this is a recursive method as showin the image below. The NEE is able to learn merge sort with perfect strong generalization over long sequences (up to length 100). The NEE was trained to perform the computation underlying merge sort on sequences of length ≤ 8.</li>
+                <li><b>Composable Subroutines (Shortest Path)</b>: After the success in recursive patterns the next question was whether it would learn something that was made up of many different pieces.</li>
+            </ul>
+        </p>
+
+        <figure class="size-1">
+            <img src="./images/nae-21.png">
+        </figure>
+        <figcaption><p>Subroutine Level Traces in Selection Sort.</p></figcaption>
+        <figure class="size-1">
+            <img src="./images/nae-22.png">
+        </figure>
+        <figcaption><p>Recursive Subroutine in Merge Sort.</p></figcaption>
+        <figure class="size-1">
+            <img src="./images/nae-23.png">
+        </figure>
+        <figcaption><p>Djikstra's Algorithm to NEE Architecture.</p></figcaption>
+
+        <p>
+            In order to see how the learning happened the emebddings for the numbers was passed through PCA, we can see that highly structured understanding of number system by the system. You can see that in the image below.
+        </p>
+        <figure class="size-2">
+            <img src="./images/nae-24.png">
+        </figure>
+        <figcaption><p>Model shows understanding of the number system</p></figcaption>
+
+        <figure class="size-2">
+            <img src="./images/nae-25.png">
+        </figure>
+        <figcaption><p>Model showed unparalled results by learning what to actually do. All seven images above are <a class="article-a" href="https://openreview.net/forum?id=rJg7BA4YDr">from here</a></p></figcaption>
+
+        <h3 id="conclusion">Conclusion</h3>
+        <p>
+            This was probably the biggest note-taking thing I have done is some time, and it solves a variety of doubts I had on graph neural networks and introduced me to the theory of something I did not know was called "Neural Algorithm Execution" where the neural network learns programs. The couple of interesting points from the reading was this:
+            <ul>
+                <li>Graph networks that closely resemble the existing algorithsm work better, so find the algorithm and get the simples network for it.</li>
+                <li>Microscopic networks trained via intense supervision tend to learn much better and scale much better</li>
+            </ul>
+        </p>
 
         <h3 id="total-reading">Total Reading List</h3>
         <p>
@@ -346,6 +410,7 @@
                 <li>Simplifying Graph Convolutional Network <a class="article-a" href="http://arxiv.org/abs/1902.07153">(link)</a></li>
                 <li>On Graph Classification Networks, Datasets and Baselines <a class="article-a" href="http://arxiv.org/abs/1905.04682">(link)</a></li>
                 <li>Pitfalls of Graph Neural Network Evaluation <a class="article-a" href="http://arxiv.org/abs/1811.05868">(link)</a></li>
+                <li>Deep Graph Infomax <a class="article-a" href="https://openreview.net/pdf?id=rklz9iAcKQ">(link)</a></li>
             </ul>
         </p>
 
