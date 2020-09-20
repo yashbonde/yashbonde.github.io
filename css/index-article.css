@@ -42,8 +42,8 @@ p {
 
 .top-box {
     /* Center and scale the image nicely */
-    background: url("../files/bp.svg");
-    background-position: center;
+    background: url("../files/somewall.jpg");
+    background-position: bottom;
     background-repeat: no-repeat;
     background-size: cover;
 
@@ -74,8 +74,8 @@ p {
     text-align: center;
     padding: 1.4rem;
   
-    color: #1f1f1f;
-    background: #E8E5B295;
+    color: #fef7fe;
+    /* background: #E8E5B295; */
 }
 
 .banner-middle {

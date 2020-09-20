@@ -1,3 +1,4 @@
 # notes files
 *.txt
 blogs/dumped/*
+.DS_Store

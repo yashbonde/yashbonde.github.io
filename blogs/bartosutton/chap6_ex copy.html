@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Barto Sutton | Chapter 6 Exercises</title>
+    <title>Barto Sutton | Chapter 7 Exercises</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -21,14 +21,12 @@
     <link href="../styles/nav.css" rel="stylesheet">
     <link href="../styles/code-block.css" rel="stylesheet">
     <link href="./exer.css" rel="stylesheet">
-    <link href="./assets/toolitp.css" rel="stylesheet">
 
     <link href="../styles/footer-blog.css" rel="stylesheet">
 
     <!-- Latex -->
     <!-- for help with symbols goto: https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols -->
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
-    <script src='./func.js' async></script>
 
 </head>
 <body>
@@ -53,32 +51,14 @@
 
         <h3 id="6_1">6.1 Changing Value function</h3>
         <p>
-            We are given the TD update equation as
-            \[V(S_t) \leftarrow V(S_t) + \alpha [ R_{t+1} + \gamma V(S_{t+1}) - V(S_t) ]\]
-            and we can right it with subscript \(t\) as an array as
-            \[V_{t+1}(S_t) = V_t(S_t) + \alpha [ R_{t+1} + \gamma V_t(S_{t+1}) - V_t(S_t) ]\]
-            and we write the error that is applied on state \(S_{t+1}\) as
-            \[V_{t+1}(S_t) - V_t(S_t) = u_t = \alpha [ R_{t+1} + \gamma V_t(S_{t+1}) - V_t(S_t)]\]
-            we also know that
-            \[G_t - V_t(S_t) = \delta_t + \gamma(G_{t+1} - V_t(S_{t+1}))\]
-            and after update with discounted error \((\gamma u_{t+1})\) because the first mathematical operation we apply is on state \(S_{t+1}\) ie. \((\pm\gamma V_t(S_{t+1}))\), we get the equation as
-            \[=  \delta_t + \gamma(G_{t+1} - V_t(S_{t+1})) + \gamma u_{t+1}\]
-            \[=  \delta_t + \gamma(\delta_{t+1} + \gamma(G_{t+2} - V_t(S_{t+2})) + \gamma u_{t+2}) + \gamma u_{t+1}\]
-            So after expanding and compressing we get the equation
-            \[= \sum_{k=t}^{T-1}\gamma^{k-t}(\delta_k + \gamma u_{k+1})\]
-            So the additional error added is \(\sum_{k=t}^{T-1}\gamma^{k-t+1}u_{k+1}\)
-
-            <!-- OLD SOLUTION -->
-
-            <!-- \[G_t - V_t(S_t) = R_{t+1} + \gamma G_{t+1} - V_t(S_t) + \gamma V_t(S_{t+1}) -\gamma V_t(S_{t+1}) \]
+            \[G_t - V_t(S_t) = R_{t+1} + \gamma G_{t+1} - V_t(S_t) + \gamma V_t(S_{t+1}) -\gamma V_t(S_{t+1}) \]
             \[= \delta_t + \gamma (G_{t+1} - V_t(S_{t+1}))\]
             \[= \delta_t + \gamma (G_{t+1} - V_{t+1}(S_{t+1})) + \gamma (V_{t+1}(S_{t+1}) - V_t(S_{t+1}))\]
             Now notice that \(V_{t+1}(S_{t+1}) - V_t(S_{t+1})\) is the update with value \(u_t = \alpha(R_t + \gamma V(S_{t+1}) - V(S_t))\) so we can write this as
             \[= \delta_t + \gamma (G_{t+1} - V_{t+1}(S_{t+1})) + \gamma u_{t+1}\]
             expanding and compressing gives us
             \[= \sum_{k=0}^{T-1}[\gamma^{k-t}\delta_k + \gamma^{k-t+1}u_{k-t+1}]\]
-            So the amount we have added is \(\sum_{k=0}^{T-1}\gamma^{k-t+1}u_{k-t+1}\) -->
-
+            So the amount we have added is \(\sum_{k=0}^{T-1}\gamma^{k-t+1}u_{k-t+1}\)
         </p>
 
         <h3 id="6_2">6.2 TD vs. MC</h3>
