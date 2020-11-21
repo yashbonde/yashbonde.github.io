@@ -107,3 +107,17 @@
 	box-shadow: 0 0px 12px 5px rgba(84,49,49,1);
 }
 
+.grad-8 {
+	background: rgb(253,255,197);
+    background: linear-gradient(312deg, rgb(255, 98, 141) 0%, rgb(38, 31, 136) 100%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+}
+
+.shadow-8:hover{
+	-webkit-box-shadow: 0 0px 12px 5px rgb(107, 102, 182);
+	-moz-box-shadow: 0 0px 12px 5px rgb(107, 102, 182);
+	box-shadow: 0 0px 12px 5px rgb(107, 102, 182);
+}
