@@ -283,12 +283,15 @@
 
         <figure class="size-2">
             <img
-                src="./images/chess-lm-1.png">
+                src="./images/chess-lm-3.png">
         </figure>
         <figcaption>
-            <p  style="font-size: 0.9rem; text-align: centre">Tensorboard for training 2 models. Grey
-                represents buffer size of \(99999\) and blue represents buffer size of \(10000000\).
-                Grey was trained for 3 epochs whereas blue was trained for 1 epoch.
+            <p  style="font-size: 0.9rem; text-align: centre">Tensorboard for training 3 models. Grey
+                represents buffer size of \(55555\), red is larger model \(~3\times\) parameters of baseline parameters
+                and buffer size of \(1000000\). Orange represents fully loaded dataset same arch. as Grey. Though the larger
+                model trains quicker the loss function is rougher and there is a slight benefit. Grey was trained for
+                3 epochs whereas others were trained for 1 epoch. (there was as bug in IterableDataset which caused number
+                of samples to be lower than fully loaded)
             </p>
         </figcaption>
 
@@ -303,9 +306,16 @@
 
         <h2>➡️ What Next?</h2>
         <p>
-            You can raise a PR on <a href="https://github.com/yashbonde/chess_lm" class="article-a">repo</a>, there is
-            also a Todo list on things that need to be completed. Again a plug, I am currently looking for freelancing
-            work and if you have something connect with me on my
+            First step is to evaluate the models using accuracy and other through competition. This part is much slower and
+            will take 3-4 days to complete in automated testing. In another method I will create the large model with atleast
+            \(~10\times\) more parameters (\(~1/2\) the size of GPT-2) and see how it performs (training will take
+            another 1 day).
+        </p>
+
+        <p>
+            I need help with writing automated tests. You can raise a PR on <a href="https://github.com/yashbonde/chess_lm"
+            class="article-a">repo</a>, there is also a Todo list on things that need to be completed. Again a plug, I am
+            currently looking for freelancing work and if you have something connect with me on my
             <a href="https://www.linkedin.com/in/yash-bonde/" class="article-a">LinkedIn</a>.
         </p>
         
