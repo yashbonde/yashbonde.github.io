@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Chessssssss</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Link the main.css stylesheet -->
+    <link href="styles/reset.css" rel="stylesheet">
+    <link href="styles/-debug.css" rel="stylesheet">
+    <link href="styles/article.css" rel="stylesheet">
+    <link href="styles/article-text.css" rel="stylesheet">
+    <link href="styles/article-figure.css" rel="stylesheet">
+    <link href="styles/nav.css" rel="stylesheet">
+    <link href="styles/code-block.css" rel="stylesheet">
+
+    <link href="styles/footer-blog.css" rel="stylesheet">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+    <style type="text/css">
+      .gist-data {max-height: 400px}
+    </style>
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../index.html">HOME</a>
+        <a class = "nav-project" href="../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../musings.html">BLOG</a>
+        <a class="nav-resume" href="../files/yashbonde_resume.pdf">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Chess Engine - (Part 1.5)</h1>
+        <h2>On scaling laws for Language Models</h2>
+
+        <time datetime="23-11-2020">NOV. 23, 2020</time>
+
+        <p>
+            This is first in a series of blogs covering this project. <strong>TL;DR</strong> see this
+            <a href="https://github.com/yashbonde/chess_lm" class="article-a">Github repo</a>.
+            Also for all you who do not understand the Indian number system just read this
+            <a href="https://en.wikipedia.org/wiki/Indian_numbering_system" class="article-a">wiki</a>.
+            This is a follow up to my <a href="./chess-lm.htmlx class="article-a">previous work</a> where
+            I train a language model on \(25Cr\) or \(225.1Mn\) moves and pose some questions.
+        </p>
+
+        <p>
+            If you have any freelancing work, contact me on my <a
+            href="https://www.linkedin.com/in/yash-bonde/" class="article-a">LinkedIn</a>.
+        </p>
+
+        <p>
+            Initially this was going to be do and done kind of project but now it seems like this is going to take
+            a while and if I am lucky I might just get a paper out of it. There are so many shitty papers out there
+            that you can't believe something so meaningless can get a paper out. But anyways, it's them and we gotta
+            do our योग. This blog is mostly a paper discussion and will be a quick one.
+        </p>
+        
+        <h2 id="power-laws">📶 What are power laws</h2>
+
+        <p>
+            It used to be when compute was low that simply adding more layers to a network used to work. But this
+            paradigm changed with very large model (GPT-2, BERT, T5, etc.) and with the investment in these softwares
+            it became important to know how these model actually scale, what matters and what not. So OpenAI did a
+            research and answered those questions based on <a href="https://en.wikipedia.org/wiki/Power_law"
+            class="article-a">Power Law</a>. So we start our discussion with what is a powerlaw.
+        </p>
+
+        <p>
+            Powerlaws are mathematical relationship where changing one value causes a proportional change in the outcome or
+            power law is a function \(f(x)\) where the value \(y\) is proportional to some value of \(x\).
+            Eg. doubling the length makes area \(4\) times and volume \(8\) times. So we can give it a form \(A(x) \propto x^k\)
+            where \(k = 2\) and when considering volume \(k = 3\). Such functions have three properties:
+            <li><b>Scale Invariance:</b> given a relation \(f(x) = ax^{-\alpha}\) scaling \(x\) by a factor \(c\) causes
+                proportional scaling of the function itself ie. \(f(cx) = c^{-\alpha} f(x)\). Thus the log of these values
+                gives a linear line.
+            <li>Lack of well defined average value, which makes it hard to apply traditional statistics like mean, etc. An
+                example if the <a class="article-a" href="https://en.wikipedia.org/wiki/Pareto_distribution">
+                Pareto Distribution</a>.
+            <li>Universality, which in gist means that as a different systems behave the same way. And the exponent in such
+                a distribution (\(k\)) remains the same for those different system. In the paper it means that for a lot of
+                different models the scaling parameters eg. \(\alpha_N, \alpha_D\) remain the same for large number of values.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/chess-lm-4.png">
+        </figure>
+        <figcaption>
+            <p style="font-size:0.9rem; text-align:centre">(Left) you have normal power law distribution and (Right) shows
+                that scaling x-axis to log gives a linear graph. Which helps when working exponentially increasing/decreasing
+                values. \(y = f(x) = 5.6 x^{-0.095} \forall x \in [0,1000) \)</p>
+        </figcaption>
+
+        <h2 id="on-intelligence">📶 How to make network bigger (PROPERLY)</h2>
+
+        <p>
+            The paper we are dealing with today is called "Scaling Laws for Neural Language Models"
+            (<a href="http://arxiv.org/abs/2001.08361" class="article-a">ArXiv</a>) by OpenAI. With the knowledge of the power
+            laws it becomes easier to predict things at scale and this is helpful as neural networks grow exponentially in size.
+            But we start with defining the nomenclature:
+            <li> \(L\): Cross entropy loss in <a href="https://en.wikipedia.org/wiki/Nat_(unit)" class ="article-a">nats</a>,
+                typically it will be averaged over all the tokens in the context.
+            <li> \(N\): The number of models parameters, excluding all the vocabulary and positional parameters. This can
+                roughly be calculated as \(N \approx 2d_{model}n_{layer}(2 d_{attn} + d_{ff}) = 12n_{layer}d_{model}^2\)
+            <li> \(D\): The dataset size in tokens
+            <li> \(C\): Compute required. One forward pass takes \(C_{forward} \approx 2N + 2d_{model}n_{layer}n_{ctx}\)
+                where the factor \(2\) comes from multiply-accumuate operation used in matrix multiplication. Accounting for
+                the backwards pass (twice the forward pass) the total compute comes at \(C \approx 6N\) per training token.
+            <li> \(B_{crit}\): The critical batch size. Training at the critical batch size provides a roughly optimize
+                between time and compute efficiency.
+            <li> \(C_{min}\): An estimate of the minimum amount of non-embedding compute to reach a given value of the loss
+                (batch size \(\ll\) critical batch size)
+            <li> \(S_{min}\): An estimate of the minimal number of training steps needed to reach a given value of the loss
+                (batch size \(\ll\) critical batch size)
+            <li> \(\alpha_X\): power law exponents for scaling of the loss \(L(X) \propto 1/X^{\alpha_X}\) where \(X\) can be
+                any of \(N,D,C,S,B,C^{min}\)
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/chess-lm-4.png">
+        </figure>
+        <figcaption>
+            <p style="font-size:0.9rem; text-align:centre">Parameter counts and compute (forward pass) estimates for a
+                Transformer model. Sub-leading terms such as nonlinearities, biases, and layer normalization
+                are omitted.</p>
+        </figcaption>
+
+        <p>
+            What are the lesson learnt:
+            <li> Transformer performance depends very weakly on the shape parameters \(n_{layer}, n_{heads}\) and \(d_{ff}\)
+                when we hold the non-embedding parameters count fixed to \(N\).
+            <li> The variation in the loss with different random seeds is roughly \(0.02\), does this mean setting seeds during
+                training is pretty much useless?
+            <li> To avoid overfitting when training within the above threshold of convergence we require
+                \(D \sim> (5 \times 10^3) N^{0.74}\)
+        </p>
+
+
+
+        <blockquote style="border-left: 8px solid #ffbf00;">
+            Being able to compress well is closely related to intelligence as explained below. While intelligence is a slippery
+            concept, file sizes are hard numbers. Wikipedia is an extensive snapshot of Human Knowledge. If you can compress the
+            first 1GB of Wikipedia better than your predecessors, your (de)compressor likely has to be smart(er). The intention of
+            this prize is to encourage development of intelligent compressors/programs as a path to AGI.
+        </blockquote>
+
+        <p>
+            The size of raw dataset is \(~1.1GB\) which is then compressed get a zipfile of \(~360MB\).
+            If this is considered as baseline then our model needs to compress all this information in a smaller file size.
+            However with the Neural Networks we cannot get a lossless compression, because of the probabilistic nature there has
+            to be loss in the compression, and I think it is fine to do that because it compensates this by providing an inbuilt
+            search engine as well. Given this set of moves we take the action that most likely leads us to win. In practice
+            the baseline model with parameters given above gives a \(~24.2MB\) for pytorch model, far lower than the compressed ZIP.
+            Thus making it smart(er) in a different way?
+        </p>
+
+        <p>
+            On the topic of compression there are other ideas like
+            <a href="https://en.wikipedia.org/wiki/Kolmogorov_complexity" class="article-a">Kolmogorov Complexity</a> (KC), the smallest
+            computer program that produces a certain object as an output. For eg. consider a string like
+            \(\text{0123456789012345678901234567890123456789 (36b)}\), it is far easier to write code like
+            \(\text{print([i in range(10)]}\times 4)\text{ (25b)}\),
+            thus we say that the KC of program is lower. Another way to look at this is as follows: 
+        </p>
+
+        <blockquote style="border-left: 8px solid #ffbf00;">
+            Kolmogorov defined the complexity of a string \(\text{x}\) as the length of its shortest description \(\text{p}\)
+            on a universal Turing machine \(\text{U(K(x))} = \min\{\text{l(p):U(p)=x}\}\)
+        </blockquote>
+
+        <p>
+            The way to include KC in the chess problem is to say what is the shortest description of all the games that the model has seen.
+            In clarity KC is a hypothetical concept and not practicaly applicable because it allows for programs that can run for infinite
+            time (read <a href="https://en.wikipedia.org/wiki/Halting_problem" class="article-a">Halting Problem</a>).
+            If you are interested in reading more, search for "Solomonoff Probability", "Levin Search", "Martin-Loef Randomness".
+        </p>
+
+        <h2 id="chess-engine">📦 What is this?</h2>
+
+        <p>
+            Current neural chess engines, specifically <a href="https://arxiv.org/pdf/1712.01815.pdf" class="article-a"> AlphaZero</a>
+            / <a href="http://arxiv.org/abs/1911.08265" class="article-a">MuZero</a>, primarily are search engines that travel over a
+            tree to identify best bets over a certain fixed future (depth value \(k\)). It plays with itself and tries to assign
+            expecation for each and every board configuration given a past. The task of neural network is now to become value
+            function. However, it is super hard to code and build such system from scratch and it does not include the millions of
+            games already played.
+        </p>
+
+        <p>
+            Now there is a reason why you would not want to have any prior (previously played games), because this can help with
+            something called <a href="https://openai.com/blog/emergent-tool-use/" class="article-a">emergent behaviour</a>. This
+            emergent behaviour can help in solving problems and getting solutions that previously were not thought, from 
+            AlphaGo's Move-37 to finding bug in code (driving on a box). However \(>70\%\) of the problems in this world are already
+            very efficient and what needs to be done is speed up the process, which requires massive use of prior.
+        </p>
+
+        <p>
+            Muzero and AlphaZero showed how we can utilise self play and
+            <a href="https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf" class="article-a">AlphaGo</a>
+            showed how we can use priors, thus this project is closer to AlphaGo than AZ. Now if there already exists AlphaGo (extend
+            to AlphaGo for Chess) why do we even need this? All these algorithms and other supervised methods utilise board state.
+            But most of the problems in this world, we may not be able to generate a perfect board state to feed into the model.
+            Consider another RL problem like
+            <a href="https://blog.griddynamics.com/deep-reinforcement-learning-for-supply-chain-and-price-optimization/" class="article-a">Shipping</a>
+            where creating a perfect board state is impossible.
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/chess-lm-0.png">
+        </figure>
+        <figcaption>
+            <p style="font-size:0.9rem; text-align:centre">Training method (left) and network (right) of AlphaGo. Note how is utilises
+                the complete board state and internally only process it.</p>
+        </figcaption>
+
+        <p>
+            Now that the perfect board state is thrown out of the window, how do we train a chess engine. One interesting thing I
+            have noticed in great chess players is that they have a perfect memory of board moves as if they are poems to them. See
+            this <a href="https://www.youtube.com/watch?v=acVvkz4MsKc" class="article-a">video</a> of Magnus Carlsen remembering games.
+            If they can just remember things, why can we not make a neural network just remember the moves and expect that it has an
+            internal representation of the model.
+        </p>
+
+        <blockquote style="border-left: 8px solid #ffbf00;">
+            Why not make a neural network just remember the moves and expect that it has an internal representation of the model
+        </blockquote>
+
+        <h2>👾 My Solution</h2>
+
+        <p>
+            So I took the best model that has the capability of remembering things aka the legendary
+            <a href="http://arxiv.org/abs/1706.03762" class="article">transformer</a>.
+            I train an transformer on moves as if it is a langauge, such that it would be able to identify patterns in it. To get the data,
+            I scraped the links on <a href="https://www.pgnmentor.com/files.html" class="article-a">pgnmentor.com</a>, which gave \(31,67,846\)
+            games and removing the corrupted ones gives \(31,66,353\) games. Note that there can be duplicates in this and I have not
+            checked for those. All these games give an approximate \(18.6 L\) or \(186 Mn\) moves. This means that model has to learn
+            patterns in all these tokens.
+        </p>
+
+        <p>
+            I use huggingface's amazing <a href="https://huggingface.co/transformers/_modules/transformers/modeling_gpt2.html" class="article-a">transformers</a>
+            library, more specifically a <a href="https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf" class="article-a">GPT-2 model</a>.
+            The trick was encoding all the moves, there are multilpe notations for each move like figurine ("♘f3 ♞c6") or algebric ("Nf3 Nc6").
+        </p>
+
+        <h3>🗣 Vocabulary</h3>
+
+        <p>
+            There are multiple ways to build a vocabulary. One method is to use the PGN notation, in this case we
+            take all the units as "N"(knight), "R"(rook), "B"(bishop), "K"(king), "Q"(queen) and pawns are given empty
+            san notation.
+            <li> There can be different ways each unit moves and so we also need to identify the target box, ie.
+                knight to F3 (Nf3) this gives \(6\) units and \(64\) boxes, \(6 \times 64 = 404\) tokens for moves
+            <li> Include special tokens such as capture ie. Queen to E7 and captures the unit there (Qxe7).
+                add equally more \(404 + 404 = 808\) tokens
+            <li> Castling ie. King's side (O-O) and Queen's side (O-O-O). Add 2 more \(808 + 2 = 810\)
+            <li> Then we will also need to include checks ie. Rook to A6 (Ra6+). Add all the positions and places to
+                give check \(810 + 404 = 1214\)
+            <li> Pawn promotions ie. Pawn at E8 moves and promotes to queen (e8=Q). Add ... see if you are still
+                counting you don't get the point.
+        </p>
+
+        <p>
+            There are just too many tokens to accurately find, moreover the super niche ones (like en-passant) would occur
+            only a few times making distribution too skewed. One way is to simply pass it through a sentencepiece tokenizer,
+            but that does not work with the interactive gaming style we need.
+        </p>
+
+        <blockquote style="border-left: 8px solid #ffbf00;">
+            In short this is too stupid, is there a better way to do it?
+        </blockquote>
+
+        <figure class="size-2">
+            <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/SCD_algebraic_notation.svg/1200px-SCD_algebraic_notation.svg.png">
+        </figure>
+        <figcaption>
+            <p style="font-size:0.9rem; text-align:centre">The board notation is given as above, we can then
+                extend it to fill all the locations in the board. You can then simply say that any move irrespective
+                of the unit has a starting box and a destination box.
+            </p>
+        </figcaption>
+
+        <h3>🗣 Vocabulary 2</h3>
+        
+        <p>
+            A simpler method is to simply tag a starting box and a destination box ie. if a unit moves from A1 to A2 we
+            denote the move as A1A2 and so now all we need to know is all the possible moves on a board. It turns out that
+            the total possible moves on a chess board is \(1792\). In this method we have to drop the unit information, which
+            is fine because library like <code>chess</code> already takes moves as <code>(from_box,to_box)</code>. Again
+            continuing my assumption that model would be able to have an internal representation of the board and units and
+            movements. For eg find the list <a href="https://github.com/yashbonde/chess_lm/blob/master/m2id.json" class="article-a">here</a>:
+            <li>"f5d7" becomes ID \(1288\)</li>
+            <li>"d5c5" becomes ID \(787\)</li>
+        </p>
+
+        <figure class="size-2">
+            <img src="./images/chess-lm-2.png">
+        </figure>
+        <figcaption>
+            <p style="font-size:0.9rem; text-align:centre"> Sample sequences shuffled. Note \(0\) means new game just like GPT-2
+                and not use any special attention matrices. In my experience it does not work well.</p>
+        </figcaption>
+
+        <h2>🤸🏻‍♂️ Training</h2>
+
+        <p>
+            The training is super straightforward, we continue with the GPT-2 training style and assume that the input is
+            a very long string and at the start of each game we add a <code>[GAME]</code> token which acts like a delimiter.
+            For more details read the code on <a href="https://github.com/yashbonde/chess_lm" class="article-a">Github repo</a>.
+            The model has the following properties <code>{"n_embd": 128, "n_head": 8, "n_inner": None, "n_layer": 30, "n_positions": 60,
+            "beta1": 0.9, "beta2": 0.95, "lr": 0.0001}</code>. Training is performed on two 1080Ti with combined GPU memory of
+            \(~22GB\).
+        </p>
+
+        <p>
+            Since initially developement was done on my laptop I added an <code>IterableDataset</code> and for shuffling added a
+            buffer. Once this buffer was full we split the tokens into sequences, shuffle them and yield those. Next task is to
+            convert this to a conventional <code>Dataset</code> and see how better the results get.
+        </p>
+
+        <h2>🎛 Experiment</h2>
+
+        <p>
+            First task is to see if a model can actually learn and it turns out it eventually does. Following are the lessons learned:
+            <li>A larger embedding dimension does not actually help, this somehow validates what DeepMind found in the AlphaZero Paper.
+                One part is the loss, which reduces faster when you have a large model but training for longer period gives the same
+                loss. <b>And another part is accuracy, I still need to check this.</b></li>
+            <li>The larger the buffer the better the training, by better I mean smoother loss curves. This happens because during dump
+                creation the games are added sequentially and so some games might be more complicated and thus give a higher loss.
+                Buffer size can help mitigate that.
+            </li>
+        </p>
+
+        <figure class="size-2">
+            <img
+                src="./images/chess-lm-3.png">
+        </figure>
+        <figcaption>
+            <p  style="font-size: 0.9rem; text-align: centre">Tensorboard for training 3 models. Grey
+                represents buffer size of \(55555\), red is larger model \(~3\times\) parameters of baseline parameters
+                and buffer size of \(1000000\). Orange represents fully loaded dataset same arch. as Grey. Though the larger
+                model trains quicker the loss function is rougher and there is a slight benefit. Grey was trained for
+                3 epochs whereas others were trained for 1 epoch. (there was as bug in IterableDataset which caused number
+                of samples to be lower than fully loaded)
+            </p>
+        </figcaption>
+
+        <h3>Validatation</h3>
+
+        <p>
+            The first part of validation is to include a tournament system to calculate the
+            <a href="https://en.wikipedia.org/wiki/Elo_rating_system" class="article-a">ELO ratings</a>. For this
+            I have written a single script that takes two models and competes them against each other. For a larger
+            tournament system will need to write a bash script that manages this script 😂. This is still Todo.
+        </p>
+
+        <h2>➡️ What Next?</h2>
+        <p>
+            First step is to evaluate the models using accuracy and other through competition. This part is much slower and
+            will take 3-4 days to complete in automated testing. In another method I will create the large model with atleast
+            \(~10\times\) more parameters (\(~1/2\) the size of GPT-2) and see how it performs (training will take
+            another 1 day).
+        </p>
+
+        <p>
+            I need help with writing automated tests. You can raise a PR on <a href="https://github.com/yashbonde/chess_lm"
+            class="article-a">repo</a>, there is also a Todo list on things that need to be completed. Again a plug, I am
+            currently looking for freelancing work and if you have something connect with me on my
+            <a href="https://www.linkedin.com/in/yash-bonde/" class="article-a">LinkedIn</a>.
+        </p>
+        
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="images/instagram.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>
