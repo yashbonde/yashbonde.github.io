@@ -11,11 +11,8 @@
 	margin: 1rem 1rem;
 }
 
-.update-container.update {
-}
-
 .update-container.update p {
-	font: 300 1.0rem/1.5 "Raleway";
+	font: 300 1.0rem/1.5 "IBM Plex Serif";
 	color: #f1f1f1;
 	text-align: center;
 	margin: 0rem 1rem;

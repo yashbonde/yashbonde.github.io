@@ -3,7 +3,7 @@
 footer {
 	margin-top: 0.5rem;
 	padding: 1.0rem;
-	background: #1f1f1f;
+	background: #0f1731;
 }
 
 .footer-p {
@@ -11,8 +11,8 @@ footer {
 	color: #ffffff;
 	justify-content: center; /* to centre the box horizontally */ 
 
-	font-family: "Raleway";
-	font-weight: 300;
+	font-family: "Poppins";
+	font-weight: 400;
 	font-size: 0.8rem;
 
 	letter-spacing: 4px;

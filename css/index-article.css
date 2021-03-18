@@ -23,13 +23,13 @@ article * {
 }
 
 p { 
-  font: 400 1.0rem/1.5 "Raleway";
+  font: 400 1.0rem/1.5 "IBM Plex Serif";
   color: #202020;
   margin-bottom: 1.5rem;
 }
 
 .article-a {
-    box-shadow: inset 0 -0.25em #FFBF00;
+    box-shadow: inset 0 -0.15em #FFBF00;
     -moz-transition: all .5s ease-in-out;
     -o-transition: all .5s ease-in-out;
     -webkit-transition: all .5s ease-in-out;
@@ -37,13 +37,13 @@ p {
 }
 
 .article-a:hover {
-    box-shadow: inset 0 -0.25em #3DB277;
+    box-shadow: inset 0 -0.15em #3DB277;
 }
 
 .top-box {
     /* Center and scale the image nicely */
-    background: url("https://wallpapercave.com/wp/Kj5cd8B.jpg");
-    background-position: bottom;
+    background: url("../images/back.jpg");
+    background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 
@@ -70,10 +70,10 @@ p {
     justify-content: center;
     align-content: center;
 
-    font: 700 3.0rem/1.0 "Playfair Display";
+    font: 400 3.0rem/1.0 "Poppins";
     text-align: center;
     padding: 1.4rem;
-  
+    letter-spacing: 20px;
     color: #fef7fe;
     /* background: #E8E5B295; */
 }
@@ -89,7 +89,7 @@ p {
 }
 
 .banner-middle p {
-  font: 400 1.0rem/1.3 "Raleway";
+  font: 400 1.0rem/1.3 "IBM Plex Serif";
   text-align: center;
   color: #E8E5B2;
 

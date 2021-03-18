@@ -1,38 +1,38 @@
-h1   { font: 700 2.0rem/1.2 "Roboto Slab";
+h1   { font: 700 2.0rem/1.2 "Poppins";
        color: #202020;
        margin-bottom: 0.3rem;
 }
 
-h2   { font: 400 1.5rem/1.2 "Roboto Slab";
+h2   { font: 400 1.5rem/1.2 "Poppins";
        color: #616161;
        margin-bottom: 0.8rem;
 }
 
-time { font: 700 0.8rem/1.2 "Raleway";
-       color: #B20737;
+time { font: 700 0.8rem/1.2 "Poppins";
+       color: #001dff;
        margin-bottom: 1.0rem;
 }
 
-h3   { font: 700 1.0rem/1.2 "Raleway";
-       color: #B20737;
-       margin-bottom: 0.8rem;
-       text-transform: uppercase;
-}
-
-h4 {   font: 700 0.9rem/1.2 "Raleway";
+h3   { font: 700 1.0rem/1.2 "Poppins";
        color: #616161;
        margin-bottom: 0.8rem;
        text-transform: uppercase;
 }
 
-p   { font: 400 1.0rem/1.5 "Raleway";
+h4 {   font: 700 0.9rem/1.2 "Poppins";
+       color: #616161;
+       margin-bottom: 0.8rem;
+       text-transform: uppercase;
+}
+
+p   { font: 400 1.0rem/1.5 "IBM Plex Serif";
        color: #202020;
        margin-bottom: 1.5rem;
        text-align: justify;
 }
 
 li {
-       font: 400 1.0rem/1.5 "Raleway";
+       font: 400 1.0rem/1.5 "IBM Plex Serif";
        color: #202020;
        margin-bottom: 0.25rem;
        text-align: justify;
@@ -50,7 +50,7 @@ hr {
 /* links hanlding with fade in and fade-out */
 
 .article-a {
-       box-shadow: inset 0 -0.25em #FFBF00;
+       box-shadow: inset 0 -0.15em #FFBF00;
        -moz-transition: all .5s ease-in-out;
        -o-transition: all .5s ease-in-out;
        -webkit-transition: all .5s ease-in-out;
@@ -58,7 +58,7 @@ hr {
 }
 
 .article-a:hover {
-       box-shadow: inset 0 -0.25em #FF3755;
+       box-shadow: inset 0 -0.15em #FF3755;
        -moz-transition: all .5s ease-in-out;
        -o-transition: all .5s ease-in-out;
        -webkit-transition: all .5s ease-in-out;
@@ -84,16 +84,17 @@ hr {
 /* QUOTES */
 
 blockquote {
-       font-weight: 600;
+       font-weight: 400;
        font-size: 1.0rem;
        line-height: 1.4;
        margin: 0;
        padding: 0.5rem 1.0rem;
-
-       border-left: 8px solid #B20737;
-
-       font-style: italic;
+       border-left: 8px solid;
+       border-bottom: 8px solid;
+       font-family: "Poppins";
        margin-bottom: 1.5rem;
+       border-color:#001dff;
+       padding-bottom: 1.0rem;
 }
 
 /* inline code */

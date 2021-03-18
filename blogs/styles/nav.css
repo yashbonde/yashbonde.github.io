@@ -1,12 +1,12 @@
 nav {
 	display: grid;
-	background: #1f1f1f;
+	background: #00ff75;
 	padding-top: 1.0rem;
 	padding-bottom: 1.0rem;
 	padding-left: 0.5rem;
 	padding-right: 0.5rem;
 	color: #efefef;
-
+  font-family: "Poppins";
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
@@ -28,16 +28,17 @@ nav {
 
 
 nav a {
-	-moz-transition: all .5s ease-in-out;
-    -o-transition: all .5s ease-in-out;
-    -webkit-transition: all .5s ease-in-out;
-    transition: all .5s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+		color: #2a3d37;
 }
 
-nav a:hover { color: #4FC9FF;
-	-moz-transition: all .5s ease-in-out;
-    -o-transition: all .5s ease-in-out;
-    -webkit-transition: all .5s ease-in-out;
-    transition: all .5s ease-in-out;
+nav a:hover { color: #48c49a;
+	-moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
 }
 

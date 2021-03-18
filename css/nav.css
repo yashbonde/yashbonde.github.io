@@ -6,24 +6,33 @@ nav {
 	padding-left: 0.5rem;
 	padding-right: 0.5rem;
 	color: #efefef;
-
+	font-family: "Poppins";
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
-.nav-home { grid-column: 1 / 2;
+.nav-home {
+	grid-column: 1 / 2;
 	display: flex;
-	justify-content: center;}
+	font-family: "Poppins";
+	justify-content: center;
+}
 
-.nav-project { grid-column: 2 / 3;
+.nav-project {
+	grid-column: 2 / 3;
 	display: flex;
-	justify-content: center;}
+	font-family: "Poppins";
+	justify-content: center;
+}
 
-.nav-blog { grid-column: 3 / 4; 
+.nav-blog {
+	grid-column: 3 / 4; 
 	display: flex;
+	font-family: "Poppins";
 	justify-content: center;}
 
 .nav-resume { grid-column: 4 / 5; 
 	display: flex;
+	font-family: "Poppins";
 	justify-content: center;}
 
 
@@ -34,6 +43,7 @@ nav a {
     -o-transition: all .5s ease-in-out;
     -webkit-transition: all .5s ease-in-out;
     transition: all .5s ease-in-out;
+		font-family: "Poppins";
 }
 
 nav a:hover {
@@ -42,5 +52,6 @@ nav a:hover {
     -o-transition: all .5s ease-in-out;
     -webkit-transition: all .5s ease-in-out;
     transition: all .5s ease-in-out;
+		font-family: "Poppins";
 }
 

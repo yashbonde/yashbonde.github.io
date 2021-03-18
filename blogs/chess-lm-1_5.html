@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,400,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Serif:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
 
     <!-- Link the main.css stylesheet -->
@@ -135,250 +135,79 @@
         </figcaption>
 
         <p>
-            What are the lesson learnt:
+            What are the lesson learnt, those with images are given below the bullet points:
             <li> Transformer performance depends very weakly on the shape parameters \(n_{layer}, n_{heads}\) and \(d_{ff}\)
                 when we hold the non-embedding parameters count fixed to \(N\).
             <li> The variation in the loss with different random seeds is roughly \(0.02\), does this mean setting seeds during
                 training is pretty much useless?
             <li> To avoid overfitting when training within the above threshold of convergence we require
-                \(D \sim> (5 \times 10^3) N^{0.74}\)
+                \(D \geq (5 \times 10^3) N^{0.74}\). However, this according to my calculations actually comes
+                \(D \geq (1.73 \times 10^3) N^{0.74}\)
+                <!-- <a href="diff-1" class="article-a">here</a> -->.
+            <li> Convergence is inefficient: When working with a fixed compute \(C\) but without any other restrictions on \(N\) and
+                \(D\), we attain optimal performance by training a very large network and stopping significantly before convergence.
+                As given by relation \(D \sim C^{0.27}\)
+            <li> The performance penalty depends predictably on the ratio \(N^{0.74}/D\), meaning that every time we increase the
+                model size \(8\times\), we only need to increase the data by roughly \(5\times\) to avoid a penalty.
+            <li> This is somewhat obvious but larger models are more sample efficient, reaching same performance with fewer parameters.
         </p>
 
+        <figure class="size-2">
+            <img src="./images/chess-lm-6.png">
+        </figure>
+        <figcaption>
+            <p style="font-size:0.9rem; text-align:centre"> (left) It means that for a given compute size there is an optimal
+                model size (where the loss is lowest, on the line) and for the same amout of compute both the larger and the
+                smaller models can give the same results (test loss). Thus we should find the optimal model for this compute size.
+                (right) at same steps, larger models give lower loss and on increasing the steps there is decrease in loss for
+                the same model.
+            </p>
+        </figcaption>
+
+        <figure class="size-2">
+            <img src="./images/chess-lm-7.png">
+        </figure>
+        <figcaption>
+            <p style="font-size:0.9rem; text-align:centre"> This has to be the best representation of results. What this shows
+                is that for each variable shown, if the other two are optimal then the test loss is very predictable and follows
+                smooth curves. Thus in order to train an efficient model we need to grow all three in tandem. This is the
+                engineering challenge!
+            </p>
+        </figcaption>
+
+        <figure class="size-2">
+            <img src="./images/chess-lm-8.png">
+        </figure>
+        <figcaption>
+            <p style="font-size:0.9rem; text-align:centre"> This is another important graph. On the right you see that datasize
+                can also become a bottleneck (😓 this sounds familiar), ie. when you have a small dataset even larger models can
+                suffer same loss. When this happens no amount of compute or model size increase can help you and you start to
+                move away from efficient frontier. On the right is the 
+                For reference:
+                \(L(N,D) = \Big( (\frac{N_C}{N})^{\frac{\alpha_N}{\alpha_D}} + \frac{D_C}{D} \Big)^{\alpha_D}\) and
+                on right, X-axis is \(N^{0.737}/D\).
+            </p>
+        </figcaption>
 
 
-        <blockquote style="border-left: 8px solid #ffbf00;">
-            Being able to compress well is closely related to intelligence as explained below. While intelligence is a slippery
-            concept, file sizes are hard numbers. Wikipedia is an extensive snapshot of Human Knowledge. If you can compress the
-            first 1GB of Wikipedia better than your predecessors, your (de)compressor likely has to be smart(er). The intention of
-            this prize is to encourage development of intelligent compressors/programs as a path to AGI.
-        </blockquote>
-
-        <p>
-            The size of raw dataset is \(~1.1GB\) which is then compressed get a zipfile of \(~360MB\).
-            If this is considered as baseline then our model needs to compress all this information in a smaller file size.
-            However with the Neural Networks we cannot get a lossless compression, because of the probabilistic nature there has
-            to be loss in the compression, and I think it is fine to do that because it compensates this by providing an inbuilt
-            search engine as well. Given this set of moves we take the action that most likely leads us to win. In practice
-            the baseline model with parameters given above gives a \(~24.2MB\) for pytorch model, far lower than the compressed ZIP.
-            Thus making it smart(er) in a different way?
-        </p>
-
-        <p>
-            On the topic of compression there are other ideas like
-            <a href="https://en.wikipedia.org/wiki/Kolmogorov_complexity" class="article-a">Kolmogorov Complexity</a> (KC), the smallest
-            computer program that produces a certain object as an output. For eg. consider a string like
-            \(\text{0123456789012345678901234567890123456789 (36b)}\), it is far easier to write code like
-            \(\text{print([i in range(10)]}\times 4)\text{ (25b)}\),
-            thus we say that the KC of program is lower. Another way to look at this is as follows: 
-        </p>
+        <h3>So what is the problem?</h3>
 
         <blockquote style="border-left: 8px solid #ffbf00;">
             Kolmogorov defined the complexity of a string \(\text{x}\) as the length of its shortest description \(\text{p}\)
-            on a universal Turing machine \(\text{U(K(x))} = \min\{\text{l(p):U(p)=x}\}\)
+            on a universal Turing machine \(\text{U(K(x))} = \min\{\text{l(p):U(p)=x}\}\), .
         </blockquote>
 
-        <p>
-            The way to include KC in the chess problem is to say what is the shortest description of all the games that the model has seen.
-            In clarity KC is a hypothetical concept and not practicaly applicable because it allows for programs that can run for infinite
-            time (read <a href="https://en.wikipedia.org/wiki/Halting_problem" class="article-a">Halting Problem</a>).
-            If you are interested in reading more, search for "Solomonoff Probability", "Levin Search", "Martin-Loef Randomness".
+        <!-- <p id="diff-1">
+            <b>Data threshold for convergence:</b> (I am pretty sure I have done some mistake here) According the formula
+            \[\delta L = \frac{L(N,D)}{L(N,\infty)} - 1\]
+            We can insert the expansion of \(L(N,D)\) and \(L(N,\infty)\) and get the value
+            \[\delta L = \frac{\Big( (\frac{N_C}{N})^{\frac{\alpha_N}{\alpha_D}} + \frac{D_C}{D} \Big)^{\alpha_D}}
+            {\Big( \frac{N_C}{N} \Big)^{\frac{\alpha_N}{\alpha_D}}} - 1\]
+            \[\delta L \approx \Big( 1 + \Big( \frac{N}{N_C} \Big)^{\frac{\alpha_N}{\alpha_D}} \frac{D_C}{D} \Big)^{\alpha_D} -1 \]
+            Feeding values for \(N_C, \alpha_N, \alpha_D, D_C\) I got value as
+            \[0.9798 \approx \]
         </p>
-
-        <h2 id="chess-engine">📦 What is this?</h2>
-
-        <p>
-            Current neural chess engines, specifically <a href="https://arxiv.org/pdf/1712.01815.pdf" class="article-a"> AlphaZero</a>
-            / <a href="http://arxiv.org/abs/1911.08265" class="article-a">MuZero</a>, primarily are search engines that travel over a
-            tree to identify best bets over a certain fixed future (depth value \(k\)). It plays with itself and tries to assign
-            expecation for each and every board configuration given a past. The task of neural network is now to become value
-            function. However, it is super hard to code and build such system from scratch and it does not include the millions of
-            games already played.
-        </p>
-
-        <p>
-            Now there is a reason why you would not want to have any prior (previously played games), because this can help with
-            something called <a href="https://openai.com/blog/emergent-tool-use/" class="article-a">emergent behaviour</a>. This
-            emergent behaviour can help in solving problems and getting solutions that previously were not thought, from 
-            AlphaGo's Move-37 to finding bug in code (driving on a box). However \(>70\%\) of the problems in this world are already
-            very efficient and what needs to be done is speed up the process, which requires massive use of prior.
-        </p>
-
-        <p>
-            Muzero and AlphaZero showed how we can utilise self play and
-            <a href="https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf" class="article-a">AlphaGo</a>
-            showed how we can use priors, thus this project is closer to AlphaGo than AZ. Now if there already exists AlphaGo (extend
-            to AlphaGo for Chess) why do we even need this? All these algorithms and other supervised methods utilise board state.
-            But most of the problems in this world, we may not be able to generate a perfect board state to feed into the model.
-            Consider another RL problem like
-            <a href="https://blog.griddynamics.com/deep-reinforcement-learning-for-supply-chain-and-price-optimization/" class="article-a">Shipping</a>
-            where creating a perfect board state is impossible.
-        </p>
-
-        <figure class="size-2">
-            <img src="./images/chess-lm-0.png">
-        </figure>
-        <figcaption>
-            <p style="font-size:0.9rem; text-align:centre">Training method (left) and network (right) of AlphaGo. Note how is utilises
-                the complete board state and internally only process it.</p>
-        </figcaption>
-
-        <p>
-            Now that the perfect board state is thrown out of the window, how do we train a chess engine. One interesting thing I
-            have noticed in great chess players is that they have a perfect memory of board moves as if they are poems to them. See
-            this <a href="https://www.youtube.com/watch?v=acVvkz4MsKc" class="article-a">video</a> of Magnus Carlsen remembering games.
-            If they can just remember things, why can we not make a neural network just remember the moves and expect that it has an
-            internal representation of the model.
-        </p>
-
-        <blockquote style="border-left: 8px solid #ffbf00;">
-            Why not make a neural network just remember the moves and expect that it has an internal representation of the model
-        </blockquote>
-
-        <h2>👾 My Solution</h2>
-
-        <p>
-            So I took the best model that has the capability of remembering things aka the legendary
-            <a href="http://arxiv.org/abs/1706.03762" class="article">transformer</a>.
-            I train an transformer on moves as if it is a langauge, such that it would be able to identify patterns in it. To get the data,
-            I scraped the links on <a href="https://www.pgnmentor.com/files.html" class="article-a">pgnmentor.com</a>, which gave \(31,67,846\)
-            games and removing the corrupted ones gives \(31,66,353\) games. Note that there can be duplicates in this and I have not
-            checked for those. All these games give an approximate \(18.6 L\) or \(186 Mn\) moves. This means that model has to learn
-            patterns in all these tokens.
-        </p>
-
-        <p>
-            I use huggingface's amazing <a href="https://huggingface.co/transformers/_modules/transformers/modeling_gpt2.html" class="article-a">transformers</a>
-            library, more specifically a <a href="https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf" class="article-a">GPT-2 model</a>.
-            The trick was encoding all the moves, there are multilpe notations for each move like figurine ("♘f3 ♞c6") or algebric ("Nf3 Nc6").
-        </p>
-
-        <h3>🗣 Vocabulary</h3>
-
-        <p>
-            There are multiple ways to build a vocabulary. One method is to use the PGN notation, in this case we
-            take all the units as "N"(knight), "R"(rook), "B"(bishop), "K"(king), "Q"(queen) and pawns are given empty
-            san notation.
-            <li> There can be different ways each unit moves and so we also need to identify the target box, ie.
-                knight to F3 (Nf3) this gives \(6\) units and \(64\) boxes, \(6 \times 64 = 404\) tokens for moves
-            <li> Include special tokens such as capture ie. Queen to E7 and captures the unit there (Qxe7).
-                add equally more \(404 + 404 = 808\) tokens
-            <li> Castling ie. King's side (O-O) and Queen's side (O-O-O). Add 2 more \(808 + 2 = 810\)
-            <li> Then we will also need to include checks ie. Rook to A6 (Ra6+). Add all the positions and places to
-                give check \(810 + 404 = 1214\)
-            <li> Pawn promotions ie. Pawn at E8 moves and promotes to queen (e8=Q). Add ... see if you are still
-                counting you don't get the point.
-        </p>
-
-        <p>
-            There are just too many tokens to accurately find, moreover the super niche ones (like en-passant) would occur
-            only a few times making distribution too skewed. One way is to simply pass it through a sentencepiece tokenizer,
-            but that does not work with the interactive gaming style we need.
-        </p>
-
-        <blockquote style="border-left: 8px solid #ffbf00;">
-            In short this is too stupid, is there a better way to do it?
-        </blockquote>
-
-        <figure class="size-2">
-            <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/SCD_algebraic_notation.svg/1200px-SCD_algebraic_notation.svg.png">
-        </figure>
-        <figcaption>
-            <p style="font-size:0.9rem; text-align:centre">The board notation is given as above, we can then
-                extend it to fill all the locations in the board. You can then simply say that any move irrespective
-                of the unit has a starting box and a destination box.
-            </p>
-        </figcaption>
-
-        <h3>🗣 Vocabulary 2</h3>
-        
-        <p>
-            A simpler method is to simply tag a starting box and a destination box ie. if a unit moves from A1 to A2 we
-            denote the move as A1A2 and so now all we need to know is all the possible moves on a board. It turns out that
-            the total possible moves on a chess board is \(1792\). In this method we have to drop the unit information, which
-            is fine because library like <code>chess</code> already takes moves as <code>(from_box,to_box)</code>. Again
-            continuing my assumption that model would be able to have an internal representation of the board and units and
-            movements. For eg find the list <a href="https://github.com/yashbonde/chess_lm/blob/master/m2id.json" class="article-a">here</a>:
-            <li>"f5d7" becomes ID \(1288\)</li>
-            <li>"d5c5" becomes ID \(787\)</li>
-        </p>
-
-        <figure class="size-2">
-            <img src="./images/chess-lm-2.png">
-        </figure>
-        <figcaption>
-            <p style="font-size:0.9rem; text-align:centre"> Sample sequences shuffled. Note \(0\) means new game just like GPT-2
-                and not use any special attention matrices. In my experience it does not work well.</p>
-        </figcaption>
-
-        <h2>🤸🏻‍♂️ Training</h2>
-
-        <p>
-            The training is super straightforward, we continue with the GPT-2 training style and assume that the input is
-            a very long string and at the start of each game we add a <code>[GAME]</code> token which acts like a delimiter.
-            For more details read the code on <a href="https://github.com/yashbonde/chess_lm" class="article-a">Github repo</a>.
-            The model has the following properties <code>{"n_embd": 128, "n_head": 8, "n_inner": None, "n_layer": 30, "n_positions": 60,
-            "beta1": 0.9, "beta2": 0.95, "lr": 0.0001}</code>. Training is performed on two 1080Ti with combined GPU memory of
-            \(~22GB\).
-        </p>
-
-        <p>
-            Since initially developement was done on my laptop I added an <code>IterableDataset</code> and for shuffling added a
-            buffer. Once this buffer was full we split the tokens into sequences, shuffle them and yield those. Next task is to
-            convert this to a conventional <code>Dataset</code> and see how better the results get.
-        </p>
-
-        <h2>🎛 Experiment</h2>
-
-        <p>
-            First task is to see if a model can actually learn and it turns out it eventually does. Following are the lessons learned:
-            <li>A larger embedding dimension does not actually help, this somehow validates what DeepMind found in the AlphaZero Paper.
-                One part is the loss, which reduces faster when you have a large model but training for longer period gives the same
-                loss. <b>And another part is accuracy, I still need to check this.</b></li>
-            <li>The larger the buffer the better the training, by better I mean smoother loss curves. This happens because during dump
-                creation the games are added sequentially and so some games might be more complicated and thus give a higher loss.
-                Buffer size can help mitigate that.
-            </li>
-        </p>
-
-        <figure class="size-2">
-            <img
-                src="./images/chess-lm-3.png">
-        </figure>
-        <figcaption>
-            <p  style="font-size: 0.9rem; text-align: centre">Tensorboard for training 3 models. Grey
-                represents buffer size of \(55555\), red is larger model \(~3\times\) parameters of baseline parameters
-                and buffer size of \(1000000\). Orange represents fully loaded dataset same arch. as Grey. Though the larger
-                model trains quicker the loss function is rougher and there is a slight benefit. Grey was trained for
-                3 epochs whereas others were trained for 1 epoch. (there was as bug in IterableDataset which caused number
-                of samples to be lower than fully loaded)
-            </p>
-        </figcaption>
-
-        <h3>Validatation</h3>
-
-        <p>
-            The first part of validation is to include a tournament system to calculate the
-            <a href="https://en.wikipedia.org/wiki/Elo_rating_system" class="article-a">ELO ratings</a>. For this
-            I have written a single script that takes two models and competes them against each other. For a larger
-            tournament system will need to write a bash script that manages this script 😂. This is still Todo.
-        </p>
-
-        <h2>➡️ What Next?</h2>
-        <p>
-            First step is to evaluate the models using accuracy and other through competition. This part is much slower and
-            will take 3-4 days to complete in automated testing. In another method I will create the large model with atleast
-            \(~10\times\) more parameters (\(~1/2\) the size of GPT-2) and see how it performs (training will take
-            another 1 day).
-        </p>
-
-        <p>
-            I need help with writing automated tests. You can raise a PR on <a href="https://github.com/yashbonde/chess_lm"
-            class="article-a">repo</a>, there is also a Todo list on things that need to be completed. Again a plug, I am
-            currently looking for freelancing work and if you have something connect with me on my
-            <a href="https://www.linkedin.com/in/yash-bonde/" class="article-a">LinkedIn</a>.
-        </p>
-        
+         -->
     </article>
 
     <footer>

@@ -30,19 +30,19 @@ card a {
 card name {
 	grid-column: 3 / 4;
 	grid-row: 2 / 3;
-	font: 700 1.5rem/1.2 "Roboto Slab";
+	font: 400 1.5rem/1.2 "Poppins";
 }
 
 card info {
 	grid-column: 3 / 4;
 	grid-row: 3 / 4;
-	font: 400 1.0rem/1.2 "Roboto Slab";
+	font: 400 1.0rem/1.2 "Poppins";
 	color: #616161;
 }
 card sentence {
 	grid-column: 3 / 4;
 	grid-row: 4 / 5;
-	font: 400 0.85rem/1.5 "Raleway";
+	font: 400 0.80rem/1.3 "IBM Plex Serif";
 }
 
 card date {
