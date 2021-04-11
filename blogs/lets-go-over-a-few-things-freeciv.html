@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Let’s go over a few things freeciv!</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Serif:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+    
+
+    <!-- Link the main.css stylesheet -->
+    <link href="styles/reset.css" rel="stylesheet">
+    <link href="styles/-debug.css" rel="stylesheet">
+    <link href="styles/article.css" rel="stylesheet">
+    <link href="styles/article-text.css" rel="stylesheet">
+    <link href="styles/article-figure.css" rel="stylesheet">
+    <link href="styles/nav.css" rel="stylesheet">
+    <link href="styles/code-block.css" rel="stylesheet">
+    <link href="styles/footer-blog.css" rel="stylesheet">
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../index.html">HOME</a>
+        <a class = "nav-project" href="../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../musings.html">BLOG</a>
+        <a class="nav-resume" href="../files/yashbonde_resume.pdf">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Let’s go over a few things freeciv!</h1>
+        <h2>Setting up the foundation right is the key to great development</h2>
+
+        <time datetime="19-11-2018">NOV. 19, 2018</time>
+
+        <p> 
+            I used to write on Medium before this, these are ports.
+        </p>
+
+        <p>
+            As I talked in my <a href="./call-for-an-army-of-be-a-sts.html" class="article-a">previous post</a>, I have
+            a keen interest in setting up a <a href="https://github.com/yashbonde/freeciv-python" class="article-a">freeciv
+            learning environment</a> in python. But many
+            people thought that the details were either far and wide or too many ideas were clustered into it. Over the next few
+            posts I wanted to clarify any issues and lay the groundwork for the project.
+
+        </p>
+
+        <p>
+            Setting up an Open Source Project is more than easy these days, all you have to do is sign up a Github account and boom,
+            you are ready! But the hard part is running and maintaining the codebase, and even harder is making people care enough
+            to contribute anything to your project and I want to focus on the latter here. Through these posts I want to clarify my
+            ideas and discuss the issues raised. This time around I want to go over these three points:
+            <li> Action Spaces: Why discrete action space of freeciv is important
+            <li> Game Structure: How the vastness of game is similar to real world
+            <li> Multiplayer Collaborative Idea: How freeciv support different kinds of interaction and what is so special about it
+        </p>
+
+        <p>
+            And in each of those points I will also put sub-points to make understanding easier.
+        </p>
+
+        <blockquote>
+            I am not asking the very hard questions here, like why care about anything. But why care about this project?
+        </blockquote>
+
+        <h3>1. Action Spaces</h3>
+        <p>
+            Every action in our universe can be broken down into two types, a continuous action space and a discrete action space.
+            In layman terms discrete spaces are where hard decision need to be taken and continuous spaces a distribution is to be
+            generated.
+            <li>Most of the applications in real life domain that involve use of hardware (Robotics, Self Driving Cars, etc.) require a
+            distribution of values to be generated. Movement vectors used to operate them is a set of force values and directions.
+            This domain is still in its early stages, but the applications nonetheless will be far felt. It will continue to improve
+            over time, though at a slower rate and the reason for that is the simulators are just not good enough (ironically agent
+            trained on robot simulator rarely gives same results in real life robot). And our algorithms just aren’t good at sample
+            efficiency and training on real life robots would mean extreme long training durations making it unfeasible.
+            
+            <figure class="size-3" style="margin-top: 0.6rem;">
+                <img src="https://miro.medium.com/max/1400/1*PGimsPTRnFuWOQxQBgovWg.jpeg">
+            </figure>
+            <figcaption>
+                <p>Self driving car operates in the continuous distribution</p>
+            </figcaption>
+
+            <li>Discrete action spaces have a different task, all those applications where hard decisions are to be made we have a
+            discrete space. Video games a great example of this, they need a very specific single action that needs to be taken at
+            any given moment. So far most of the research that we have seen has been in this domain, DQN which revolutionised the
+            idea of deep RL takes actions in discrete domain. Medicine, where we require roll out of actions over time is an example
+            of real world application in discrete spaces. Other applications are, optimising video quality in streaming services
+            which are affected due to poor network conditions, notification systems on social networking sites to notify you only
+            the important stuff, etcetera.
+        </p>
+        
+        <figure class="size-2">
+            <img src="https://miro.medium.com/max/1400/1*uPvKP67o4Al_b-yjPqtPWQ.jpeg">
+        </figure>
+        <figcaption>
+            <p>Montezuma’s Revenge is an Atari game with discrete action space. This also happens to be a notoriously difficult game
+            for AI to master due to its sparse reward structure.</p>
+        </figcaption>
+
+        <p>
+            We do not need a single agent that is good at everything, in fact the future will be filled with ensemble architecture
+            where multiple agents each good at a particular thing collaborate to achieve goals far superior to what human can, this
+            is what we mean by super-intelligence. Freeciv being a video game operates in discrete spaces. This is one of the
+            reasons for choosing it, it will be one of the most challenging learning environments. Though there is still a
+            possibility of using continuous actions to be taken in this. More details on this later!
+        </p>
+
+        <h3>2. Game Structure</h3>
+        <p>
+            Saying freeciv is vast is an understatement. There are so many things you can do that it’s hard to remember them all,
+            also the action taken at any given moment can affect the results at later stage in the game.
+
+            <li>Each unit has dynamic number of moves i.e. every unit has different actions that it can take, each city can build new
+            units and items in it. In the image below we can see there are 12 of actions for a single unit. This challenges AI to
+            optimise according to the unit it is controlling at that given moment. Now you can have a complicated single network to
+            run this, but I think better results can be obtained by using ensemble.
+            
+            <figure class="size-2" style="margin-top: 0.6rem;">
+                <img src="https://miro.medium.com/max/2626/1*xgiFUnv2Gg63fkAiz9XaCg.jpeg">
+            </figure>
+            <figcaption>
+                <p>The game at turn 314 is so advanced, though the game in ‘default’ mode can run to 5000 turns. The small circles at the
+                bottom show the actions that can be takes for any unit. 12 actions can be taken for this particular unit, 1 less than
+                the Atari games! This is an amazing example of the vastness of this game.</p>
+            </figcaption>
+
+            <li>Other than the actions, taking a look at <a href="http://freeciv.wikia.com/wiki/Technology" class="article-a">technology tree</a>
+            can give you the scale of the variety of decisions that have to
+            be taken and its consequences. In order to progress through game agent needs to obtain new and different technologies.
+            Each technology is a node in a big tree, to get one, you need to complete the previous ones. This poses a challenge for
+            AI to do structural planning for long time steps. This is very different than current state of the art environments
+            where a single action is chosen by looking at the current frame.
+            
+            <figure class="size-2" style="margin-top: 0.6rem;">
+                <img src="https://miro.medium.com/max/2858/1*52mzxyJLZ_6nWPIVJI-dmQ.png">
+            </figure>
+            <figcaption>
+                <p>A sample tech-tree in freeciv. As you can see in the right, to get Electricity, you need to have Metallurgy and
+                Magnetism. This complex intermixing of possibilities make life tricky for our small agent.</p>
+            </figcaption>
+
+            <li>I also want to talk for a moment about the cities. There is clear correlation between the quality of your cities and
+            your power. Cities lie at the heart of this game, improving them improves the odds of your success. Take a look at a
+            simple city below, this is one big city. Each tile in the ‘city-radius’ has values associated with it like food and
+            gold. The better quality you have for the tiles, the better are your cities and in turn your civilisation.
+            
+            <figure class="size-1" style="margin-top: 0.6rem;">
+                <img src="https://miro.medium.com/max/1020/1*lEiKvSM0wFeI0EfOTPwtqA.png">
+            </figure>
+            <figcaption>
+                <p>A sample city, more details about the cities <a href="http://freeciv.wikia.com/wiki/Radius" class="article-a">here</a></p>
+            </figcaption>
+
+            <li>Due to fog of war (and unclear worklists, resources) position/status of the enemy and overall map is not fully known —
+            hence risky investments (explorer teams) are required to gain information.
+        </p>
+
+        <h3>2. Game Structure</h3>
+        <p>
+            Freeciv can be played be large number of players, upto 126 in freeciv-desktop and upto 500 in freeciv-web to be
+            specific. There are rules according to which the game is to be played, these are called rulesets. In the classic/default
+            ruleset there are three ways to win:
+
+            <li>As in other games of conquest and expansion, you are declared the winner by default once the last city and unit of every
+            other civilization is destroyed.
+            
+            <li>Once technological progress has brought you into the space age, you may launch a spacecraft destined for Alpha Centauri;
+            the first civilization whose craft reaches the system wins.
+
+            <li>In the absence of other means to determine victory, the game will end after 5000 turns if no spacecraft have yet been
+            launched. The surviving civilisations are then rated, and the one with the highest <a href="http://freeciv.wikia.com/wiki/Score" class="article-a">score</a>
+            is the winner.
+        </p>
+
+        <p>
+            Due to the open source nature of project the rulesets can be modified to the researchers needs. We intend to make doing
+            this a breeze so researchers can spend most of their time developing their models and don’t have to worry about boring
+            stuff. This also allows for extreme customisation that can make this environment even better.
+        </p>
+        
+
+        <figure class="size-2">
+            <img src="https://miro.medium.com/max/3168/1*5mejAWAMR-QdwdfFczB5_w.jpeg">
+        </figure>
+        <figcaption>
+            <p>Look at the minimap at bottom left, the opportunity to see how various AIs will compete with each other is one thing
+            that really excites me about this!</p>
+        </figcaption>
+
+        <p>
+            <li><a href="http://freeciv.wikia.com/wiki/Diplomacy" class="article-a">Diplomacy</a>
+            is a huge part of this game and the interactions that take place can be very important. It is in favour of
+            players to be open and trade to boost the economies of nations, but later on in the game become enemies and fight each
+            other. All of this can of course be changed by changing the structure of the game in configuration files
+            <code>*.fcfg</code>. This
+            kind of collaboration can yield great results in ensemble AI systems, where many small AI systems combine to make the
+            whole system work.
+        </p>
+
+        <p>
+            With the large number of players that can play this game there is a opportunity to study how collaborative systems would
+            work. With recent developments in the area of
+            <a href="https://blog.openai.com/competitive-self-play/" class="article-a">competitive self-play</a> and
+            <a href="https://deepmind.com/blog/capture-the-flag/" class="article-a">collaborative-play</a>,
+            it will be interesting to
+            see how world will pan out when large number of AIs are left alone in an earth-like world. Maybe we will understand how
+            smart intelligence will emerge out of this mess.
+        </p>
+
+        <p>
+            Cheers!
+        </p>
+
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="images/instagram.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>

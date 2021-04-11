@@ -103,7 +103,12 @@ code-inline { font-family: "Ubuntu Mono";
        background: #dedede;}
 
 
-figcaption p { color: #616161; }
+figcaption p {
+       color: #616161;
+       font-family: "Poppins";
+       font-size: 0.8rem;
+       text-align:centre;
+}
 
 @media (max-width: 8.5in) { :root { font-size: 16px; } }
 @media (max-width: 5.0in) { :root { font-size: 14px; } }

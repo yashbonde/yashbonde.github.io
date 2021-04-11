@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Call for an Army of Be(a)sts!</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Serif:300,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700,700i" rel="stylesheet">
+    
+
+    <!-- Link the main.css stylesheet -->
+    <link href="styles/reset.css" rel="stylesheet">
+    <link href="styles/-debug.css" rel="stylesheet">
+    <link href="styles/article.css" rel="stylesheet">
+    <link href="styles/article-text.css" rel="stylesheet">
+    <link href="styles/article-figure.css" rel="stylesheet">
+    <link href="styles/nav.css" rel="stylesheet">
+    <link href="styles/code-block.css" rel="stylesheet">
+    <link href="styles/footer-blog.css" rel="stylesheet">
+
+</head>
+<body>
+    <nav>
+        <a class = "nav-home" href="../index.html">HOME</a>
+        <a class = "nav-project" href="../projects.html">PROJECTS</a>
+        <a class = "nav-blog" href="../musings.html">BLOG</a>
+        <a class="nav-resume" href="../files/yashbonde_resume.pdf">RESUME</a>
+    </nav>
+
+    <article id = "blog-0">
+
+        <h1>Call for an Army of Be(a)sts!</h1>
+        <h2>Pushing for a more democratized AI.</h2>
+
+        <time datetime="09-11-2018">NOV. 9, 2018</time>
+
+        <p> 
+            I used to write on Medium before this, these are ports.
+        </p>
+
+        <p>
+            Artificial Intelligence will be powered by three domains, a better understanding of natural languages, generative models
+            learning from probabilistic distributions (GANs, VAEs) and main ingredient training by reinforcement learning (RL)
+            algorithms. Let’s talk about RL for a minute, it is the way forward because it learns to solve problems, not just
+            posterior mapping that supervised algorithms do. You can throw at it a problem to play chess and it will learn to do
+            that with or without your help, or Go, Dota2, Starcraft or even the stock market!
+        </p>
+
+        <p>
+            They do so by interacting with environments, simulations of things you want the agent to do. OpenAI with
+            <a href="http://gym.openai.com/" class="article-a">gym</a>,
+            democratized the domain and pushed the involvement of people and awareness of the idea. The environments are a great
+            example of the power of open-source, it’s free, it’s powerful and it’s backed by a community of developers and users who
+            can solve your problems in an instant. Despite being great it lacks a very important item, a complex strategy game, more
+            complex than chess and other board games. Something that has a rules and regulations and requires immense amounts of
+            creativity.
+        </p>
+
+        <blockquote>
+            Despite being great OpenAI gym lacks a very important item, a complex strategy game, more complex than chess and other
+            board games.
+        </blockquote>
+
+        <figure class="size-2">
+            <img src="https://miro.medium.com/max/700/1*gT4B-ca05ItYV0rZ-r21EQ.jpeg">
+        </figure>
+        <figcaption>
+            <p>A screenshot of DeepMind’s Starcraft-2 environment</p>
+        </figcaption>
+
+        <p>
+            If we look at more open-source projects in this domain of which there are many, there is nothing like this. The
+            <a href="https://www.wired.co.uk/article/deepmind-starchart-ai-games" class="article-a">Starcraft-2 environment</a>
+            from <a href="https://medium.com/u/55e08ddea42e?source=post_page-----f751436671be--------------------------------" class="article-a">DeepMind Safety Research</a>
+            and Blizzard is groundbreaking but is still plagued by many issues, not being open source, lack of access to full
+            version and mainly it’s size 30 GB! All these issues make its use difficult.
+            
+        </p>
+
+
+        <h3>Let’s make one then</h3>
+        <p>
+            I have been personally working on this for sometime, and after lot of feedback and validation from some of the best in
+            industry, finally opening it up. <a href="http://freeciv.org/" class="article-a">Freeciv</a> is an open-source turn based multiplayer
+            deep strategy game with rules, and it
+            makes it the perfect candidate for using it as an environment. Not just is it fun, it’s also one of the oldest games
+            that people still love to play, with initial commit done in 1996 and stale branches going back 21 years! <b>And we are
+            writing a python binder for it.</b> You can check it out <a href="https://github.com/yashbonde/freeciv-python" class="article-a">here</a>,
+            we have uploaded the original work done for a <a href="http://groups.csail.mit.edu/rbg/code/civ/" class="article-a">paper</a> called
+            ‘Learning to Win by Reading Manuals in a Monte-Carlo Framework’.
+        </p>
+
+        <figure class="size-3">
+            <img src="https://miro.medium.com/max/1200/1*GeZBCNa0dAn4AY4MLlzvMg.png">
+        </figure>
+        <figcaption>
+            <p>A screenshot from freeciv 2.4</p>
+        </figcaption>
+
+
+        <blockquote>
+            This work is not just important but will be one of the most influential in the hindsight. This project demands not just
+            the good, but deserves the best people.
+        </blockquote>
+
+
+        <p>
+            There is a small team that is working on this hard but we need more to get this project off the ground and really
+            establish. But we need your help to make this happen. A lot of the work needs to be done on writing the code and
+            dynamics of the environment. We are starting off with a simple requirement, to compile the source code and document the
+            process. The end goal is to create an agent which can learn to traverse and play in complex enviroment by itself with
+            minimal help from humans (the only support should be basic instructions).
+        </p>
+
+        <h3>Applying deep reinforcement learning here</h3>
+        <p>
+            This environment will provide with a huge opportunity to test the AI because of following reasons, you can also take
+            this as a manifesto for things we need to achieve in this project and contribute:
+
+            <li><b>Open ended reward structure</b>: because of such a diverse game offerings and actions that can be taken, the user will be
+            given raw information and if they want can write their own reward structure, though we will be providing basic rewards.
+            Most of the recent breakthrough models have applied meta-learning style architectures with auto-reward understanding.
+            This environment will push this to next level.
+            
+            <li><b>Deep hierarchical structure</b>: the game has so many things that need to be done to play that it will demand of the agent to have a deeper understanding
+            of what should be done at various levels, not just look at the frame and decide what the next action will be.
+
+            <li><b>Long term gameplay</b>: as the game can last many turns, it requires agents to do very long term strategic thought processing. Longer and more
+            diverse than what any environment has to do right now.
+
+            <li><b>Information types</b>: the game not just sends out a raw image but many of those, agent gets a variety of maps (resources, units, holdings)
+            rather than a single image. There are rules and regulations, many strategy guides in text which make your model to be
+            able process different types of information that we as humans take for granted.
+
+            <li><b>General Intelligence</b>: diversity, structure and decisions to be made in the game are so open and vast that your agent [or ensemble] needs to be
+            have a very general thought process. This kind of platform will result in research and agents that will make our
+            understanding and development of AI better.
+
+            <li><b>Size</b>: And the biggest advantage by far is the size, less than 100MB for a fully functional interactive game and source code
+            with API for taps in the game so you can record your actions and use them to train your model later.
+
+            <li><b>[bonus] minigames</b>: to make life easier for a beginner to start working on this, we aim to release a variety of mini-games just like in
+            Starcraft2 environment which will help you test out your model to the simple tasks before proceeding to the main game.
+        </p>
+
+        <figure class="size-2">
+            <img src="https://miro.medium.com/max/700/1*Zt8cFjnkssNJhpYwNDgftQ.png">
+        </figure>
+        <figcaption>
+            <p>Let’s not be this dumb</p>
+        </figcaption>
+
+        <p>
+            All this is what this environment is offering; main difficulty, we need to build and test this thing out. The repo is
+            new and projects will be added to it to guide us and set benchmarks on the project. Link to github repo:
+            <a href="https://github.com/yashbonde/freeciv-python" class="article-a">https://github.com/yashbonde/freeciv-python</a>
+        </p>
+
+        <p>
+            Cheers!
+        </p>
+
+    </article>
+
+    <footer>
+        <p class="footer-p">
+            CONNECT WITH ME
+        </p>
+        <div class = "share">
+            <a href="https://www.linkedin.com/in/yash-bonde/"><img src="images/linkedin.svg"></a>
+            <a href="https://www.instagram.com/yassh.bonde/"><img src="images/instagram.svg"></a>
+        </div>
+    </footer>
+
+</body>
+</html>
