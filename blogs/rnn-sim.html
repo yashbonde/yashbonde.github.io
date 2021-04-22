@@ -87,6 +87,7 @@
                 is_graph_log = true;
                 document.getElementById('log-button').innerHTML="Remove Log";
                 type = 'log';
+                yaxisname = "Time Taken (Seconds) [log]";
                 var myChart = echarts.init(document.getElementById('main'));
                 is_init = false;
             } else {
@@ -97,6 +98,7 @@
                     document.getElementById('log-button').innerHTML = "Log";
                 }
                 is_init = false;
+                yaxisname = "Time Taken (Seconds)";
             }
             // console.log(myChart);
 
@@ -119,7 +121,7 @@
                 },
                 yAxis: {
                     type: type,
-                    name: "Time Taken (Seconds)",
+                    name: yaxisname,
                     nameLocation: "middle",
                     nameTextStyle: {
                         padding: [0, 0, 20, 0]
