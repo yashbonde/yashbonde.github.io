@@ -1,5 +1,6 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python3
 
+import os
 import re
 import sys
 from copy import deepcopy
@@ -282,30 +283,25 @@ def convert_to_html(sections):
 """
 
 if __name__ == "__main__":
-  def print_help():
-    print('''Tool to help convert any markdown file to HTML output.
-  Usage: md2html <in_file> <out_file>''')
-    exit()
-
   args = ArgumentParser(description="Converts markdown to my HTML code")
-  args.add_argument("--input", type = str, help = "markdown file path")
-  args.add_argument("--output", type = str, help = "Output filename")
-  
-  # get system args
-  try:
-      in_file = sys.argv[1]
-      out_file = sys.argv[2]
-  except:
-      print_help()
+  args.add_argument("input", type = str, help = "markdown file path")
+  args.add_argument("output", type = str, help = "Output filename")
+  args = args.parse_args()
 
-  if sys.argv[1] == "--help":
-      print_help()
-      
+  inpath_full = os.path.abspath(args.input)
+  here = os.path.dirname(os.path.abspath(__file__))
+  blogs_folder = os.path.join(here, "blogs")
+  output_file = os.path.join(blogs_folder, args.output)
+  if not output_file.endswith(".html"):
+    output_file += ".html"
+
+  print("Reading file:", inpath_full)
+  print("Output file:", output_file)
+
   # open the markdown file -> parse -> stitch -> save
-  with open(in_file, "r") as f:
+  with open(inpath_full, "r") as f:
     lines = f.read()
   parsed_data = parse_lines(lines)
   html_str = convert_to_html(parsed_data)
-  with open(out_file, "w") as f:
+  with open(output_file, "w") as f:
     f.write(html_str)
-
