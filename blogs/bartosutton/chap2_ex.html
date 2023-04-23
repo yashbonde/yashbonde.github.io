@@ -62,10 +62,10 @@
             \[Q_{n+1} = Q_n + \beta(R_n - Q_n)\]
             \[= (1 - \beta)Q_n + \beta R_n\]
             \[= (1 - \frac{\alpha_n}{\bar{o_n}})Q_n + \frac{\alpha_n}{\bar{o_n}}R_n\]
-            \[\bar{o}_n Q_{n+1} = \alpha R_n - (\bar{o}_n - \alpha)Q_n \tag{2} \]
+            \[\bar{o}_n Q_{n+1} = \alpha R_n + (\bar{o}_n - \alpha)Q_n \tag{2} \]
             Now we replace the value of \(\bar{o}_n\) in \((1)\) from \((2)\)
-            \[= \alpha R_n - \left[\bar{o}_{n-1} + \alpha(1 - \bar{o}_{n-1}) - \alpha \right]Q_n\]
-            \[\bar{o}_n Q_{n+1} = \alpha R_n - (1 - \alpha)\bar{o}_{n-1}Q_n\]
+            \[= \alpha R_n + \left[\bar{o}_{n-1} + \alpha(1 - \bar{o}_{n-1}) - \alpha \right]Q_n\]
+            \[\bar{o}_n Q_{n+1} = \alpha R_n + (1 - \alpha)\bar{o}_{n-1}Q_n\]
             The expansion of \(Q_{n+1}\) can be given as
             \[Q_{n+1} = (1-\alpha)^nQ_1 + \sum_{i=1}^{n}\alpha(1-\alpha)^{n-1}R_i \tag{3} \]
             We can look at similarity between \((2)\) and \((3)\) and fitting the equation we get
